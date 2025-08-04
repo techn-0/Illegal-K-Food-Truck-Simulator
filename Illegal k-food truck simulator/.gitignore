@@ -97,7 +97,7 @@ crashlytics-build.properties
 
 
 # 에셋
-/GUIPackCartoon/
-/PolygonFarm/
-/Toon Harbor Pack/
-/Toon Suburban Pack/
+/Assets/GUIPackCartoon/
+/Assets/PolygonFarm/
+/Assets/Toon Harbor Pack/
+/Assets/Toon Suburban Pack/
