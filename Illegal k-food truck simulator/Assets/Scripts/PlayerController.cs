@@ -5,17 +5,38 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float speed = 5f;
+    [SerializeField] Transform cameraTransform; // 카메라 Transform 참조
+    
     CharacterController cc;
     Vector2 moveInput;
 
-    void Awake() => cc = GetComponent<CharacterController>();
+    void Awake()
+    {
+        cc = GetComponent<CharacterController>();
+        
+        // 카메라 Transform이 설정되지 않았다면 Main Camera 사용
+        if (cameraTransform == null)
+            cameraTransform = Camera.main?.transform;
+    }
 
     void OnMove(InputValue value) => moveInput = value.Get<Vector2>();
 
     void Update()
     {
-        // 쿼터뷰 기준 -Z가 화면 위쪽
-        Vector3 dir = new Vector3(moveInput.x, 0, moveInput.y);
+        if (cameraTransform == null) return;
+        
+        // 카메라 기준 방향 벡터 계산
+        Vector3 cameraForward = cameraTransform.forward;
+        Vector3 cameraRight = cameraTransform.right;
+        
+        // Y축 제거 (수평면에서만 움직임)
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+        
+        // 입력에 따른 움직임 방향 계산
+        Vector3 dir = cameraRight * moveInput.x + cameraForward * moveInput.y;
         
         // 대각선 이동 속도 보정: 입력값의 크기를 1로 제한
         if (dir.sqrMagnitude > 1f)
