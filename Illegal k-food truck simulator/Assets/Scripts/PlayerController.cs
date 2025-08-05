@@ -15,7 +15,12 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // 쿼터뷰 기준 -Z가 화면 위쪽
-        Vector3 dir = new Vector3(moveInput.x, 0, moveInput.y).normalized;
+        Vector3 dir = new Vector3(moveInput.x, 0, moveInput.y);
+        
+        // 대각선 이동 속도 보정: 입력값의 크기를 1로 제한
+        if (dir.sqrMagnitude > 1f)
+            dir = dir.normalized;
+            
         if (dir.sqrMagnitude > 0)
             cc.Move(dir * speed * Time.deltaTime);
 
