@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // CharacterController가 활성화되어 있는지 확인
+        if (cc == null || !cc.enabled || !cc.gameObject.activeInHierarchy) return;
         if (cameraTransform == null) return;
         
         // 카메라 기준 방향 벡터 계산
