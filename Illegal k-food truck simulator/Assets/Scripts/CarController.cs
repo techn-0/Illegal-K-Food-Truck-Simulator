@@ -1,108 +1,137 @@
 using UnityEngine;
-using UnityEngine.InputSystem;   // 새 Input System
 
-/// <summary>트럭 주행 스크립트</summary>
+/// <summary>단순한 자동차 시스템 - 운전 + 승하차 통합</summary>
 [RequireComponent(typeof(Rigidbody))]
 public class CarController : MonoBehaviour
 {
-    [Header("Wheel Colliders")]
-    public WheelCollider wcFL, wcFR, wcRL, wcRR;
+    [Header("자동차 설정")]
+    public float speed = 30f;           // 속도
+    public float turnSpeed = 100f;      // 회전 속도
+    public float acceleration = 5f;     // 가속도
 
-    [Header("Wheel Meshes (Visual)")]
-    public Transform meshFL, meshFR, meshRL, meshRR;
+    [Header("승하차 설정")]
+    public Transform driverSeat;        // 운전석 위치
+    public Transform exitPoint;         // 하차 위치
 
-    [Header("Spec")]
-    [Tooltip("최대 모터 토크 (N·m)")]
-    public float maxMotorTorque = 2500f;
-    [Tooltip("최대 조향 각 (deg)")]
-    public float maxSteerAngle = 28f;
-    [Tooltip("속도(km/h)별 조향 감소 한계")]
-    public float steerFadeSpeed = 15f;   // 이 속도 이상부터 감쇄 0→1
-    [Tooltip("브레이크 토크 (N·m)")]
-    public float brakeTorque = 6000f;
+    private Rigidbody rb;
+    private float currentSpeed;
+    private float targetSpeed;
+    
+    // 승하차 관련
+    private bool playerNear = false;    // 플레이어가 근처에 있는지
+    private bool driving = false;       // 운전 중인지
+    private GameObject player;          // 플레이어 오브젝트
 
-    // ───────────────── InputActionReference 연결용 ─────────────────
-    [Header("Input Actions")]
-    public InputActionReference moveAction;   // 2D Vector (y: 전/후, x: 좌/우)
-    public InputActionReference brakeAction;  // Button (Space 등)
-
-    float throttle;   // -1 ~ 1  (전/후진)
-    float steer;      // -1 ~ 1
-    bool braking;
-
-    Rigidbody rb;
-
-    void Awake()
+    void Start()
     {
         rb = GetComponent<Rigidbody>();
-
-        // ❶ 콜백 연결만 한다 (Enable() 호출 제거)
-        moveAction.action.performed += OnMove;
-        moveAction.action.canceled += _ => throttle = steer = 0;
-
-        brakeAction.action.performed += _ => braking = true;
-        brakeAction.action.canceled += _ => braking = false;
+        rb.centerOfMass = new Vector3(0, -0.5f, 0); // 안정성을 위한 낮은 무게중심
     }
 
-    void OnEnable()           // ❷ 컴포넌트 켜질 때 한 번만 Enable
+    void Update()
     {
-        moveAction.action.Enable();
-        brakeAction.action.Enable();
-    }
-    void OnDisable()          // ❸ 끌 때 Disable
-    {
-        moveAction.action.Disable();
-        brakeAction.action.Disable();
+        // E 키로 승하차
+        if (playerNear && Input.GetKeyDown(KeyCode.E))
+        {
+            if (driving)
+                GetOutOfCar();
+            else
+                GetInCar();
+        }
+
+        // 운전 중일 때만 자동차 조작 가능
+        if (driving)
+        {
+            HandleCarInput();
+        }
     }
 
-    void OnDestroy()          // ❹ 중복 콜백 방지
+    void HandleCarInput()
     {
-        moveAction.action.performed -= OnMove;
-        moveAction.action.canceled -= _ => throttle = steer = 0;
-        brakeAction.action.performed -= _ => braking = true;
-        brakeAction.action.canceled -= _ => braking = false;
-    }
+        // 간단한 입력
+        float vertical = Input.GetAxis("Vertical");     // W/S
+        float horizontal = Input.GetAxis("Horizontal"); // A/D
+        bool brake = Input.GetKey(KeyCode.Space);       // 스페이스
 
-    void OnMove(InputAction.CallbackContext ctx)
-    {
-        Vector2 v = ctx.ReadValue<Vector2>();
-        throttle = v.y;
-        steer = v.x;
+        // 목표 속도 설정
+        if (brake)
+            targetSpeed = 0f;
+        else
+            targetSpeed = vertical * speed;
+
+        // 부드러운 가속/감속
+        currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.deltaTime * 10f);
+
+        // 회전 (이동 중일 때만)
+        if (Mathf.Abs(currentSpeed) > 0.1f)
+        {
+            float turn = horizontal * turnSpeed * Time.deltaTime;
+            if (currentSpeed < 0) turn *= -1; // 후진시 반전
+            transform.Rotate(0, turn, 0);
+        }
     }
 
     void FixedUpdate()
     {
-        float speedKmh = rb.linearVelocity.magnitude * 3.6f;
-
-        // ── 1. 추진 ──────────────────────────────
-        float motor = throttle * maxMotorTorque;
-        wcRL.motorTorque = wcRR.motorTorque = motor;
-
-        // ── 2. 브레이크 ──────────────────────────
-        float brake = braking ? brakeTorque : 0f;
-        wcFL.brakeTorque = wcFR.brakeTorque = wcRL.brakeTorque = wcRR.brakeTorque = brake;
-
-        // ── 3. 조향 (속도 감쇄) ───────────────────
-        // 후진 시에도 조향이 가능하도록 수정
-        float steerFactor = speedKmh < 5f ? 1f : Mathf.Clamp01(speedKmh / steerFadeSpeed);
-        float steerAngle = steer * maxSteerAngle * steerFactor;
-        
-        // 후진 시 조향 방향 반전
-        if (throttle < 0)
-            steerAngle *= -1f;
-            
-        wcFL.steerAngle = wcFR.steerAngle = steerAngle;
-
-        // ── 4. 시각적 바퀴 동기화 ────────────────
-        PoseWheel(wcFL, meshFL);
-        PoseWheel(wcFR, meshFR);
-        PoseWheel(wcRL, meshRL);
-        PoseWheel(wcRR, meshRR);
+        // 운전 중일 때만 이동
+        if (driving)
+        {
+            Vector3 forwardMovement = transform.forward * currentSpeed;
+            rb.linearVelocity = new Vector3(forwardMovement.x, rb.linearVelocity.y, forwardMovement.z);
+        }
     }
 
-    void PoseWheel(WheelCollider col, Transform vis)
+    void OnTriggerEnter(Collider other)
     {
-        col.GetWorldPose(out var pos, out var rot);
-        vis.SetPositionAndRotation(pos, rot);
+        if (other.CompareTag("Player"))
+        {
+            playerNear = true;
+            player = other.gameObject;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerNear = false;
+            player = null;
+        }
+    }
+
+    void GetInCar()
+    {
+        if (player == null || driverSeat == null) return;
+
+        driving = true;
+        
+        // 플레이어를 운전석으로 이동
+        player.transform.position = driverSeat.position;
+        player.transform.rotation = driverSeat.rotation;
+        player.transform.SetParent(driverSeat);
+
+        // 플레이어 이동 막기
+        CharacterController cc = player.GetComponent<CharacterController>();
+        if (cc != null) cc.enabled = false;
+    }
+
+    void GetOutOfCar()
+    {
+        if (player == null || exitPoint == null) return;
+
+        driving = false;
+        
+        // 자동차 정지
+        currentSpeed = 0f;
+        targetSpeed = 0f;
+
+        // 플레이어를 하차 위치로 이동
+        player.transform.SetParent(null);
+        player.transform.position = exitPoint.position;
+        player.transform.rotation = exitPoint.rotation;
+
+        // 플레이어 이동 허용
+        CharacterController cc = player.GetComponent<CharacterController>();
+        if (cc != null) cc.enabled = true;
     }
 }
