@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class Inventory : MonoBehaviour
 {
-    private const int CAPACITY = 12; // 인벤토리 용량 고정값
+    private const int CAPACITY = 11; // 인벤토리 용량 고정값
 
     [SerializeField] private List<InventorySlot> slots; // 인벤토리 슬롯들
 

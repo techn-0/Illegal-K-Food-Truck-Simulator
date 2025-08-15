@@ -191,6 +191,7 @@ GameObject:
   - component: {fileID: 793554150415625345}
   - component: {fileID: 198273383076325733}
   - component: {fileID: 8617024250258673905}
+  - component: {fileID: 5350821032343277767}
   m_Layer: 5
   m_Name: Panel_Inventory
   m_TagString: Untagged
@@ -257,3 +258,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5350821032343277767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7309139749804738738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e79a7eb21fdfc044ab123786cbce9407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventory: {fileID: 0}
+  gridRoot: {fileID: 0}
+  slotPrefab: {fileID: 0}
