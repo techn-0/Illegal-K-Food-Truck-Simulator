@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0001
   displayName: Chicken
+  _type: 0
   ingredientKey: CHICKEN
-  icon: {fileID: 0}
+  icon: {fileID: 878862339, guid: 5158a527b789d004ba3dd037b2e91a5d, type: 3}
   maxStack: 99

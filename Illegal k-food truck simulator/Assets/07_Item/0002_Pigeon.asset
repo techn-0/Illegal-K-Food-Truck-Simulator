@@ -16,5 +16,5 @@ MonoBehaviour:
   displayName: Pigeon
   _type: 0
   ingredientKey: CHICKEN
-  icon: {fileID: 0}
+  icon: {fileID: -1944511769, guid: 35793cb2eeb0dd3438789febe9586d99, type: 3}
   maxStack: 99

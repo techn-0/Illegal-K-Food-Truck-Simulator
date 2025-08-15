@@ -16,5 +16,5 @@ MonoBehaviour:
   displayName: Flour
   _type: 0
   ingredientKey: Flour
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0c79883b9823fbf4dadfd8c1d460e2c2, type: 3}
   maxStack: 99

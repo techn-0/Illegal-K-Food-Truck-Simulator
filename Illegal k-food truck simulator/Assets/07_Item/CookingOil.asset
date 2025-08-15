@@ -16,5 +16,5 @@ MonoBehaviour:
   displayName: CookingOil
   _type: 0
   ingredientKey: CookingOil
-  icon: {fileID: 0}
+  icon: {fileID: 1325370138, guid: f13661a454585c74c82dc14e88dd1fdb, type: 3}
   maxStack: 99
