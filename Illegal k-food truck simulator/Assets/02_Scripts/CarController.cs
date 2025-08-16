@@ -31,7 +31,7 @@ public class CarController : MonoBehaviour
     void Update()
     {
         // E 키로 승하차
-        if (playerNear && Input.GetKeyDown(KeyCode.E))
+        if (playerNear && Input.GetKeyDown(KeyCode.F))
         {
             if (driving)
                 GetOutOfCar();
