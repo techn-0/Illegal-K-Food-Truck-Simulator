@@ -199,4 +199,69 @@ public class Inventory : MonoBehaviour
         
         OnChanged?.Invoke();
     }
+    
+    /// <summary>
+    /// 특정 아이템이 충분한 수량 있는지 확인
+    /// </summary>
+    /// <param name="item">확인할 아이템</param>
+    /// <param name="requiredAmount">필요한 수량</param>
+    /// <returns>충분한 수량이 있으면 true</returns>
+    public bool HasItem(ItemDefinition item, int requiredAmount)
+    {
+        return CountItem(item) >= requiredAmount;
+    }
+    
+    /// <summary>
+    /// 특정 아이템의 개수 반환 (CountItem과 동일하지만 더 직관적인 이름)
+    /// </summary>
+    /// <param name="item">확인할 아이템</param>
+    /// <returns>아이템 개수</returns>
+    public int GetItemCount(ItemDefinition item)
+    {
+        return CountItem(item);
+    }
+    
+    /// <summary>
+    /// 아이템 추가 (Add와 동일하지만 더 직관적인 이름)
+    /// </summary>
+    /// <param name="item">추가할 아이템</param>
+    /// <param name="amount">추가할 수량</param>
+    /// <returns>실제로 추가된 수량</returns>
+    public int AddItem(ItemDefinition item, int amount)
+    {
+        return Add(item, amount);
+    }
+    
+    /// <summary>
+    /// 특정 아이템을 인벤토리에서 제거
+    /// </summary>
+    /// <param name="item">제거할 아이템</param>
+    /// <param name="amount">제거할 수량</param>
+    /// <returns>실제로 제거된 수량</returns>
+    public int RemoveItem(ItemDefinition item, int amount)
+    {
+        if (item == null || amount <= 0) return 0;
+        
+        int remainingToRemove = amount;
+        
+        for (int i = 0; i < slots.Count && remainingToRemove > 0; i++)
+        {
+            InventorySlot slot = slots[i];
+            
+            if (slot.IsSameItem(item))
+            {
+                int removedFromSlot = slot.RemoveCount(remainingToRemove);
+                remainingToRemove -= removedFromSlot;
+            }
+        }
+        
+        int actualRemoved = amount - remainingToRemove;
+        
+        if (actualRemoved > 0)
+        {
+            OnChanged?.Invoke();
+        }
+        
+        return actualRemoved;
+    }
 }
