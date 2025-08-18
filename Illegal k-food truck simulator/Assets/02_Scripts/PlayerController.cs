@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float speed = 5f;
     [SerializeField] Transform cameraTransform; // 카메라 Transform 참조
+    [SerializeField] InventoryView inventoryView; // 인벤토리 UI 참조
     
     CharacterController _cc;
     Vector2 _moveInput;
@@ -23,6 +24,15 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // 인벤토리 토글 처리
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (inventoryView != null)
+            {
+                inventoryView.gameObject.SetActive(!inventoryView.gameObject.activeSelf);
+            }
+        }
+
         // CharacterController가 활성화되어 있는지 확인
         if (_cc == null || !_cc.enabled || !_cc.gameObject.activeInHierarchy) return;
         if (cameraTransform == null) return;
