@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1327022260574833256}
   - component: {fileID: 3098261479262776346}
   - component: {fileID: 3038391555098958882}
+  - component: {fileID: 981136770810310178}
   m_Layer: 0
   m_Name: ChickenPrefab
   m_TagString: Untagged
@@ -31,8 +32,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -128,7 +129,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!65 &3038391555098958882
 BoxCollider:
@@ -151,3 +152,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.469131, y: 1, z: 1}
   m_Center: {x: 0, y: -0.00000011920929, z: 0}
+--- !u!114 &981136770810310178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291095118703859062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a19e9b32d264059b5fa66d8a6f1d658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 1.5
+  wanderRadius: 3
+  rotationSpeed: 180
+  idleTimeRange: {x: 1, y: 3}
+  homeOverride: {fileID: 9166768228812416869}

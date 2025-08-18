@@ -49,12 +49,19 @@ namespace _02_Scripts
         private void MoveToTarget()
         {
             Vector3 direction = (_targetPosition - transform.position).normalized;
+            
+            // Y축 이동을 방지하기 위해 direction의 Y 성분을 0으로 설정
+            direction.y = 0;
+            direction = direction.normalized;
+            
             Vector3 moveVector = direction * (moveSpeed * Time.deltaTime);
             
-            // 이동
-            transform.Translate(moveVector, Space.World);
+            // 이동 (Y축 변화 방지)
+            Vector3 newPosition = transform.position + moveVector;
+            newPosition.y = transform.position.y; // Y 위치 고정
+            transform.position = newPosition;
             
-            // 회전 - 이동 방향을 향하도록
+            // 회전 - 이동 방향을 향하도록 (Y축 회전만)
             if (direction != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -65,8 +72,10 @@ namespace _02_Scripts
                 );
             }
             
-            // 목표 지점에 도착했는지 확인 (0.1m 이내)
-            if (Vector3.Distance(transform.position, _targetPosition) < 0.1f)
+            // 목표 지점에 도착했는지 확인 (0.1m 이내, Y축 제외)
+            Vector3 currentPosFlat = new Vector3(transform.position.x, 0, transform.position.z);
+            Vector3 targetPosFlat = new Vector3(_targetPosition.x, 0, _targetPosition.z);
+            if (Vector3.Distance(currentPosFlat, targetPosFlat) < 0.1f)
             {
                 _isMoving = false;
                 _idleTimer = 0f;
@@ -91,8 +100,8 @@ namespace _02_Scripts
             Vector2 randomCircle = Random.insideUnitCircle * wanderRadius;
             _targetPosition = _homePosition + new Vector3(randomCircle.x, 0f, randomCircle.y);
             
-            // Y축은 홈 위치와 동일하게 유지 (지면 높이 유지)
-            _targetPosition.y = _homePosition.y;
+            // Y축은 현재 새의 Y 위치로 설정하여 수평 이동만 하도록 함
+            _targetPosition.y = transform.position.y;
         }
         
         private void SetNewIdleTime()
