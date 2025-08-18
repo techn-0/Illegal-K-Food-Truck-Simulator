@@ -481,6 +481,18 @@ PrefabInstance:
       value: ChickenPrefab
       objectReference: {fileID: 0}
     - target: {fileID: 9166768228812416869, guid: b8c81c11efe8b754096af335a0283fe1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9166768228812416869, guid: b8c81c11efe8b754096af335a0283fe1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9166768228812416869, guid: b8c81c11efe8b754096af335a0283fe1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9166768228812416869, guid: b8c81c11efe8b754096af335a0283fe1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.9270597
       objectReference: {fileID: 0}
@@ -520,6 +532,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9166768228812416869, guid: b8c81c11efe8b754096af335a0283fe1, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -533,6 +549,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1843149523984241726, guid: 6633ccf8f73027f46a0008c7b0273935, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1843149523984241726, guid: 6633ccf8f73027f46a0008c7b0273935, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1843149523984241726, guid: 6633ccf8f73027f46a0008c7b0273935, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1843149523984241726, guid: 6633ccf8f73027f46a0008c7b0273935, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.83
@@ -572,6 +600,10 @@ PrefabInstance:
     - target: {fileID: 1843149523984241726, guid: 6633ccf8f73027f46a0008c7b0273935, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1843149523984241726, guid: 6633ccf8f73027f46a0008c7b0273935, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3445103506687796781, guid: 6633ccf8f73027f46a0008c7b0273935, type: 3}
       propertyPath: m_Name
