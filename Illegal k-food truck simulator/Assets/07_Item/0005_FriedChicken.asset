@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2418f959671a9434ab56455112e3d29b, type: 3}
-  m_Name: CookingOil
+  m_Name: 0005_FriedChicken
   m_EditorClassIdentifier: 
-  id: 0001
-  displayName: CookingOil
-  _type: 0
-  ingredientKey: CookingOil
-  icon: {fileID: 1325370138, guid: f13661a454585c74c82dc14e88dd1fdb, type: 3}
+  id: 0005
+  displayName: FriedChicken
+  _type: 2
+  ingredientKey: FriedChicken
+  icon: {fileID: 21300000, guid: ac1b9b581b455b6489b9fed3e38863f7, type: 3}
   maxStack: 99

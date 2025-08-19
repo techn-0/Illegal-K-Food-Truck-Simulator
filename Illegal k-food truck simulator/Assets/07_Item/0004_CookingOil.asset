@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2418f959671a9434ab56455112e3d29b, type: 3}
-  m_Name: 0003_Flour
+  m_Name: 0004_CookingOil
   m_EditorClassIdentifier: 
-  id: 0003
-  displayName: Flour
+  id: 0004
+  displayName: CookingOil
   _type: 0
-  ingredientKey: Flour
-  icon: {fileID: 21300000, guid: 0c79883b9823fbf4dadfd8c1d460e2c2, type: 3}
+  ingredientKey: CookingOil
+  icon: {fileID: 1325370138, guid: f13661a454585c74c82dc14e88dd1fdb, type: 3}
   maxStack: 99

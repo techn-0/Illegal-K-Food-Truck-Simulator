@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2418f959671a9434ab56455112e3d29b, type: 3}
   m_Name: 0002_Pigeon
   m_EditorClassIdentifier: 
-  id: 0001
+  id: 0002
   displayName: Pigeon
   _type: 0
   ingredientKey: CHICKEN

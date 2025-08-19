@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70acc04f15ca42319be239a0369bcffd, type: 3}
   m_Name: Fried Chicken
   m_EditorClassIdentifier: 
-  recipeName: 
-  dishImage: {fileID: 0}
+  recipeName: Fried Chicken
+  dishImage: {fileID: 21300000, guid: ac1b9b581b455b6489b9fed3e38863f7, type: 3}
   cookingTime: 10
   price: 100
   requiredIngredients: []
-  resultDish: {fileID: 0}
+  resultDish: {fileID: 11400000, guid: 2142d50de3e6e0145851e1d11ae7c481, type: 2}
   resultAmount: 1
