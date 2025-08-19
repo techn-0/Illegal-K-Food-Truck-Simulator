@@ -16,6 +16,12 @@ MonoBehaviour:
   dishImage: {fileID: 21300000, guid: ac1b9b581b455b6489b9fed3e38863f7, type: 3}
   cookingTime: 10
   price: 100
-  requiredIngredients: []
+  requiredIngredients:
+  - ingredient: {fileID: 11400000, guid: ae4bb24738b827f4aa6700b65bd886e8, type: 2}
+    requiredAmount: 1
+  - ingredient: {fileID: 11400000, guid: 9e9b3f10f89d3774e9193b57aa250f55, type: 2}
+    requiredAmount: 1
+  - ingredient: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
+    requiredAmount: 1
   resultDish: {fileID: 11400000, guid: 2142d50de3e6e0145851e1d11ae7c481, type: 2}
   resultAmount: 1
