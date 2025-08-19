@@ -356,6 +356,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 636696384379732879}
+  - component: {fileID: -4739693892824676627}
   m_Layer: 5
   m_Name: 03_IngredientSlot
   m_TagString: Untagged
@@ -385,3 +386,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 246.6734, y: 246.67}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &-4739693892824676627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8618069710895889415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef51826103d94266adaf991b67ccd5c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ingredientIcon: {fileID: 8854320607197089793}
+  amountText: {fileID: 4611479732378575307}
+  ingredientNameText: {fileID: 1594977999972931551}

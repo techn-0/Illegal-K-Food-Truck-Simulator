@@ -282,6 +282,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 483732817731256364}
+  - component: {fileID: 7535822503842530421}
   m_Layer: 5
   m_Name: 02_RecipeItem
   m_TagString: Untagged
@@ -314,6 +315,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1736.5, y: 290.6716}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7535822503842530421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133508712961088607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a52cad7e167a4c1b875b31fb4a619e5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dishImage: {fileID: 133675773981687592}
+  dishNameText: {fileID: 4174742262593111854}
+  priceText: {fileID: 2732593298437540980}
+  cookingTimeText: {fileID: 1864358107169658518}
+  ingredientsContainer: {fileID: 6038155911982459142}
+  ingredientSlotPrefab: {fileID: 8618069710895889415, guid: d761dff095133234c96963cdbe50a28a, type: 3}
+  cookButton: {fileID: 1624866390110001735}
 --- !u!1 &3362221212951757152
 GameObject:
   m_ObjectHideFlags: 0
