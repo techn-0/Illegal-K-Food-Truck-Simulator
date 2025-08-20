@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 0001_Chicken
   m_EditorClassIdentifier: 
   id: 0001
-  displayName: Chicken
+  displayName: "\uB2ED"
   _type: 0
   ingredientKey: CHICKEN
   icon: {fileID: 878862339, guid: 5158a527b789d004ba3dd037b2e91a5d, type: 3}

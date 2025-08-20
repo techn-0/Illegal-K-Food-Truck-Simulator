@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 0004_CookingOil
   m_EditorClassIdentifier: 
   id: 0004
-  displayName: CookingOil
+  displayName: "\uC2DD\uC6A9\uC720"
   _type: 0
   ingredientKey: CookingOil
   icon: {fileID: 1325370138, guid: f13661a454585c74c82dc14e88dd1fdb, type: 3}

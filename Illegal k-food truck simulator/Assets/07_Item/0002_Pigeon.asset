@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 0002_Pigeon
   m_EditorClassIdentifier: 
   id: 0002
-  displayName: Pigeon
+  displayName: "\uBE44\uB458\uAE30"
   _type: 0
   ingredientKey: CHICKEN
   icon: {fileID: -1944511769, guid: 35793cb2eeb0dd3438789febe9586d99, type: 3}
