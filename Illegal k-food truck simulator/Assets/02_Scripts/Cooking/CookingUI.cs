@@ -35,8 +35,8 @@ public class CookingUI : MonoBehaviour
         cookingTimer.OnTimerUpdated += OnTimerUpdated;
         
         // 초기 상태 설정
-        cookingPanel.SetActive(false);
-        cookingTimerPanel.SetActive(false);
+        // cookingPanel.SetActive(false);
+        // cookingTimerPanel.SetActive(false);
 
         // 레시피 목록 생성
         CreateRecipeList();
@@ -97,14 +97,5 @@ public class CookingUI : MonoBehaviour
         timerSlider.value = progress;
         timerText.text = $"{Mathf.Ceil(remainingTime)}초";
     }
-    
-    public void ShowCookingPanel()
-    {
-        cookingPanel.SetActive(true);
-    }
-    
-    public void HideCookingPanel()
-    {
-        cookingPanel.SetActive(false);
-    }
 }
+
