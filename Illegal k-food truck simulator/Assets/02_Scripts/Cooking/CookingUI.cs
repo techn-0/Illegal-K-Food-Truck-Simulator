@@ -16,8 +16,7 @@ public class CookingUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI cookingDishNameText;
     
     private CookingManager cookingManager;
-    private float currentCookingTime;
-    private float totalCookingTime;
+    private CookingTimer cookingTimer;
     
     void Awake()
     {
@@ -31,20 +30,16 @@ public class CookingUI : MonoBehaviour
         cookingManager.OnCookingCompleted += OnCookingCompleted;
         cookingManager.OnCookingFailed += OnCookingFailed;
         
+        // 쿠킹 타이머 가져오기 및 이벤트 구독
+        cookingTimer = cookingManager.GetCookingTimer();
+        cookingTimer.OnTimerUpdated += OnTimerUpdated;
+        
         // 초기 상태 설정
         cookingPanel.SetActive(false);
         cookingTimerPanel.SetActive(false);
-        
+
         // 레시피 목록 생성
         CreateRecipeList();
-    }
-    
-    void Update()
-    {
-        if (cookingManager.IsCooking)
-        {
-            UpdateCookingTimer();
-        }
     }
     
     void OnDestroy()
@@ -54,6 +49,11 @@ public class CookingUI : MonoBehaviour
             cookingManager.OnCookingStarted -= OnCookingStarted;
             cookingManager.OnCookingCompleted -= OnCookingCompleted;
             cookingManager.OnCookingFailed -= OnCookingFailed;
+        }
+        
+        if (cookingTimer != null)
+        {
+            cookingTimer.OnTimerUpdated -= OnTimerUpdated;
         }
     }
     
@@ -74,11 +74,8 @@ public class CookingUI : MonoBehaviour
         cookingPanel.SetActive(false);
         cookingTimerPanel.SetActive(true);
         
-        totalCookingTime = cookingTime;
-        currentCookingTime = cookingTime;
-        
         cookingDishNameText.text = $"{recipe.RecipeName} 조리 중...";
-        timerSlider.value = 1f;
+        timerSlider.value = 0f; // 진행도는 0부터 시작
     }
     
     private void OnCookingCompleted(RecipeDefinition recipe)
@@ -94,18 +91,20 @@ public class CookingUI : MonoBehaviour
         // 실패 메시지 UI 표시 (선택사항)
     }
     
-    private void UpdateCookingTimer()
+    private void OnTimerUpdated(float remainingTime, float progress)
     {
-        currentCookingTime -= Time.deltaTime;
-        
-        if (currentCookingTime <= 0)
-        {
-            currentCookingTime = 0;
-        }
-        
-        float progress = 1f - (currentCookingTime / totalCookingTime);
+        // 타이머 UI 업데이트
         timerSlider.value = progress;
-        
-        timerText.text = $"{Mathf.Ceil(currentCookingTime)}초";
+        timerText.text = $"{Mathf.Ceil(remainingTime)}초";
+    }
+    
+    public void ShowCookingPanel()
+    {
+        cookingPanel.SetActive(true);
+    }
+    
+    public void HideCookingPanel()
+    {
+        cookingPanel.SetActive(false);
     }
 }

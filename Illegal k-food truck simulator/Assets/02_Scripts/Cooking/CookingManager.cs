@@ -14,18 +14,42 @@ public class CookingManager : MonoBehaviour
     public event Action<RecipeDefinition> OnCookingCompleted;
     public event Action<string> OnCookingFailed;
     
-    private Coroutine currentCookingCoroutine;
     private bool isCooking = false;
+    private CookingTimer cookingTimer;
     
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            cookingTimer = new CookingTimer();
         }
         else
         {
             Destroy(gameObject);
+        }
+    }
+    
+    void Start()
+    {
+        // 타이머 이벤트 구독
+        cookingTimer.OnTimerCompleted += OnTimerCompleted;
+    }
+    
+    void Update()
+    {
+        // 타이머 업데이트
+        if (cookingTimer.IsRunning)
+        {
+            cookingTimer.UpdateTimer(Time.deltaTime);
+        }
+    }
+    
+    void OnDestroy()
+    {
+        if (cookingTimer != null)
+        {
+            cookingTimer.OnTimerCompleted -= OnTimerCompleted;
         }
     }
     
@@ -64,21 +88,19 @@ public class CookingManager : MonoBehaviour
         }
         
         isCooking = true;
-        currentCookingCoroutine = StartCoroutine(CookingCoroutine(recipe));
+        cookingTimer.StartTimer(recipe, recipe.CookingTime);
         OnCookingStarted?.Invoke(recipe, recipe.CookingTime);
     }
     
-    private IEnumerator CookingCoroutine(RecipeDefinition recipe)
+    private void OnTimerCompleted(RecipeDefinition recipe)
     {
-        yield return new WaitForSeconds(recipe.CookingTime);
-        
         // 요리 완성 - 결과물을 인벤토리에 추가
         playerInventory.AddItem(recipe.ResultDish, recipe.ResultAmount);
         
         isCooking = false;
-        currentCookingCoroutine = null;
         OnCookingCompleted?.Invoke(recipe);
     }
     
     public bool IsCooking => isCooking;
+    public CookingTimer GetCookingTimer() => cookingTimer;
 }

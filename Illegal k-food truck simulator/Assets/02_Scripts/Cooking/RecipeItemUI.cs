@@ -15,6 +15,7 @@ public class RecipeItemUI : MonoBehaviour
     
     private RecipeDefinition recipe;
     private CookingManager cookingManager;
+    private bool isInitialized = false;
     
     void Awake()
     {
@@ -24,6 +25,13 @@ public class RecipeItemUI : MonoBehaviour
     void Start()
     {
         cookButton.onClick.AddListener(OnCookButtonClicked);
+        isInitialized = true;
+        
+        // Start에서 초기화가 완료된 후 버튼 상태 업데이트
+        if (recipe != null)
+        {
+            UpdateCookButton();
+        }
     }
     
     public void SetupRecipe(RecipeDefinition recipeDefinition)
@@ -39,14 +47,20 @@ public class RecipeItemUI : MonoBehaviour
         // 재료 목록 생성
         CreateIngredientSlots();
         
-        // 버튼 상태 업데이트
-        UpdateCookButton();
+        // Start가 호출된 후에만 버튼 상태 업데이트
+        if (isInitialized)
+        {
+            UpdateCookButton();
+        }
     }
     
     void Update()
     {
-        // 매 프레임마다 요리 가능 여부 확인
-        UpdateCookButton();
+        // 초기화가 완료된 후에만 매 프레임마다 요리 가능 여부 확인
+        if (isInitialized)
+        {
+            UpdateCookButton();
+        }
     }
     
     private void CreateIngredientSlots()
