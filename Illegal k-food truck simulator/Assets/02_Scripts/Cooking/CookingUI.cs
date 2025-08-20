@@ -6,7 +6,6 @@ public class CookingUI : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private GameObject cookingPanel;
-    [SerializeField] private Button cookingButton;
     [SerializeField] private Transform recipeContainer;
     [SerializeField] private GameObject recipeItemPrefab;
     
@@ -20,13 +19,13 @@ public class CookingUI : MonoBehaviour
     private float currentCookingTime;
     private float totalCookingTime;
     
-    void Start()
+    void Awake()
     {
         cookingManager = CookingManager.Instance;
-        
-        // 쿠킹 버튼 이벤트 연결
-        cookingButton.onClick.AddListener(ToggleCookingPanel);
-        
+    }
+    
+    void Start()
+    {
         // 쿠킹 매니저 이벤트 구독
         cookingManager.OnCookingStarted += OnCookingStarted;
         cookingManager.OnCookingCompleted += OnCookingCompleted;
@@ -56,11 +55,6 @@ public class CookingUI : MonoBehaviour
             cookingManager.OnCookingCompleted -= OnCookingCompleted;
             cookingManager.OnCookingFailed -= OnCookingFailed;
         }
-    }
-    
-    private void ToggleCookingPanel()
-    {
-        cookingPanel.SetActive(!cookingPanel.activeSelf);
     }
     
     private void CreateRecipeList()

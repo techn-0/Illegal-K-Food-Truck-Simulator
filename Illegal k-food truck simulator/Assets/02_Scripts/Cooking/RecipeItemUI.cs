@@ -16,9 +16,13 @@ public class RecipeItemUI : MonoBehaviour
     private RecipeDefinition recipe;
     private CookingManager cookingManager;
     
-    void Start()
+    void Awake()
     {
         cookingManager = CookingManager.Instance;
+    }
+    
+    void Start()
+    {
         cookButton.onClick.AddListener(OnCookButtonClicked);
     }
     

@@ -11,13 +11,14 @@ GameObject:
   - component: {fileID: 5177818475788289749}
   - component: {fileID: 487708539783032200}
   - component: {fileID: 2739327705338380403}
+  - component: {fileID: 7621584042477703653}
   m_Layer: 5
   m_Name: 01_Panel_Cooking
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5177818475788289749
 RectTransform:
   m_ObjectHideFlags: 0
@@ -76,6 +77,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7621584042477703653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5095289165741184464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6cf6f7ba0ef404189876fe30fd96e25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cookingPanel: {fileID: 5095289165741184464}
+  recipeContainer: {fileID: 5151074331876347220}
+  recipeItemPrefab: {fileID: 2133508712961088607, guid: 302d7bdffa498fc41b18fe9950f77f03, type: 3}
+  cookingTimerPanel: {fileID: 0}
+  timerText: {fileID: 0}
+  timerSlider: {fileID: 0}
+  cookingDishNameText: {fileID: 0}
 --- !u!1 &8318645749799611063
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,7 +112,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5151074331876347220
 RectTransform:
   m_ObjectHideFlags: 0
