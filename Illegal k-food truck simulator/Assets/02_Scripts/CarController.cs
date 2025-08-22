@@ -79,6 +79,12 @@ public class CarController : MonoBehaviour
             Vector3 forwardMovement = transform.forward * currentSpeed;
             rb.linearVelocity = new Vector3(forwardMovement.x, rb.linearVelocity.y, forwardMovement.z);
         }
+        else
+        {
+            // 운전 중이 아닐 때는 차량을 완전히 정지
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -121,9 +127,11 @@ public class CarController : MonoBehaviour
 
         driving = false;
         
-        // 자동차 정지
+        // 자동차 완전 정지
         currentSpeed = 0f;
         targetSpeed = 0f;
+        rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+        rb.angularVelocity = Vector3.zero;
 
         // 플레이어를 하차 위치로 이동
         player.transform.SetParent(null);
