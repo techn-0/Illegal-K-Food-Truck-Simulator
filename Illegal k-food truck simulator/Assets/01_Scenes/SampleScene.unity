@@ -1227,9 +1227,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1090107568038599721, guid: f54ba2e7dbf3cf34f91ed7bb0430e338, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1883901911}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f54ba2e7dbf3cf34f91ed7bb0430e338, type: 3}
+--- !u!4 &663139465 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1090107568038599721, guid: f54ba2e7dbf3cf34f91ed7bb0430e338, type: 3}
+  m_PrefabInstance: {fileID: 663139464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &697231846
 GameObject:
   m_ObjectHideFlags: 0
@@ -1729,6 +1737,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1337362163}
+  - component: {fileID: 1337362165}
+  - component: {fileID: 1337362164}
   m_Layer: 0
   m_Name: Customer
   m_TagString: Untagged
@@ -1752,6 +1762,34 @@ Transform:
   - {fileID: 51022337}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1337362164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337362162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d17be127d043a4931a831ed6ba6a6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customerView: {fileID: 1337362165}
+  truckTransform: {fileID: 1883901911}
+--- !u!114 &1337362165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337362162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 632c6c00de6d488db932ee918607fb2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  orderUI: {fileID: 0}
 --- !u!4 &1375131913 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4161190577442616075, guid: d558e0b338e68ac41979546f495df9f3, type: 3}
@@ -1987,6 +2025,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1883901910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1883901911}
+  m_Layer: 0
+  m_Name: OrderPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1883901911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883901910}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.155, y: 0.69, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 663139465}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1974548957
 MonoBehaviour:
