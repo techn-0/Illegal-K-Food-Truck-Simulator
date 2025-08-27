@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 0006_Fried99
   m_EditorClassIdentifier: 
   id: 0006
-  displayName: "\uAD6C\uAD6C\uCE58"
+  displayName: "\uAD6C\uAD6C\uCE58\uD0A8"
   _type: 2
   ingredientKey: FriedChicken
   icon: {fileID: 21300000, guid: ac1b9b581b455b6489b9fed3e38863f7, type: 3}
