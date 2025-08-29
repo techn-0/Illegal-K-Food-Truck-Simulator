@@ -17,7 +17,28 @@ public class CustomerOrderSystem : MonoBehaviour
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        MoveToOrderCounter();
+        BusinessManager.OnBusinessStateChanged += HandleBusinessStateChanged;
+        if (BusinessManager.IsBusinessActive)
+        {
+            MoveToOrderCounter();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        BusinessManager.OnBusinessStateChanged -= HandleBusinessStateChanged;
+    }
+
+    private void HandleBusinessStateChanged(bool isActive)
+    {
+        if (isActive)
+        {
+            MoveToOrderCounter();
+        }
+        else
+        {
+            CancelOrder();
+        }
     }
 
     private void MoveToOrderCounter()
@@ -28,9 +49,18 @@ public class CustomerOrderSystem : MonoBehaviour
         }
     }
 
+    private void CancelOrder()
+    {
+        if (instantiatedUI != null)
+        {
+            Destroy(instantiatedUI);
+            instantiatedUI = null;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform == orderCounter)
+        if (BusinessManager.IsBusinessActive && other.transform == orderCounter)
         {
             PlaceOrder();
         }
