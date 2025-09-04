@@ -1,77 +1,240 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// 손님의 주문 시스템을 관리하는 클래스
+/// 단일 책임: 손님의 이동 및 주문 상태 관리
+/// </summary>
 public class CustomerOrderSystem : MonoBehaviour
 {
     [Header("Order Settings")]
-    public Transform orderCounter; // 주문 창구 위치
-    public ItemDefinition orderItem; // 주문 아이템
-    [Range(1, 5)] public int orderQuantity = 1; // 주문 수량
+    public ItemDefinition orderItem; // 주문 아이템 (인스펙터에서 설정)
+    [Range(1, 5)] public int orderQuantity = 1; // 주문 수량 (인스펙터에서 설정)
+    [Range(10f, 60f)] public float orderTimeLimit = 30f; // 주문 제한 시간 (인스펙터에서 설정)
 
     [Header("UI Settings")]
-    public GameObject orderUI; // 주문 UI 프리팹
+    public GameObject orderUI; // 주문 UI 프리팹 (인스펙터에서 설정)
 
-    private NavMeshAgent agent;
-    private GameObject instantiatedUI;
+    [Header("Movement Settings")]
+    [SerializeField] private float arrivalDistance = 0.5f; // 도착 판정 거리
+
+    private NavMeshAgent _agent;
+    private GameObject _instantiatedUI;
+    private CustomerOrder _currentOrder;
+    private Vector3 _originalPosition; // 원래 위치
+    private Quaternion _originalRotation; // 원래 회전
+    private Vector3 _targetPosition; // 현재 목표 위치
+    private bool _isInQueue = false;
+    private bool _hasPlacedOrder = false;
 
     private void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        _agent = GetComponent<NavMeshAgent>();
+        
+        // 원래 위치와 회전 저장
+        _originalPosition = transform.position;
+        _originalRotation = transform.rotation;
+        
+        // 주문 데이터 초기화
+        _currentOrder = new CustomerOrder(orderItem, orderQuantity, orderTimeLimit);
+        _currentOrder.OnOrderExpired += HandleOrderExpired;
+        
+        // 비즈니스 상태 이벤트 구독
         BusinessManager.OnBusinessStateChanged += HandleBusinessStateChanged;
+        
+        // 영업 중이면 대기열에 참가
         if (BusinessManager.IsBusinessActive)
         {
-            MoveToOrderCounter();
+            JoinQueue();
         }
+    }
+
+    private void Update()
+    {
+        // 주문 타이머 업데이트
+        if (_currentOrder != null)
+        {
+            _currentOrder.UpdateTimer(Time.deltaTime);
+        }
+
+        // 목표 위치에 도달했는지 확인
+        CheckArrival();
     }
 
     private void OnDestroy()
     {
         BusinessManager.OnBusinessStateChanged -= HandleBusinessStateChanged;
+        if (_currentOrder != null)
+        {
+            _currentOrder.OnOrderExpired -= HandleOrderExpired;
+        }
     }
 
     private void HandleBusinessStateChanged(bool isActive)
     {
         if (isActive)
         {
-            MoveToOrderCounter();
+            JoinQueue();
         }
         else
         {
-            CancelOrder();
+            LeaveQueue();
+            ReturnToOriginalPosition();
         }
     }
 
-    private void MoveToOrderCounter()
+    /// <summary>
+    /// 대기열에 참가
+    /// </summary>
+    private void JoinQueue()
     {
-        if (orderCounter != null)
+        if (OrderManager.Instance != null && !_isInQueue)
         {
-            agent.SetDestination(orderCounter.position);
+            OrderManager.Instance.EnqueueCustomer(this);
+            _isInQueue = true;
         }
     }
 
-    private void CancelOrder()
+    /// <summary>
+    /// 대기열에서 나가기
+    /// </summary>
+    private void LeaveQueue()
     {
-        if (instantiatedUI != null)
+        if (OrderManager.Instance != null && _isInQueue)
         {
-            Destroy(instantiatedUI);
-            instantiatedUI = null;
+            OrderManager.Instance.DequeueCustomer(this);
+            _isInQueue = false;
         }
+        
+        // 주문 UI 제거
+        RemoveOrderUI();
+        
+        // 주문 비활성화
+        if (_currentOrder != null)
+        {
+            _currentOrder.DeactivateOrder();
+        }
+        
+        _hasPlacedOrder = false;
     }
 
-    private void OnTriggerEnter(Collider other)
+    /// <summary>
+    /// OrderManager에서 호출되는 목표 위치 설정
+    /// </summary>
+    public void SetTargetPosition(Vector3 position)
     {
-        if (BusinessManager.IsBusinessActive && other.transform == orderCounter)
+        _targetPosition = position;
+        if (_agent != null && _agent.isActiveAndEnabled)
         {
-            PlaceOrder();
+            _agent.SetDestination(_targetPosition);
         }
     }
 
+    /// <summary>
+    /// 대기열에서 제거될 때 호출
+    /// </summary>
+    public void OnRemovedFromQueue()
+    {
+        _isInQueue = false;
+        RemoveOrderUI();
+        if (_currentOrder != null)
+        {
+            _currentOrder.DeactivateOrder();
+        }
+        _hasPlacedOrder = false;
+    }
+
+    /// <summary>
+    /// 목표 위치 도달 확인
+    /// </summary>
+    private void CheckArrival()
+    {
+        if (Vector3.Distance(transform.position, _targetPosition) <= arrivalDistance)
+        {
+            // 첫 번째 손님이고 아직 주문하지 않았다면 주문 생성
+            if (OrderManager.Instance != null && 
+                OrderManager.Instance.IsFirstInQueue(this) && 
+                !_hasPlacedOrder &&
+                BusinessManager.IsBusinessActive)
+            {
+                PlaceOrder();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 주문 생성
+    /// </summary>
     private void PlaceOrder()
     {
-        if (orderUI != null && instantiatedUI == null)
+        if (orderUI != null && _instantiatedUI == null && _currentOrder != null)
         {
-            instantiatedUI = Instantiate(orderUI, transform);
-            instantiatedUI.GetComponent<OrderUI>().Setup(orderItem, orderQuantity);
+            _instantiatedUI = Instantiate(orderUI, transform);
+            
+            var orderUIComponent = _instantiatedUI.GetComponent<OrderUI>();
+            if (orderUIComponent != null)
+            {
+                orderUIComponent.Setup(_currentOrder.orderItem, _currentOrder.quantity);
+            }
+            
+            // 주문 타이머 시작
+            _currentOrder.ActivateOrder();
+            _hasPlacedOrder = true;
         }
+    }
+
+    /// <summary>
+    /// 주문 UI 제거
+    /// </summary>
+    private void RemoveOrderUI()
+    {
+        if (_instantiatedUI != null)
+        {
+            Destroy(_instantiatedUI);
+            _instantiatedUI = null;
+        }
+    }
+
+    /// <summary>
+    /// 주문 시간 초과 처리
+    /// </summary>
+    private void HandleOrderExpired(CustomerOrder expiredOrder)
+    {
+        Debug.Log($"주문 시간 초과: {expiredOrder.orderItem.DisplayName}");
+        LeaveQueue();
+        ReturnToOriginalPosition();
+    }
+
+    /// <summary>
+    /// 주문 완료 처리 (OrderUI에서 호출)
+    /// </summary>
+    public void OnOrderCompleted()
+    {
+        if (_currentOrder != null)
+        {
+            _currentOrder.CompleteOrder();
+        }
+        
+        LeaveQueue();
+        ReturnToOriginalPosition();
+    }
+
+    /// <summary>
+    /// 원래 위치로 복귀
+    /// </summary>
+    private void ReturnToOriginalPosition()
+    {
+        if (_agent != null && _agent.isActiveAndEnabled)
+        {
+            _agent.SetDestination(_originalPosition);
+        }
+    }
+
+    /// <summary>
+    /// 현재 주문 정보 반환
+    /// </summary>
+    public CustomerOrder GetCurrentOrder()
+    {
+        return _currentOrder;
     }
 }

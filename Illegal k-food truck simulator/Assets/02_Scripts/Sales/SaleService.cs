@@ -99,7 +99,7 @@ public class SaleService : MonoBehaviour
         
         return ProcessSale(recipe.ResultDish, quantity, recipe.Price);
     }
-    
+
     /// <summary>
     /// 정적 메서드: 아이템 판매 시도 (프리팹에서 호출 가능)
     /// </summary>
@@ -113,7 +113,7 @@ public class SaleService : MonoBehaviour
             Debug.LogError("SaleService 인스턴스를 찾을 수 없습니다.");
             return false;
         }
-        
+
         // 레시피 정의에서 해당 아이템의 가격을 찾아서 판매
         RecipeDefinition[] allRecipes = Resources.FindObjectsOfTypeAll<RecipeDefinition>();
         foreach (var recipe in allRecipes)
