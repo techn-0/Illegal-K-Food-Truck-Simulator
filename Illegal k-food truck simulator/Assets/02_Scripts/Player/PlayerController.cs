@@ -68,7 +68,13 @@ namespace _02_Scripts
             
             // 실제 이동 처리
             if (dir.sqrMagnitude > 0)
+            {
                 _cc.Move(dir * (speed * Time.deltaTime));
+
+                // 캐릭터가 이동 방향을 바라보도록 회전
+                Quaternion targetRotation = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+            }
 
             // 기본 중력 처리 (땅에 붙어있지 않을 때)
             if (!_cc.isGrounded) _cc.Move(Physics.gravity * Time.deltaTime);
