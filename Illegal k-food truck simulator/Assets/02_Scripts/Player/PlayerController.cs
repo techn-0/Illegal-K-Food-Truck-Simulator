@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using _02_Scripts.Player;
 
 namespace _02_Scripts
 {
@@ -16,6 +17,7 @@ namespace _02_Scripts
     
         CharacterController _cc;
         Vector2 _moveInput; // Input System에서 받은 이동 입력값
+        PlayerAnimationPresenter _animationPresenter;
 
         /// <summary>
         /// 초기화: 필수 컴포넌트 연결 및 카메라 자동 할당
@@ -27,6 +29,10 @@ namespace _02_Scripts
             // 카메라 Transform이 설정되지 않았다면 Main Camera 자동 할당
             if (cameraTransform == null)
                 cameraTransform = Camera.main?.transform;
+
+            var animationModel = new PlayerAnimationModel();
+            var animationView = GetComponentInChildren<PlayerAnimationView>();
+            _animationPresenter = new PlayerAnimationPresenter(animationModel, animationView);
         }
 
         /// <summary>
@@ -78,6 +84,10 @@ namespace _02_Scripts
 
             // 기본 중력 처리 (땅에 붙어있지 않을 때)
             if (!_cc.isGrounded) _cc.Move(Physics.gravity * Time.deltaTime);
+
+            // 이동 상태에 따라 애니메이션 업데이트
+            bool isWalking = _moveInput.sqrMagnitude > 0;
+            _animationPresenter.UpdateWalkingState(isWalking);
         }
     }
 }
