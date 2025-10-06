@@ -18,6 +18,9 @@ public class CustomerOrderSystem : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float arrivalDistance = 0.5f; // 도착 판정 거리
 
+    [Header("Animation Settings")]
+    [SerializeField] private Animator animator; // 애니메이터 컴포넌트
+
     private NavMeshAgent _agent;
     private GameObject _instantiatedUI;
     private CustomerOrder _currentOrder;
@@ -26,14 +29,22 @@ public class CustomerOrderSystem : MonoBehaviour
     private Vector3 _targetPosition; // 현재 목표 위치
     private bool _isInQueue = false;
     private bool _hasPlacedOrder = false;
+    private Vector3 _lastPosition; // 이전 프레임 위치
 
     private void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
         
+        // 애니메이터가 설정되지 않았다면 자동으로 찾기
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
+        
         // 원래 위치와 회전 저장
         _originalPosition = transform.position;
         _originalRotation = transform.rotation;
+        _lastPosition = transform.position;
         
         // 주문 데이터 초기화
         _currentOrder = new CustomerOrder(orderItem, orderQuantity, orderTimeLimit);
@@ -56,6 +67,9 @@ public class CustomerOrderSystem : MonoBehaviour
         {
             _currentOrder.UpdateTimer(Time.deltaTime);
         }
+
+        // 움직임 감지 및 애니메이션 제어
+        UpdateWalkingAnimation();
 
         // 목표 위치에 도달했는지 확인
         CheckArrival();
@@ -236,5 +250,23 @@ public class CustomerOrderSystem : MonoBehaviour
     public CustomerOrder GetCurrentOrder()
     {
         return _currentOrder;
+    }
+
+    /// <summary>
+    /// 움직임을 감지하여 걷는 애니메이션을 제어
+    /// </summary>
+    private void UpdateWalkingAnimation()
+    {
+        if (animator != null)
+        {
+            // 현재 위치와 이전 위치를 비교하여 움직임 감지
+            float movementDistance = Vector3.Distance(transform.position, _lastPosition);
+            bool isWalking = movementDistance > 0.01f; // 아주 작은 움직임도 감지
+            
+            animator.SetBool("isWalkF", isWalking);
+            
+            // 이전 위치 업데이트
+            _lastPosition = transform.position;
+        }
     }
 }
