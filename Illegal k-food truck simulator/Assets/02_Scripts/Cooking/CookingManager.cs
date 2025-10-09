@@ -55,12 +55,25 @@ public class CookingManager : MonoBehaviour
     
     public RecipeDefinition[] GetAvailableRecipes()
     {
-        return availableRecipes;
+        // 해금된 레시피만 반환
+        if (RecipeUnlockManager.Instance == null)
+        {
+            // RecipeUnlockManager가 없다면 기존 방식 사용
+            return availableRecipes;
+        }
+        
+        return RecipeUnlockManager.Instance.GetUnlockedRecipes();
     }
     
     public bool CanCookRecipe(RecipeDefinition recipe)
     {
         if (isCooking) return false;
+        
+        // 레시피가 해금되어 있는지 확인
+        if (RecipeUnlockManager.Instance != null && !RecipeUnlockManager.Instance.IsRecipeUnlocked(recipe))
+        {
+            return false;
+        }
         
         foreach (var ingredient in recipe.RequiredIngredients)
         {
@@ -75,9 +88,10 @@ public class CookingManager : MonoBehaviour
     
     public void StartCooking(RecipeDefinition recipe)
     {
-        if (!CanCookRecipe(recipe))
+        // 레시피 해금 상태 확인
+        if (RecipeUnlockManager.Instance != null && !RecipeUnlockManager.Instance.IsRecipeUnlocked(recipe))
         {
-            OnCookingFailed?.Invoke("재료가 부족합니다!");
+            OnCookingFailed?.Invoke("해금되지 않은 레시피입니다!");
             return;
         }
         

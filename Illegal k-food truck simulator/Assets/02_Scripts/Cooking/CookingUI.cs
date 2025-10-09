@@ -65,6 +65,12 @@ public class CookingUI : MonoBehaviour
         {
             GameObject recipeItem = Instantiate(recipeItemPrefab, recipeContainer);
             RecipeItemUI recipeItemUI = recipeItem.GetComponent<RecipeItemUI>();
+        // 기존 레시피 아이템들 제거
+        foreach (Transform child in recipeContainer)
+        {
+            Destroy(child.gameObject);
+        }
+        
             recipeItemUI.SetupRecipe(recipe);
         }
     }
@@ -98,4 +104,5 @@ public class CookingUI : MonoBehaviour
         timerText.text = $"{Mathf.Ceil(remainingTime)}초";
     }
 }
+
 
