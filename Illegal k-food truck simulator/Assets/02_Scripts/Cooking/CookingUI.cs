@@ -34,6 +34,9 @@ public class CookingUI : MonoBehaviour
         cookingTimer = cookingManager.GetCookingTimer();
         cookingTimer.OnTimerUpdated += OnTimerUpdated;
         
+        // 레시피 해금 이벤트 구독
+        RecipeUnlockManager.OnUnlockedRecipesChanged += OnUnlockedRecipesChanged;
+        
         // 초기 상태 설정
         // cookingPanel.SetActive(false);
         // cookingTimerPanel.SetActive(false);
@@ -55,22 +58,25 @@ public class CookingUI : MonoBehaviour
         {
             cookingTimer.OnTimerUpdated -= OnTimerUpdated;
         }
+        
+        // 레시피 해금 이벤트 구독 해제
+        RecipeUnlockManager.OnUnlockedRecipesChanged -= OnUnlockedRecipesChanged;
     }
     
     private void CreateRecipeList()
     {
-        var recipes = cookingManager.GetAvailableRecipes();
-        
-        foreach (var recipe in recipes)
-        {
-            GameObject recipeItem = Instantiate(recipeItemPrefab, recipeContainer);
-            RecipeItemUI recipeItemUI = recipeItem.GetComponent<RecipeItemUI>();
         // 기존 레시피 아이템들 제거
         foreach (Transform child in recipeContainer)
         {
             Destroy(child.gameObject);
         }
         
+        var recipes = cookingManager.GetAvailableRecipes();
+        
+        foreach (var recipe in recipes)
+        {
+            GameObject recipeItem = Instantiate(recipeItemPrefab, recipeContainer);
+            RecipeItemUI recipeItemUI = recipeItem.GetComponent<RecipeItemUI>();
             recipeItemUI.SetupRecipe(recipe);
         }
     }
@@ -103,6 +109,12 @@ public class CookingUI : MonoBehaviour
         timerSlider.value = progress;
         timerText.text = $"{Mathf.Ceil(remainingTime)}초";
     }
+    
+    /// <summary>
+    /// 해금된 레시피가 변경되었을 때 호출되는 이벤트 핸들러
+    /// </summary>
+    private void OnUnlockedRecipesChanged()
+    {
+        CreateRecipeList();
+    }
 }
-
-

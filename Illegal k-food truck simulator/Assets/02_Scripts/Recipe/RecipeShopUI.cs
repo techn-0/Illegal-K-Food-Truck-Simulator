@@ -33,6 +33,16 @@ public class RecipeShopUI : MonoBehaviour
     
     private void OnEnable()
     {
+        // 상점 참조가 없다면 다시 찾기
+        if (recipeShop == null)
+        {
+            var shopInteractor = FindObjectOfType<RecipeShopInteractor>();
+            if (shopInteractor != null)
+            {
+                recipeShop = shopInteractor.GetRecipeShop();
+            }
+        }
+        
         // UI가 활성화될 때마다 상점 아이템 생성
         CreateShopItems();
         UpdateMoneyDisplay();
