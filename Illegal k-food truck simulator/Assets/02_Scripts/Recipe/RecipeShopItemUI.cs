@@ -14,7 +14,6 @@ public class RecipeShopItemUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI recipePriceText;
     [SerializeField] private TextMeshProUGUI recipeDescriptionText; // 선택사항
     [SerializeField] private Button purchaseButton;
-    [SerializeField] private GameObject alreadyOwnedIndicator; // 이미 보유 표시
     
     private ShopRecipeItem shopItem;
     private RecipeShop recipeShop;
@@ -88,12 +87,6 @@ public class RecipeShopItemUI : MonoBehaviour
         
         bool isAlreadyOwned = RecipeUnlockManager.Instance.IsRecipeUnlocked(shopItem.Recipe);
         bool canPurchase = recipeShop.CanPurchaseRecipe(shopItem.Recipe);
-        
-        // 이미 보유한 레시피 표시
-        if (alreadyOwnedIndicator != null)
-        {
-            alreadyOwnedIndicator.SetActive(isAlreadyOwned);
-        }
         
         // 구매 버튼 상태 설정
         if (purchaseButton != null)

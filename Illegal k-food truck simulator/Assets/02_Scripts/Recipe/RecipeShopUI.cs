@@ -12,7 +12,6 @@ public class RecipeShopUI : MonoBehaviour
     [SerializeField] private Transform recipeContainer; // 레시피 아이템들이 들어갈 컨테이너
     [SerializeField] private GameObject recipeItemPrefab; // 레시피 아이템 UI 프리팹
     [SerializeField] private TextMeshProUGUI playerMoneyText; // 플레이어 돈 표시 텍스트
-    [SerializeField] private Button closeButton; // 닫기 버튼
     
     private RecipeShop recipeShop;
     
@@ -23,12 +22,6 @@ public class RecipeShopUI : MonoBehaviour
         if (shopInteractor != null)
         {
             recipeShop = shopInteractor.GetRecipeShop();
-        }
-        
-        // 닫기 버튼 이벤트 연결
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(CloseShop);
         }
         
         // 돈 변경 이벤트 구독
@@ -119,13 +112,5 @@ public class RecipeShopUI : MonoBehaviour
         {
             CreateShopItems();
         }
-    }
-    
-    /// <summary>
-    /// 상점 닫기
-    /// </summary>
-    private void CloseShop()
-    {
-        gameObject.SetActive(false);
     }
 }
