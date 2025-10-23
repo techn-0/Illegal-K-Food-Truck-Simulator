@@ -67,19 +67,26 @@ public class RecipeShopInteractor : MonoBehaviour
         {
             playerInRange = false;
             CloseShop();
+
+            // CursorManager 호출
+            CursorManager cursorManager = FindObjectOfType<CursorManager>();
+            if (cursorManager != null)
+            {
+                cursorManager.OnUIWindowClosed();
+            }
         }
     }
     
     private void OnInteractPerformed(InputAction.CallbackContext context)
     {
         if (!playerInRange || recipeShop == null) return;
-        
+
         // 상점 UI 토글
         if (shopUI != null)
         {
             bool isActive = shopUI.activeSelf;
             shopUI.SetActive(!isActive);
-            
+
             if (!isActive)
             {
                 OpenShop();
@@ -87,6 +94,20 @@ public class RecipeShopInteractor : MonoBehaviour
             else
             {
                 CloseShop();
+            }
+
+            // CursorManager 호출
+            CursorManager cursorManager = FindObjectOfType<CursorManager>();
+            if (cursorManager != null)
+            {
+                if (!isActive)
+                {
+                    cursorManager.OnUIWindowOpened();
+                }
+                else
+                {
+                    cursorManager.OnUIWindowClosed();
+                }
             }
         }
     }

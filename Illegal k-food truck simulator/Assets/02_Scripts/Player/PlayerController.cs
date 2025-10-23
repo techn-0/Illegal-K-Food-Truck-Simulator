@@ -47,7 +47,22 @@ namespace _02_Scripts
             {
                 if (inventoryView != null)
                 {
-                    inventoryView.gameObject.SetActive(!inventoryView.gameObject.activeSelf);
+                    bool isActive = !inventoryView.gameObject.activeSelf;
+                    inventoryView.gameObject.SetActive(isActive);
+
+                    // CursorManager 호출
+                    CursorManager cursorManager = FindObjectOfType<CursorManager>();
+                    if (cursorManager != null)
+                    {
+                        if (isActive)
+                        {
+                            cursorManager.OnUIWindowOpened();
+                        }
+                        else
+                        {
+                            cursorManager.OnUIWindowClosed();
+                        }
+                    }
                 }
             }
 

@@ -13,6 +13,7 @@ public class CursorManager : MonoBehaviour
     [SerializeField] private MonoBehaviour cinemachineInputAxisController; // Cinemachine Input Axis Controller 참조
 
     private bool isCursorLocked = true; // 현재 커서 잠금 상태
+    private int activeUIWindows = 0; // 활성화된 UI 창의 개수
 
     void Start()
     {
@@ -34,6 +35,9 @@ public class CursorManager : MonoBehaviour
     /// </summary>
     private void ToggleCursorState()
     {
+        // UI 창이 열려 있으면 Alt 키로 커서 상태를 변경하지 않음
+        if (activeUIWindows > 0) return;
+
         SetCursorState(!isCursorLocked);
 
         // Cinemachine Input Axis Controller 활성화/비활성화
@@ -85,5 +89,31 @@ public class CursorManager : MonoBehaviour
     public void ForceCursorState(bool locked)
     {
         SetCursorState(locked);
+    }
+
+    /// <summary>
+    /// UI 창이 열릴 때 호출
+    /// </summary>
+    public void OnUIWindowOpened()
+    {
+        activeUIWindows++;
+        SetCursorState(false); // 커서 활성화
+    }
+
+    /// <summary>
+    /// UI 창이 닫힐 때 호출
+    /// </summary>
+    public void OnUIWindowClosed()
+    {
+        if (activeUIWindows > 0)
+        {
+            activeUIWindows--;
+        }
+
+        // 모든 UI 창이 닫혔을 때만 커서 상태를 원래대로 복원
+        if (activeUIWindows == 0)
+        {
+            SetCursorState(startWithCursorLocked);
+        }
     }
 }
