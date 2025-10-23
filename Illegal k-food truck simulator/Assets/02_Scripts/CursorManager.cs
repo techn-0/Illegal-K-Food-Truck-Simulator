@@ -8,15 +8,18 @@ public class CursorManager : MonoBehaviour
 {
     [Header("Cursor Settings")]
     [SerializeField] private bool startWithCursorLocked = true; // 시작 시 커서 잠금 여부
-    
+
+    [Header("Dependencies")]
+    [SerializeField] private MonoBehaviour cinemachineInputAxisController; // Cinemachine Input Axis Controller 참조
+
     private bool isCursorLocked = true; // 현재 커서 잠금 상태
-    
+
     void Start()
     {
         // 게임 시작 시 커서 상태 설정
         SetCursorState(startWithCursorLocked);
     }
-    
+
     void Update()
     {
         // Alt 키 입력 감지
@@ -25,15 +28,21 @@ public class CursorManager : MonoBehaviour
             ToggleCursorState();
         }
     }
-     
+
     /// <summary>
     /// 커서 상태를 토글합니다
     /// </summary>
     private void ToggleCursorState()
     {
         SetCursorState(!isCursorLocked);
+
+        // Cinemachine Input Axis Controller 활성화/비활성화
+        if (cinemachineInputAxisController != null)
+        {
+            cinemachineInputAxisController.enabled = isCursorLocked;
+        }
     }
-    
+
     /// <summary>
     /// 커서 상태를 설정합니다
     /// </summary>
@@ -41,7 +50,7 @@ public class CursorManager : MonoBehaviour
     private void SetCursorState(bool locked)
     {
         isCursorLocked = locked;
-        
+
         if (locked)
         {
             // 커서 숨기고 화면 중앙에 잠금
@@ -54,15 +63,21 @@ public class CursorManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
-        
+
         Debug.Log($"커서 상태 변경: {(locked ? "잠금" : "해제")}");
+
+        // Cinemachine Input Axis Controller 활성화/비활성화
+        if (cinemachineInputAxisController != null)
+        {
+            cinemachineInputAxisController.enabled = locked;
+        }
     }
-    
+
     /// <summary>
     /// 현재 커서가 잠겨있는지 확인
     /// </summary>
     public bool IsCursorLocked => isCursorLocked;
-    
+
     /// <summary>
     /// 외부에서 커서 상태를 강제로 설정할 때 사용
     /// </summary>
