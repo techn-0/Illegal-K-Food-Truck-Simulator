@@ -453,6 +453,7 @@ MonoBehaviour:
     amount: 2
   addAllItems: 0
   clearInventory: 0
+  addMoney: 0
 --- !u!4 &254759171
 Transform:
   m_ObjectHideFlags: 0
@@ -2849,7 +2850,7 @@ GameObject:
   - component: {fileID: 1847597759}
   - component: {fileID: 1847597758}
   m_Layer: 0
-  m_Name: GameSystems
+  m_Name: InventorySystems
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3632,18 +3633,6 @@ PrefabInstance:
       value: -360.9045
       objectReference: {fileID: 0}
     - target: {fileID: 4286245131119732114, guid: e62f796589b77ec4292a7026832734c8, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4286245131119732114, guid: e62f796589b77ec4292a7026832734c8, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4286245131119732114, guid: e62f796589b77ec4292a7026832734c8, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4286245131119732114, guid: e62f796589b77ec4292a7026832734c8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3690,10 +3679,6 @@ PrefabInstance:
     - target: {fileID: 4286245131119732114, guid: e62f796589b77ec4292a7026832734c8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4286245131119732114, guid: e62f796589b77ec4292a7026832734c8, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4960938616239913019, guid: e62f796589b77ec4292a7026832734c8, type: 3}
       propertyPath: m_Name
@@ -4113,6 +4098,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1107047003665328199, guid: 4263b2f795634e64e9ae5ca8f4a5c62d, type: 3}
+      propertyPath: targetInventory
+      value: 
+      objectReference: {fileID: 1847597758}
     - target: {fileID: 1107047003665328199, guid: 4263b2f795634e64e9ae5ca8f4a5c62d, type: 3}
       propertyPath: shopItems.Array.size
       value: 7

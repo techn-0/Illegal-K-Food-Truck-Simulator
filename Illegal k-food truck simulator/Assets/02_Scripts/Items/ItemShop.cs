@@ -24,6 +24,9 @@ public class ItemShop : MonoBehaviour
     [Header("Shop Settings")]
     [SerializeField] private ShopItemData[] shopItems; // 상점에서 판매할 아이템들
     
+    [Header("Inventory Reference")]
+    [SerializeField] private Inventory targetInventory; // 인스펙터에서 할당할 대상 인벤토리
+    
     /// <summary>
     /// 상점에서 판매하는 모든 아이템 반환
     /// </summary>
@@ -49,7 +52,7 @@ public class ItemShop : MonoBehaviour
         }
         
         // 인벤토리에 공간이 있는지 확인
-        Inventory playerInventory = FindPlayerInventory();
+        Inventory playerInventory = targetInventory != null ? targetInventory : FindPlayerInventory();
         if (playerInventory == null)
         {
             Debug.LogError("플레이어 인벤토리를 찾을 수 없습니다.");
@@ -98,7 +101,7 @@ public class ItemShop : MonoBehaviour
         if (!PlayerMoneyManager.Instance.CanAfford(shopItemData.Price)) return false;
         
         // 인벤토리 공간 확인
-        Inventory playerInventory = FindPlayerInventory();
+        Inventory playerInventory = targetInventory != null ? targetInventory : FindPlayerInventory();
         if (playerInventory == null) return false;
         
         int canAdd = CanAddToInventory(playerInventory, shopItemData.Item, shopItemData.SellAmount);
@@ -118,7 +121,25 @@ public class ItemShop : MonoBehaviour
         }
         
         // 직접 찾기
-        return FindObjectOfType<Inventory>();
+        return FindFirstObjectByType<Inventory>();
+    }
+    
+    /// <summary>
+    /// 대상 인벤토리 설정
+    /// </summary>
+    /// <param name="inventory">설정할 인벤토리</param>
+    public void SetTargetInventory(Inventory inventory)
+    {
+        targetInventory = inventory;
+    }
+    
+    /// <summary>
+    /// 현재 대상 인벤토리 반환
+    /// </summary>
+    /// <returns>현재 대상 인벤토리</returns>
+    public Inventory GetTargetInventory()
+    {
+        return targetInventory != null ? targetInventory : FindPlayerInventory();
     }
     
     /// <summary>
