@@ -83,7 +83,6 @@ public class CookingUI : MonoBehaviour
     
     private void OnCookingStarted(RecipeDefinition recipe, float cookingTime)
     {
-        cookingPanel.SetActive(false);
         cookingTimerPanel.SetActive(true);
         
         cookingDishNameText.text = $"{recipe.RecipeName} 조리 중...";

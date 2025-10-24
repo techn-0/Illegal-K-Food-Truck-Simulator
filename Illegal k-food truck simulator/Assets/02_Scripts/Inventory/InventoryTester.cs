@@ -26,6 +26,7 @@ public class InventoryTester : MonoBehaviour
     [Space(10)]
     public bool addAllItems;
     public bool clearInventory;
+    public bool addMoney;
 
     private void OnValidate()
     {
@@ -41,6 +42,13 @@ public class InventoryTester : MonoBehaviour
         {
             clearInventory = false;
             ClearInventory();
+        }
+
+        // 인스펙터에서 addMoney 체크박스를 체크하면 플레이어에게 돈 추가
+        if (addMoney)
+        {
+            addMoney = false;
+            AddTestMoney();
         }
     }
 
@@ -143,6 +151,31 @@ public class InventoryTester : MonoBehaviour
             {
                 Debug.Log($"슬롯 {i}: 비어있음");
             }
+        }
+    }
+
+    /// <summary>
+    /// 플레이어에게 테스트용 돈 추가 (50000원)
+    /// </summary>
+    [ContextMenu("테스트용 돈 추가 (50000원)")]
+    public void AddTestMoney()
+    {
+        if (PlayerMoneyManager.Instance == null)
+        {
+            Debug.LogWarning("PlayerMoneyManager 인스턴스를 찾을 수 없습니다.");
+            return;
+        }
+
+        int moneyToAdd = 50000;
+        bool success = PlayerMoneyManager.Instance.AddMoney(moneyToAdd);
+        
+        if (success)
+        {
+            Debug.Log($"테스트용 돈 추가 완료: +{moneyToAdd}원 (현재 잔액: {PlayerMoneyManager.Instance.CurrentMoney}원)");
+        }
+        else
+        {
+            Debug.LogWarning("돈 추가에 실패했습니다.");
         }
     }
 }
