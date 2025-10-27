@@ -14,6 +14,7 @@ namespace _02_Scripts
         [SerializeField] float speed = 5f;
         [SerializeField] Transform cameraTransform; // 카메라 Transform 참조
         [SerializeField] InventoryView inventoryView; // 인벤토리 UI 참조
+        [SerializeField] CookingUI cookingUI; // 쿠킹 UI 참조
     
         CharacterController _cc;
         Vector2 _moveInput; // Input System에서 받은 이동 입력값
@@ -49,6 +50,30 @@ namespace _02_Scripts
                 {
                     bool isActive = !inventoryView.gameObject.activeSelf;
                     inventoryView.gameObject.SetActive(isActive);
+
+                    // CursorManager 호출
+                    CursorManager cursorManager = FindObjectOfType<CursorManager>();
+                    if (cursorManager != null)
+                    {
+                        if (isActive)
+                        {
+                            cursorManager.OnUIWindowOpened();
+                        }
+                        else
+                        {
+                            cursorManager.OnUIWindowClosed();
+                        }
+                    }
+                }
+            }
+
+            // 쿠킹 UI 토글 처리 (C키)
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                if (cookingUI != null)
+                {
+                    bool isActive = !cookingUI.gameObject.activeSelf;
+                    cookingUI.gameObject.SetActive(isActive);
 
                     // CursorManager 호출
                     CursorManager cursorManager = FindObjectOfType<CursorManager>();
