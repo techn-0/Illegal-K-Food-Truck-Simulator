@@ -54,8 +54,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.49, y: 2.38, z: 2.96}
-  m_Center: {x: 6.02, y: 1, z: 1.69}
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 5.24, y: 1, z: 1.69}
 --- !u!114 &1107047003665328199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,6 +75,22 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
     price: 100
     sellAmount: 1
+  - item: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
+    price: 100
+    sellAmount: 1
+  - item: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
+    price: 100
+    sellAmount: 1
+  - item: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
+    price: 100
+    sellAmount: 1
+  - item: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
+    price: 100
+    sellAmount: 1
+  - item: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
+    price: 100
+    sellAmount: 1
+  targetInventory: {fileID: 0}
 --- !u!114 &4537814198434028040
 MonoBehaviour:
   m_ObjectHideFlags: 0
