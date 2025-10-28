@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 4288695181217822940}
   - component: {fileID: 4510631875624984238}
   m_Layer: 0
-  m_Name: OLD_Canvas
+  m_Name: Customer_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -296,7 +296,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4288695181217822940
 MonoBehaviour:
   m_ObjectHideFlags: 0
