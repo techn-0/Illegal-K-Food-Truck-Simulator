@@ -57,19 +57,25 @@ public class RecipeShop : MonoBehaviour
             return false;
         }
         
-        // 돈 차감
-        if (!PlayerMoneyManager.Instance.SpendMoney(shopItem.Price))
+        // 돈 차감 (0원인 경우 건너뜀)
+        if (shopItem.Price > 0)
         {
-            Debug.LogError("돈 차감 중 오류가 발생했습니다.");
-            return false;
+            if (!PlayerMoneyManager.Instance.SpendMoney(shopItem.Price))
+            {
+                Debug.LogError("돈 차감 중 오류가 발생했습니다.");
+                return false;
+            }
         }
         
         // 레시피 해금
         bool unlockSuccess = RecipeUnlockManager.Instance.UnlockRecipe(recipe);
         if (!unlockSuccess)
         {
-            // 해금 실패 시 돈 환불
-            PlayerMoneyManager.Instance.AddMoney(shopItem.Price);
+            // 해금 실패 시 돈 환불 (0원이 아닌 경우에만)
+            if (shopItem.Price > 0)
+            {
+                PlayerMoneyManager.Instance.AddMoney(shopItem.Price);
+            }
             Debug.LogError("레시피 해금 중 오류가 발생했습니다.");
             return false;
         }

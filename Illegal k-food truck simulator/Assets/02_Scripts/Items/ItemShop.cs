@@ -70,7 +70,7 @@ public class ItemShop : MonoBehaviour
         // 돈 차감
         if (!PlayerMoneyManager.Instance.SpendMoney(shopItemData.Price))
         {
-            Debug.LogError("돈 차감 중 오류가 발생했습니다.");
+                Debug.LogError("돈 차감 중 오류가 발생했습니다.");
             return false;
         }
         
