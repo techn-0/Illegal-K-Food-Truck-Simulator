@@ -67,19 +67,25 @@ public class ItemShop : MonoBehaviour
             return false;
         }
         
-        // 돈 차감
-        if (!PlayerMoneyManager.Instance.SpendMoney(shopItemData.Price))
+        // 돈 차감 (0원인 경우 건너뜀)
+        if (shopItemData.Price > 0)
         {
+            if (!PlayerMoneyManager.Instance.SpendMoney(shopItemData.Price))
+            {
                 Debug.LogError("돈 차감 중 오류가 발생했습니다.");
-            return false;
+                return false;
+            }
         }
         
         // 인벤토리에 아이템 추가
         int actualAdded = playerInventory.Add(shopItemData.Item, shopItemData.SellAmount);
         if (actualAdded != shopItemData.SellAmount)
         {
-            // 예상과 다른 수량이 추가됨 - 돈 환불
-            PlayerMoneyManager.Instance.AddMoney(shopItemData.Price);
+            // 예상과 다른 수량이 추가됨 - 돈 환불 (0원이 아닌 경우에만)
+            if (shopItemData.Price > 0)
+            {
+                PlayerMoneyManager.Instance.AddMoney(shopItemData.Price);
+            }
             Debug.LogError("인벤토리 추가 중 오류가 발생했습니다.");
             return false;
         }

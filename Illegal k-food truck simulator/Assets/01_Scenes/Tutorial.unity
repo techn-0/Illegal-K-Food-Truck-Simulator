@@ -3633,6 +3633,10 @@ PrefabInstance:
       propertyPath: targetInventory
       value: 
       objectReference: {fileID: 1847597758}
+    - target: {fileID: 1107047003665328199, guid: 4263b2f795634e64e9ae5ca8f4a5c62d, type: 3}
+      propertyPath: shopItems.Array.data[0].price
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3344472589916384484, guid: 4263b2f795634e64e9ae5ca8f4a5c62d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.22
