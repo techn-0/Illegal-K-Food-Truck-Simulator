@@ -10,6 +10,7 @@ namespace Dialogue
     {
         [Header("테스트 설정 / Test Settings")]
         [SerializeField] private DialogueManager dialogueManager;  // 다이얼로그 매니저 참조
+        [SerializeField] private TextAsset testDialogueCSV;        // 테스트용 CSV 파일
         [SerializeField] private int startDialogueId = 100;        // 시작할 다이얼로그 ID
         [SerializeField] private bool autoStartOnAwake = true;     // 시작 시 자동 실행 여부
 
@@ -30,14 +31,20 @@ namespace Dialogue
         /// </summary>
         public void StartTestDialogue()
         {
-            if (dialogueManager != null)
-            {
-                dialogueManager.StartDialogue(startDialogueId);
-            }
-            else
+            if (dialogueManager == null)
             {
                 Debug.LogError("DialogueManager is not assigned to DialogueTester");
+                return;
             }
+
+            if (testDialogueCSV == null)
+            {
+                Debug.LogError("Test Dialogue CSV is not assigned to DialogueTester");
+                return;
+            }
+
+            // CSV를 로드하고 다이얼로그 시작
+            dialogueManager.LoadAndStartDialogue(testDialogueCSV, startDialogueId);
         }
 
         /// <summary>

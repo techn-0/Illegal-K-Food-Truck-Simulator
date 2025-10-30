@@ -143,7 +143,7 @@ namespace Dialogue
         }
 
         /// <summary>
-        /// 화자 이미지를 Resources에서 로드 / Load speaker image from Resources
+        /// 화자 이미지를 03_Resource 폴더에서 로드 / Load speaker image from 03_Resource folder
         /// </summary>
         /// <param name="fileName">파일명</param>
         /// <returns>Sprite 또는 null</returns>
@@ -152,8 +152,9 @@ namespace Dialogue
             if (string.IsNullOrEmpty(fileName))
                 return null;
 
-            string resourcePath = $"Portraits/{fileName}";
-            Sprite sprite = Resources.Load<Sprite>(resourcePath);
+            // 03_Resource/Sprite/Portraits 경로에서 로드
+            string resourcePath = $"Assets/03_Resource/Sprite/Portraits/{fileName}.png";
+            Sprite sprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(resourcePath);
             
             if (sprite == null)
             {

@@ -12,7 +12,6 @@ namespace Dialogue
     public class DialogueManager : MonoBehaviour
     {
         [Header("다이얼로그 설정 / Dialogue Settings")]
-        [SerializeField] private TextAsset csv;                    // CSV 다이얼로그 데이터
         [SerializeField] private DialogueView view;                // 다이얼로그 뷰 참조
 
         [Header("이벤트 / Events")]
@@ -29,9 +28,6 @@ namespace Dialogue
         /// </summary>
         private void Awake()
         {
-            // CSV 데이터 로드 / Load CSV data
-            LoadDialogueData();
-            
             // 뷰 초기화 / Initialize view
             if (view != null)
             {
@@ -209,18 +205,39 @@ namespace Dialogue
         }
 
         /// <summary>
-        /// CSV 다이얼로그 데이터 로드 / Load CSV dialogue data
+        /// CSV를 로드하고 다이얼로그 시작 / Load CSV and start dialogue
         /// </summary>
-        private void LoadDialogueData()
+        /// <param name="csvAsset">CSV 파일</param>
+        /// <param name="startId">시작할 다이얼로그 ID</param>
+        public void LoadAndStartDialogue(TextAsset csvAsset, int startId)
         {
-            if (csv == null)
+            if (csvAsset == null)
+            {
+                Debug.LogError("CSV Asset is null. Cannot start dialogue.");
+                return;
+            }
+
+            // CSV 데이터 로드
+            LoadDialogueDataFromCSV(csvAsset);
+
+            // 다이얼로그 시작
+            StartDialogue(startId);
+        }
+
+        /// <summary>
+        /// 특정 CSV 파일에서 다이얼로그 데이터 로드 / Load dialogue data from specific CSV file
+        /// </summary>
+        /// <param name="csvAsset">CSV 파일</param>
+        private void LoadDialogueDataFromCSV(TextAsset csvAsset)
+        {
+            if (csvAsset == null)
             {
                 Debug.LogError("CSV TextAsset is not assigned");
                 return;
             }
 
             // CSV 로드 / Load CSV
-            dialogueLines = CSVLoader.LoadDialogue(csv);
+            dialogueLines = CSVLoader.LoadDialogue(csvAsset);
             
             // 딕셔너리 생성 (ID로 빠른 검색용) / Create dictionary for fast ID lookup
             dialogueDictionary = new Dictionary<int, DialogueLine>();
@@ -236,7 +253,7 @@ namespace Dialogue
                 dialogueDictionary[line.id] = line;
             }
 
-            Debug.Log($"Loaded {dialogueLines.Count} dialogue lines from CSV");
+            Debug.Log($"Loaded {dialogueLines.Count} dialogue lines from CSV: {csvAsset.name}");
         }
 
         /// <summary>
@@ -249,7 +266,7 @@ namespace Dialogue
         }
 
         /// <summary>
-        /// 다이얼로그 강제 종료 / Force end dialogue
+        /// 다��얼로그 강제 종료 / Force end dialogue
         /// </summary>
         public void ForceEndDialogue()
         {
@@ -262,19 +279,16 @@ namespace Dialogue
         [ContextMenu("Test Start Dialogue (ID: 100)")]
         private void TestStartDialogue()
         {
-            if (Application.isPlaying)
-            {
-                StartDialogue(100);
-            }
+            // 테스트 기능은 제거됨 (DialogueTester 사용 권장)
         }
 
         /// <summary>
-        /// 에디터에서 데이터 리로드용 / For reloading data in editor
+        /// 에��터에서 데이터 리로드용 / For reloading data in editor
         /// </summary>
         [ContextMenu("Reload CSV Data")]
         private void ReloadCSVData()
         {
-            LoadDialogueData();
+            // 외부 CSV 로드 방식으로 변경되어 이 기능은 더 이상 사용하지 않음
         }
     }
 }
