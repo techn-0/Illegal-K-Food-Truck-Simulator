@@ -25,9 +25,6 @@ namespace Dialogue
         [SerializeField] private Transform choicesRoot;       // 선택지 버튼들의 부모
         [SerializeField] private Button choiceButtonPrefab;   // 선택지 버튼 프리팹
 
-        [Header("진행 버튼 / Progress Button")]
-        [SerializeField] private Button nextButton;           // 다음 버튼 (선택지 없을 때)
-
         // 현재 생성된 선택지 버튼들 / Currently generated choice buttons
         private List<Button> currentChoiceButtons = new List<Button>();
 
@@ -52,10 +49,6 @@ namespace Dialogue
 
             // 화자 유형에 따른 초상화 설정 / Set portrait based on speaker type
             SetPortraitImage(line.speakerType, line.speakerImage);
-
-            // 다음 버튼 표시/숨김 (선택지가 없을 때만 표시) / Show/hide next button
-            if (nextButton != null)
-                nextButton.gameObject.SetActive(!line.isChoice);
         }
 
         /// <summary>
@@ -143,10 +136,6 @@ namespace Dialogue
                 choiceButton.gameObject.SetActive(true);
             }
 
-            // 다음 버튼 숨김 (선택지가 있을 때) / Hide next button when choices are present
-            if (nextButton != null)
-                nextButton.gameObject.SetActive(false);
-
             // Layout을 강제로 갱신 / Force layout refresh
             Canvas.ForceUpdateCanvases();
         }
@@ -165,23 +154,6 @@ namespace Dialogue
                 }
             }
             currentChoiceButtons.Clear();
-
-            // 선택지가 없을 때는 다음 버튼 표시 / Show next button when no choices
-            if (nextButton != null)
-                nextButton.gameObject.SetActive(true);
-        }
-
-        /// <summary>
-        /// 다음 버튼 클릭 이벤트 설정 / Set next button click event
-        /// </summary>
-        /// <param name="onNext">다음 버튼 클릭 콜백</param>
-        public void SetNextButtonCallback(Action onNext)
-        {
-            if (nextButton != null)
-            {
-                nextButton.onClick.RemoveAllListeners();
-                nextButton.onClick.AddListener(() => onNext?.Invoke());
-            }
         }
 
         /// <summary>
@@ -199,8 +171,6 @@ namespace Dialogue
             InitializePortrait(leftPortraitImage);
             InitializePortrait(rightPortraitImage);
             InitializePortrait(centerPortraitImage);
-            
-            if (nextButton != null) nextButton.gameObject.SetActive(false);
         }
 
         /// <summary>

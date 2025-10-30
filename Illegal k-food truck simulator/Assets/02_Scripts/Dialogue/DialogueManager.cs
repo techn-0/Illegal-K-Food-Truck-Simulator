@@ -37,9 +37,6 @@ namespace Dialogue
             {
                 view.Initialize();
                 view.Hide();
-                
-                // 다음 버튼 콜백 설정 / Set next button callback
-                view.SetNextButtonCallback(OnNextButtonClicked);
             }
         }
 
