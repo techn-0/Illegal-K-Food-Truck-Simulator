@@ -1,0 +1,8 @@
+id,speakerName,content,speakerType,speakerImage,isChoice,choicesRaw,nextId
+100,플레이어,"닭이 없네…",Player,player_default,false,,101
+101,노점상,"대신 비둘기 줄까?",NPC,npc_vendor,true,"예|102;아니요|201",0
+102,플레이어,"…좋아요.",Player,player_default,false,,103
+103,노점상,"좋은 선택이야! 맛있을 거야.",NPC,npc_vendor,false,,0
+201,플레이어,"다음에 올게요.",Player,player_default,false,,202
+202,노점상,"언제든 환영이야!",NPC,npc_vendor,false,,0
+
