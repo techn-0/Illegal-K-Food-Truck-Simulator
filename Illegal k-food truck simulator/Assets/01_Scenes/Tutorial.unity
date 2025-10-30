@@ -479,7 +479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 378d564801094539a57d6404cc0c6640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue.DialogueTarget
-  dialogueCSV: {fileID: 4900000, guid: 525360f762476864e86213e09e0208bd, type: 3}
+  dialogueCSV: {fileID: 4900000, guid: eca685829e6dbd747bd581fd68e0367a, type: 3}
   startDialogueId: 100
 --- !u!1001 &298146340
 PrefabInstance:
