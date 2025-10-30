@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1407034567644833812}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.707107, z: -0, w: 0.7071066}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 2.77, y: 1.103, z: -35.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -69,8 +69,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecipeShop
   shopRecipes:
-  - recipe: {fileID: 11400000, guid: e65e5ea06c07ff043a66d05f31fe9cbd, type: 2}
-    price: 100
+  - recipe: {fileID: 11400000, guid: 6dbfdd3bad37ea344aa7077be07cef66, type: 2}
+    price: 0
 --- !u!114 &8509300256105874871
 MonoBehaviour:
   m_ObjectHideFlags: 0
