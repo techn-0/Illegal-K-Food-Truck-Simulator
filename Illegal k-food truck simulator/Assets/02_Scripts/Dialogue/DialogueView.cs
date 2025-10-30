@@ -12,17 +12,14 @@ namespace Dialogue
     /// </summary>
     public class DialogueView : MonoBehaviour
     {
-        [Header("패널 설정 / Panel Settings")]
-        [SerializeField] private RectTransform leftPanel;     // Player용 (왼쪽)
-        [SerializeField] private RectTransform rightPanel;    // NPC용 (오른쪽)
-        [SerializeField] private RectTransform centerPanel;   // System용 (중앙)
+        [Header("초상화 / Portraits")]
+        [SerializeField] private Image leftPortraitImage;     // 왼쪽 초상화 (Player용)
+        [SerializeField] private Image rightPortraitImage;    // 오른쪽 초상화 (NPC용)
+        [SerializeField] private Image centerPortraitImage;   // 중앙 초상화 (System용)
 
         [Header("텍스트 UI / Text UI")]
         [SerializeField] private TMP_Text nameText;           // 화자 이름
         [SerializeField] private TMP_Text contentText;        // 대화 내용
-
-        [Header("이미지 UI / Image UI")]
-        [SerializeField] private Image portraitImage;         // 화자 초상화
 
         [Header("선택지 UI / Choice UI")]
         [SerializeField] private Transform choicesRoot;       // 선택지 버튼들의 부모
@@ -46,9 +43,6 @@ namespace Dialogue
                 return;
             }
 
-            // 패널 활성화/비활성화 및 앵커 설정 / Panel activation and anchor setting
-            SetPanelVisibility(line.speakerType);
-
             // 텍스트 바인딩 / Text binding
             if (nameText != null)
                 nameText.text = line.speakerName ?? "";
@@ -56,12 +50,8 @@ namespace Dialogue
             if (contentText != null)
                 contentText.text = line.content ?? "";
 
-            // 초상화 바인딩 / Portrait binding
-            if (portraitImage != null)
-            {
-                portraitImage.sprite = line.speakerImage;
-                portraitImage.gameObject.SetActive(line.speakerImage != null);
-            }
+            // 화자 유형에 따른 초상화 설정 / Set portrait based on speaker type
+            SetPortraitImage(line.speakerType, line.speakerImage);
 
             // 다음 버튼 표시/숨김 (선택지가 없을 때만 표시) / Show/hide next button
             if (nextButton != null)
@@ -69,28 +59,36 @@ namespace Dialogue
         }
 
         /// <summary>
-        /// 화자 유형에 따라 패널 표시 설정 / Set panel visibility based on speaker type
+        /// 화자 유형에 따라 초상화 이미지 설정 / Set portrait image based on speaker type
         /// </summary>
         /// <param name="speakerType">화자 유형</param>
-        private void SetPanelVisibility(SpeakerType speakerType)
+        /// <param name="speakerImage">화자 이미지</param>
+        private void SetPortraitImage(SpeakerType speakerType, Sprite speakerImage)
         {
-            // 모든 패널 비활성화 / Deactivate all panels
-            if (leftPanel != null) leftPanel.gameObject.SetActive(false);
-            if (rightPanel != null) rightPanel.gameObject.SetActive(false);
-            if (centerPanel != null) centerPanel.gameObject.SetActive(false);
+            // 모든 초상화 숨김 / Hide all portraits
+            if (leftPortraitImage != null) leftPortraitImage.gameObject.SetActive(false);
+            if (rightPortraitImage != null) rightPortraitImage.gameObject.SetActive(false);
+            if (centerPortraitImage != null) centerPortraitImage.gameObject.SetActive(false);
 
-            // 화자 유형에 따라 해당 패널 활성화 / Activate corresponding panel
+            // 화자 유형에 따른 초상화 설정 / Set portrait based on speaker type
+            Image targetPortrait = null;
             switch (speakerType)
             {
                 case SpeakerType.Player:
-                    if (leftPanel != null) leftPanel.gameObject.SetActive(true);
+                    targetPortrait = leftPortraitImage;
                     break;
                 case SpeakerType.NPC:
-                    if (rightPanel != null) rightPanel.gameObject.SetActive(true);
+                    targetPortrait = rightPortraitImage;
                     break;
                 case SpeakerType.System:
-                    if (centerPanel != null) centerPanel.gameObject.SetActive(true);
+                    targetPortrait = centerPortraitImage;
                     break;
+            }
+
+            if (targetPortrait != null && speakerImage != null)
+            {
+                targetPortrait.sprite = speakerImage;
+                targetPortrait.gameObject.SetActive(true);
             }
         }
 
@@ -116,6 +114,9 @@ namespace Dialogue
                 return;
             }
 
+            // 선택지 루트 먼저 활성화 / Activate choices root first
+            choicesRoot.gameObject.SetActive(true);
+
             // 새 선택지 버튼 생성 / Create new choice buttons
             foreach (var choice in choices)
             {
@@ -127,17 +128,27 @@ namespace Dialogue
                 {
                     buttonText.text = choice.text;
                 }
+                else
+                {
+                    Debug.LogWarning("Choice button prefab doesn't have a TMP_Text component");
+                }
 
                 // 클릭 이벤트 설정 / Set click event
                 int nextId = choice.nextId; // 클로저 문제 방지 / Prevent closure issue
                 choiceButton.onClick.AddListener(() => onPicked?.Invoke(nextId));
 
                 currentChoiceButtons.Add(choiceButton);
+
+                // 버튼 활성화 / Activate button
+                choiceButton.gameObject.SetActive(true);
             }
 
             // 다음 버튼 숨김 (선택지가 있을 때) / Hide next button when choices are present
             if (nextButton != null)
                 nextButton.gameObject.SetActive(false);
+
+            // Layout을 강제로 갱신 / Force layout refresh
+            Canvas.ForceUpdateCanvases();
         }
 
         /// <summary>
@@ -154,6 +165,10 @@ namespace Dialogue
                 }
             }
             currentChoiceButtons.Clear();
+
+            // 선택지가 없을 때는 다음 버튼 표시 / Show next button when no choices
+            if (nextButton != null)
+                nextButton.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -176,17 +191,29 @@ namespace Dialogue
         {
             ClearChoices();
             
-            // 모든 패널 비활성화 / Deactivate all panels
-            SetPanelVisibility(SpeakerType.System);
-            
+            // 텍스트 초기화 / Initialize texts
             if (nameText != null) nameText.text = "";
             if (contentText != null) contentText.text = "";
-            if (portraitImage != null) 
+            
+            // 모든 초상화 초기화 / Initialize all portraits
+            InitializePortrait(leftPortraitImage);
+            InitializePortrait(rightPortraitImage);
+            InitializePortrait(centerPortraitImage);
+            
+            if (nextButton != null) nextButton.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// 초상화 초기화 헬퍼 메서드 / Portrait initialization helper method
+        /// </summary>
+        /// <param name="portraitImage">초기화할 초상화 이미지</param>
+        private void InitializePortrait(Image portraitImage)
+        {
+            if (portraitImage != null)
             {
                 portraitImage.sprite = null;
                 portraitImage.gameObject.SetActive(false);
             }
-            if (nextButton != null) nextButton.gameObject.SetActive(false);
         }
 
         /// <summary>
