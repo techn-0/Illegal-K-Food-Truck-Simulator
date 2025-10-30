@@ -13,15 +13,26 @@ public class RecipeShopUI : MonoBehaviour
     [SerializeField] private GameObject recipeItemPrefab; // 레시피 아이템 UI 프리팹
     [SerializeField] private TextMeshProUGUI playerMoneyText; // 플레이어 돈 표시 텍스트
     
+    [Header("Shop Reference")]
+    [SerializeField] private RecipeShop assignedRecipeShop; // 이 UI가 표시할 특정 상점
+    
     private RecipeShop recipeShop;
     
     private void Start()
     {
-        // 상점 참조 찾기
-        var shopInteractor = FindObjectOfType<RecipeShopInteractor>();
-        if (shopInteractor != null)
+        // 할당된 상점이 있다면 사용, 없다면 기존 방식으로 찾기
+        if (assignedRecipeShop != null)
         {
-            recipeShop = shopInteractor.GetRecipeShop();
+            recipeShop = assignedRecipeShop;
+        }
+        else
+        {
+            // 상점 참조 찾기 (기존 방식 - 호환성을 위해 유지)
+            var shopInteractor = FindObjectOfType<RecipeShopInteractor>();
+            if (shopInteractor != null)
+            {
+                recipeShop = shopInteractor.GetRecipeShop();
+            }
         }
         
         // 돈 변경 이벤트 구독
@@ -33,13 +44,20 @@ public class RecipeShopUI : MonoBehaviour
     
     private void OnEnable()
     {
-        // 상점 참조가 없다면 다시 찾기
+        // 할당된 상점이 있다면 사용, 없다면 기존 방식으로 찾기
         if (recipeShop == null)
         {
-            var shopInteractor = FindObjectOfType<RecipeShopInteractor>();
-            if (shopInteractor != null)
+            if (assignedRecipeShop != null)
             {
-                recipeShop = shopInteractor.GetRecipeShop();
+                recipeShop = assignedRecipeShop;
+            }
+            else
+            {
+                var shopInteractor = FindObjectOfType<RecipeShopInteractor>();
+                if (shopInteractor != null)
+                {
+                    recipeShop = shopInteractor.GetRecipeShop();
+                }
             }
         }
         
@@ -118,6 +136,21 @@ public class RecipeShopUI : MonoBehaviour
     /// </summary>
     private void RefreshShopItems()
     {
+        if (gameObject.activeInHierarchy)
+        {
+            CreateShopItems();
+        }
+    }
+    
+    /// <summary>
+    /// 외부에서 특정 상점을 설정할 수 있는 메서드
+    /// </summary>
+    public void SetRecipeShop(RecipeShop shop)
+    {
+        recipeShop = shop;
+        assignedRecipeShop = shop;
+        
+        // 즉시 UI 업데이트
         if (gameObject.activeInHierarchy)
         {
             CreateShopItems();

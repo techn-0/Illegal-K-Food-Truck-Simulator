@@ -115,7 +115,16 @@ public class RecipeShopInteractor : MonoBehaviour
     private void OpenShop()
     {
         Debug.Log("레시피 상점이 열렸습니다.");
-        // 상점 UI가 열릴 때 필요한 추가 로직
+        
+        // 상점 UI에 이 상점의 참조 설정
+        if (shopUI != null && recipeShop != null)
+        {
+            var recipeShopUI = shopUI.GetComponent<RecipeShopUI>();
+            if (recipeShopUI != null)
+            {
+                recipeShopUI.SetRecipeShop(recipeShop);
+            }
+        }
         
         // 커서 표시 (선택사항)
         Cursor.lockState = CursorLockMode.None;
