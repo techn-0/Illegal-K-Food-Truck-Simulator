@@ -40,12 +40,6 @@ namespace Dialogue
                     string choiceText = parts[0].Trim();
                     string nextIdStr = parts[1].Trim();
 
-                    // ID 파싱 / Parse ID
-                    if (int.TryParse(nextIdStr, out int nextId))
-                    {
-                        if (!string.IsNullOrEmpty(choiceText))
-                        {
-                            choices.Add((choiceText, nextId));
                         }
                     }
                     else
