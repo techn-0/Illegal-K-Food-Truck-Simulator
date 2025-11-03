@@ -22,6 +22,7 @@ namespace Dialogue
         private Dictionary<int, DialogueLine> dialogueDictionary; // ID로 빠른 검색용
         private DialogueLine currentLine;                         // 현재 표시 중인 라인
         private bool isDialogueActive = false;                    // 다이얼로그 활성 상태
+        private DialogueTarget currentDialogueTarget;             // 현재 대화 중인 타겟
 
         /// <summary>
         /// 초기화 / Initialize
@@ -59,6 +60,16 @@ namespace Dialogue
         /// <param name="startId">시작할 다이얼로그 ID</param>
         public void StartDialogue(int startId)
         {
+            StartDialogue(startId, null);
+        }
+
+        /// <summary>
+        /// 다이얼로그 시작 (DialogueTarget 포함) / Start dialogue with DialogueTarget
+        /// </summary>
+        /// <param name="startId">시작할 다이얼로그 ID</param>
+        /// <param name="target">대화 타겟 (보상 지급용)</param>
+        public void StartDialogue(int startId, DialogueTarget target)
+        {
             if (dialogueDictionary == null || dialogueDictionary.Count == 0)
             {
                 Debug.LogError("No dialogue data loaded. Cannot start dialogue.");
@@ -78,6 +89,7 @@ namespace Dialogue
             }
 
             isDialogueActive = true;
+            currentDialogueTarget = target;
             view.Show();
             ShowDialogueLine(startLine);
         }
@@ -182,6 +194,13 @@ namespace Dialogue
                 view.Hide();
             }
 
+            // DialogueTarget 보상 지급
+            if (currentDialogueTarget != null)
+            {
+                currentDialogueTarget.OnDialogueComplete();
+                currentDialogueTarget = null;
+            }
+
             // 종료 이벤트 발생 / Trigger end event
             OnDialogueEnd?.Invoke();
             
@@ -211,6 +230,17 @@ namespace Dialogue
         /// <param name="startId">시작할 다이얼로그 ID</param>
         public void LoadAndStartDialogue(TextAsset csvAsset, int startId)
         {
+            LoadAndStartDialogue(csvAsset, startId, null);
+        }
+
+        /// <summary>
+        /// CSV를 로드하고 다이얼로그 시작 (DialogueTarget 포함) / Load CSV and start dialogue with DialogueTarget
+        /// </summary>
+        /// <param name="csvAsset">CSV 파일</param>
+        /// <param name="startId">시작할 다이얼로그 ID</param>
+        /// <param name="target">대화 타겟 (보상 지급용)</param>
+        public void LoadAndStartDialogue(TextAsset csvAsset, int startId, DialogueTarget target)
+        {
             if (csvAsset == null)
             {
                 Debug.LogError("CSV Asset is null. Cannot start dialogue.");
@@ -221,7 +251,7 @@ namespace Dialogue
             LoadDialogueDataFromCSV(csvAsset);
 
             // 다이얼로그 시작
-            StartDialogue(startId);
+            StartDialogue(startId, target);
         }
 
         /// <summary>
