@@ -1,21 +1,19 @@
 id,speakerName,content,speakerType,speakerImage,isChoice,choicesRaw,nextId
 100,플레이어,누....누구세요.....???,Player,player_default,FALSE,,101
-101,할머니,애야....할미다....,NPC,GRANDMA,TRUE,(로또 번호를 알려줄지도 모르니 아는척 해보자)|102;(우리 할머니는 살아계시는데...)|201,0
+101,할머니,애야....할미다....,NPC,GRANDMA,TRUE,로또 번호를 알려줄지도 모르니 아는척 해보자|103;우리 할머니는 살아계시는데...|201,0
 102,플레이어,할머니 오랜만이에요,Player,player_default,FALSE,,103
 103,할머니,오냐,NPC,GRANDMA,FALSE,,300
 201,플레이어,"저희 할머니 아니잖아요....
 저희 할머니는  잘 살아계시는데요...?",Player,player_default,FALSE,,202
 202,할머니,예끼놈!! 이 할미도 못알아보는게냐!,NPC,GRANDMA,FALSE,,300
 300,할머니,아무튼 알려줄게 있어서 왔단다.,NPC,GRANDMA,FALSE,,301
-301,플레이어,(이게 말로만 듣던 로또번호를 알려주는 꿈!!!),Player,player_default,FALSE,,302
+301,플레이어,이게 말로만 듣던 로또번호를 알려주는 꿈!!!',Player,player_default,FALSE,,302
 302,할머니,까먹지 말고 꼭 기억하거라,NPC,GRANDMA,FALSE,,303
-303,플레이어,(드디어 내게도 이런날이 오는구나...!),Player,player_default,FALSE,,304
+303,플레이어,드디어 내게도 이런날이 오는구나...!',Player,player_default,FALSE,,304
 304,할머니,일.....,NPC,GRANDMA,FALSE,,305
-305,플레이어,(첫번째 자리는 일!!!),Player,player_default,FALSE,,306
+305,플레이어,첫번째 자리는 일!!!',Player,player_default,FALSE,,306
 306,할머니,"일단, 닭은 먼저 깨끗이 씻고 밀가루를 묻혀야 해.
-
 기름은 너무 세게 끓이면 안 된다. 노릇노릇할 때까지 기다려야지.
-
 다 됐으면 종이 towel 위에 올려서 기름을 빼. 뜨거울 때 먹어야 제맛이야.",NPC,GRANDMA,FALSE,,307
 307,플레이어,"
 할머니, 보통 꿈에서는 로또 번호를 알려준다구요!!!
@@ -23,10 +21,30 @@ id,speakerName,content,speakerType,speakerImage,isChoice,choicesRaw,nextId
 키.친.타.올!",Player,player_default,FALSE,,308
 308,할머니,"이눔시끼!!! 내가 그렇게 가르치던!
 사람이 성실하게 일해서 돈 벌 생각을 해야지, 어디서 일도 안하고 날로 먹으려고!!!",NPC,GRANDMA,FALSE,,309
-309,플레이어,(우리 할머니도 아니면서...),Player,player_default,FALSE,,310
+309,플레이어,우리 할머니도 아니면서...',Player,player_default,FALSE,,310
 310,할머니,넌 잘하는것도 없고 공부머리도 없지만 할미닮아서 손맛은 좋을게다...,NPC,GRANDMA,FALSE,,311
-311,플레이어,(윽...이건 맞는 말이네.... 그래 성실하게 일해서 돈을 벌자),Player,player_default,FALSE,,312
+311,플레이어,윽...이건 맞는 말이네.... 그래 성실하게 일해서 돈을 벌자',Player,player_default,FALSE,,312
 312,플레이어,할머니 감사합니다. 이제 그만 들어가셔요,Player,player_default,FALSE,,313
 313,할머니,오냐 다음 제삿상에는 니가 튀긴 치킨을 올려보거라,NPC,GRANDMA,FALSE,,314
 314,???,"꿈이 너무 생생해서 당신은 잠에서 깨자 마자 모르는 할머니의 치킨 레시피를 메모했습니다.
-(치킨 레시피가 해금되었습니다.)",System,,FALSE,,0
+'치킨 레시피가 해금되었습니다.'",System,,FALSE,,315
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+301,플레이어,,Player,player_default,FALSE,,
+,,,,,,,
+300,할머니,,NPC,GRANDMA,FALSE,,
