@@ -479,9 +479,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 378d564801094539a57d6404cc0c6640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue.DialogueTarget
-  dialogueCSV: {fileID: 4900000, guid: 59df22b4aef40b24e99b23ef55dba4d8, type: 3}
+  dialogueCSV: {fileID: 4900000, guid: 154e680ae61e92d488d3bab8199a8bc9, type: 3}
   startDialogueId: 100
-  itemRewards: []
+  itemRewards:
+  - item: {fileID: 11400000, guid: ae4bb24738b827f4aa6700b65bd886e8, type: 2}
+    amount: 1
+  - item: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
+    amount: 1
+  - item: {fileID: 11400000, guid: 9e9b3f10f89d3774e9193b57aa250f55, type: 2}
+    amount: 1
   recipeRewards:
   - {fileID: 11400000, guid: 6dbfdd3bad37ea344aa7077be07cef66, type: 2}
 --- !u!1001 &298146340
@@ -2429,7 +2435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue.DialogueTester
   dialogueManager: {fileID: 1791523312}
-  testDialogueCSV: {fileID: 4900000, guid: 581176fb5b3d41069421693133d98944, type: 3}
+  testDialogueCSV: {fileID: 0}
   startDialogueId: 100
   autoStartOnAwake: 0
 --- !u!4 &1754761709
