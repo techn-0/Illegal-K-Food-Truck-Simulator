@@ -69,6 +69,12 @@ public class CookingManager : MonoBehaviour
     {
         if (isCooking) return false;
         
+        // 요리 가능 범위 확인
+        if (CookingInteractor.Instance == null || !CookingInteractor.Instance.IsPlayerInCookingRange())
+        {
+            return false;
+        }
+        
         // 레시피가 해금되어 있는지 확인
         if (RecipeUnlockManager.Instance != null && !RecipeUnlockManager.Instance.IsRecipeUnlocked(recipe))
         {
@@ -88,6 +94,13 @@ public class CookingManager : MonoBehaviour
     
     public void StartCooking(RecipeDefinition recipe)
     {
+        // 요리 가능 범위 확인
+        if (CookingInteractor.Instance == null || !CookingInteractor.Instance.IsPlayerInCookingRange())
+        {
+            OnCookingFailed?.Invoke("요리 가능 범위가 아닙니다!");
+            return;
+        }
+        
         // 레시피 해금 상태 확인
         if (RecipeUnlockManager.Instance != null && !RecipeUnlockManager.Instance.IsRecipeUnlocked(recipe))
         {

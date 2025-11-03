@@ -48,6 +48,12 @@ public class SaleService : MonoBehaviour
         if (item == null || quantity <= 0) return false;
         if (playerInventory == null) return false;
         
+        // 판매 가능 범위 확인
+        if (CookingInteractor.Instance == null || !CookingInteractor.Instance.IsPlayerInCookingRange())
+        {
+            return false;
+        }
+        
         return playerInventory.CountItem(item) >= quantity;
     }
     
@@ -60,6 +66,13 @@ public class SaleService : MonoBehaviour
     /// <returns>판매 성공 여부</returns>
     public bool ProcessSale(ItemDefinition item, int quantity, int pricePerUnit)
     {
+        // 판매 가능 범위 확인
+        if (CookingInteractor.Instance == null || !CookingInteractor.Instance.IsPlayerInCookingRange())
+        {
+            Debug.Log("판매 가능 범위가 아닙니다!");
+            return false;
+        }
+        
         if (!CanSell(item, quantity)) return false;
         
         // 인벤토리에서 아이템 제거
