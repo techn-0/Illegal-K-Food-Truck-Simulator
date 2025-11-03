@@ -27,24 +27,4 @@ id,speakerName,content,speakerType,speakerImage,isChoice,choicesRaw,nextId
 312,플레이어,할머니 감사합니다. 이제 그만 들어가셔요,Player,player_default,FALSE,,313
 313,할머니,오냐 다음 제삿상에는 니가 튀긴 치킨을 올려보거라,NPC,GRANDMA,FALSE,,314
 314,???,"꿈이 너무 생생해서 당신은 잠에서 깨자 마자 모르는 할머니의 치킨 레시피를 메모했습니다.
-'치킨 레시피가 해금되었습니다.'",System,,FALSE,,315
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-301,플레이어,,Player,player_default,FALSE,,
-,,,,,,,
-300,할머니,,NPC,GRANDMA,FALSE,,
+'치킨 레시피가 해금되었습니다.'",System,,FALSE,,0

@@ -24,19 +24,20 @@ namespace Dialogue
                 return dialogueLines;
             }
 
-            string[] lines = csvAsset.text.Split('\n');
+            // 따옴표를 고려하여 행을 분리 (따옴표 내부의 줄바꿈은 동일 행으로 처리)
+            List<string> rows = SplitCsvRows(csvAsset.text);
             
-            if (lines.Length <= 1)
+            if (rows.Count <= 1)
             {
                 Debug.LogWarning("CSV has no data rows");
                 return dialogueLines;
             }
 
             // 첫 줄은 헤더이므로 스킵 / Skip header row
-            for (int i = 1; i < lines.Length; i++)
+            for (int i = 1; i < rows.Count; i++)
             {
-                string line = lines[i].Trim();
-                if (string.IsNullOrEmpty(line)) continue;
+                string line = rows[i];
+                if (string.IsNullOrWhiteSpace(line)) continue;
 
                 DialogueLine dialogueLine = ParseCSVLine(line);
                 if (dialogueLine != null)
@@ -46,6 +47,59 @@ namespace Dialogue
             }
 
             return dialogueLines;
+        }
+
+        /// <summary>
+        /// CSV 텍스트를 따옴표 인지 상태를 고려해서 행 단위로 분리 / Split CSV text into rows respecting quotes
+        /// </summary>
+        private static List<string> SplitCsvRows(string csvText)
+        {
+            List<string> rows = new List<string>();
+            if (string.IsNullOrEmpty(csvText)) return rows;
+
+            StringBuilder current = new StringBuilder();
+            bool inQuotes = false;
+
+            for (int i = 0; i < csvText.Length; i++)
+            {
+                char c = csvText[i];
+
+                // CRLF 정규화: '\r'은 무시 (줄바꿈은 '\n'만 사용)
+                if (c == '\r')
+                    continue;
+
+                if (c == '"')
+                {
+                    // 이스케이프 따옴표 처리 ("")
+                    if (inQuotes && i + 1 < csvText.Length && csvText[i + 1] == '"')
+                    {
+                        current.Append('"');
+                        i++; // 다음 따옴표 스킵
+                    }
+                    else
+                    {
+                        inQuotes = !inQuotes;
+                        current.Append(c);
+                    }
+                }
+                else if (c == '\n' && !inQuotes)
+                {
+                    rows.Add(current.ToString());
+                    current.Clear();
+                }
+                else
+                {
+                    current.Append(c);
+                }
+            }
+
+            // 마지막 행 추가
+            if (current.Length > 0)
+            {
+                rows.Add(current.ToString());
+            }
+
+            return rows;
         }
 
         /// <summary>
@@ -95,12 +149,26 @@ namespace Dialogue
 
                 if (c == '"')
                 {
-                    inQuotes = !inQuotes;
+                    // 따옴표 내부의 이스케이프 따옴표 처리 ("")
+                    if (inQuotes && i + 1 < csvLine.Length && csvLine[i + 1] == '"')
+                    {
+                        currentField.Append('"');
+                        i++; // 다음 따옴표 스킵
+                    }
+                    else
+                    {
+                        inQuotes = !inQuotes;
+                    }
                 }
                 else if (c == ',' && !inQuotes)
                 {
                     fields.Add(currentField.ToString().Trim());
                     currentField.Clear();
+                }
+                else if (c == '\r')
+                {
+                    // CR는 무시 (행 분리는 SplitCsvRows에서 처리)
+                    continue;
                 }
                 else
                 {
@@ -129,7 +197,7 @@ namespace Dialogue
         /// </summary>
         private static bool ParseBool(string value)
         {
-            return value.ToLower() == "true";
+            return value != null && value.Trim().ToLower() == "true";
         }
 
         /// <summary>
@@ -152,7 +220,8 @@ namespace Dialogue
             if (string.IsNullOrEmpty(fileName))
                 return null;
 
-            // 03_Resource/Sprite/Portraits 경로에서 로드
+#if UNITY_EDITOR
+            // 03_Resource/Sprite/Portraits 경로에서 로드 (에디터 전용)
             string resourcePath = $"Assets/03_Resource/Sprite/Portraits/{fileName}.png";
             Sprite sprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(resourcePath);
             
@@ -162,6 +231,10 @@ namespace Dialogue
             }
 
             return sprite;
+#else
+            // 런타임 빌드에서는 Addressables/Resources 사용을 권장 (현재는 null 반환)
+            return null;
+#endif
         }
     }
 }
