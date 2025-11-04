@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3758805340831302099}
   - component: {fileID: 6065801961841179389}
   - component: {fileID: 8509300256105874871}
+  - component: {fileID: 963521274245879308}
   m_Layer: 0
   m_Name: Grandma
   m_TagString: Untagged
@@ -63,7 +64,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1407034567644833812}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65892be88e7a431aa5627bc3b963298c, type: 3}
   m_Name: 
@@ -78,13 +79,34 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1407034567644833812}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cee6aed9a7e741e58e20298285871632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecipeShopInteractor
   recipeShop: {fileID: 6065801961841179389}
   shopUI: {fileID: 0}
+--- !u!114 &963521274245879308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407034567644833812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 378d564801094539a57d6404cc0c6640, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue.DialogueTarget
+  dialogueCSV: {fileID: 4900000, guid: 154e680ae61e92d488d3bab8199a8bc9, type: 3}
+  startDialogueId: 100
+  itemRewards:
+  - item: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
+    amount: 1
+  - item: {fileID: 11400000, guid: 9e9b3f10f89d3774e9193b57aa250f55, type: 2}
+    amount: 1
+  recipeRewards:
+  - {fileID: 11400000, guid: 6dbfdd3bad37ea344aa7077be07cef66, type: 2}
 --- !u!1001 &3539980771305623776
 PrefabInstance:
   m_ObjectHideFlags: 0

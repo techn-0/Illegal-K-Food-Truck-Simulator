@@ -1,6 +1,6 @@
 id,speakerName,content,speakerType,speakerImage,isChoice,choicesRaw,nextId
 100,플레이어,누....누구세요.....???,Player,player_default,FALSE,,101
-101,할머니,애야....할미다....,NPC,GRANDMA,TRUE,로또 번호를 알려줄지도 모르니 아는척 해보자|103;우리 할머니는 살아계시는데...|201,0
+101,할머니,애야....할미다....,NPC,GRANDMA,TRUE,로또 번호를 알려줄지도 모르니 아는척 해보자|102;우리 할머니는 살아계시는데...|201,0
 102,플레이어,할머니 오랜만이에요,Player,player_default,FALSE,,103
 103,할머니,오냐,NPC,GRANDMA,FALSE,,300
 201,플레이어,"저희 할머니 아니잖아요....

@@ -261,7 +261,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -583, y: 14}
+  m_AnchoredPosition: {x: -583, y: 42}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &120585451477989963
@@ -357,7 +357,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 129.71399, y: -10.310089, z: -738.3391, w: -131.70612}
+  m_margin: {x: -14.223633, y: -10.310089, z: -738.3391, w: -142.77823}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -400,8 +400,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -9.949219, y: -383}
-  m_SizeDelta: {x: -620.3124, y: -766.01}
+  m_AnchoredPosition: {x: -9.94928, y: -383}
+  m_SizeDelta: {x: -426.55, y: -766.01}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8270879913515342033
 CanvasRenderer:
@@ -474,8 +474,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 414.55, y: 0.000030518}
-  m_SizeDelta: {x: 470.59, y: 313.99}
+  m_AnchoredPosition: {x: 462.98993, y: 0.000030518}
+  m_SizeDelta: {x: 567.47, y: 313.99}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &651165233604956282
 MonoBehaviour:
@@ -530,7 +530,7 @@ RectTransform:
   m_GameObject: {fileID: 3567018459877798584}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.8451, y: 4.8451, z: 4.8451}
+  m_LocalScale: {x: 11.204293, y: 4.8451, z: 4.8451}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4347578797446340975}
@@ -711,7 +711,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -443, y: 99}
+  m_AnchoredPosition: {x: -584, y: 113}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3079662373635622257
