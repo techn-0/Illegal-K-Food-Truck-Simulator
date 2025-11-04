@@ -587,7 +587,6 @@ MonoBehaviour:
   recipePriceText: {fileID: 7045309120512191901}
   recipeDescriptionText: {fileID: 9068315675153203284}
   purchaseButton: {fileID: 4782082475607224466}
-  alreadyOwnedIndicator: {fileID: 0}
 --- !u!1 &8385441677309657622
 GameObject:
   m_ObjectHideFlags: 0

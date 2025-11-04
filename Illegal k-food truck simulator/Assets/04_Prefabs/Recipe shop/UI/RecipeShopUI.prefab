@@ -710,3 +710,4 @@ MonoBehaviour:
   recipeContainer: {fileID: 3827995487965523667}
   recipeItemPrefab: {fileID: 7689880708554218879, guid: a562e294caf71554baab4d551af293b4, type: 3}
   playerMoneyText: {fileID: 4868717015186644570}
+  assignedRecipeShop: {fileID: 0}
