@@ -4,9 +4,15 @@ using UnityEngine;
 
 /// <summary>
 /// 인벤토리 시스템 - 12개의 고정 슬롯을 가진 아이템 저장소
+/// 싱글톤 패턴으로 씬 전환 시에도 데이터 유지
 /// </summary>
 public class Inventory : MonoBehaviour
 {
+    /// <summary>
+    /// 싱글톤 인스턴스
+    /// </summary>
+    public static Inventory Instance { get; private set; }
+
     private const int CAPACITY = 12; // 인벤토리 용량 고정값
 
     [SerializeField] private List<InventorySlot> slots; // 인벤토리 슬롯들
@@ -31,7 +37,17 @@ public class Inventory : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        InitializeSlots();
+        // 싱글톤 패턴 구현
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            InitializeSlots();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>

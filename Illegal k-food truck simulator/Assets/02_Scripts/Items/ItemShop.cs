@@ -119,15 +119,8 @@ public class ItemShop : MonoBehaviour
     /// </summary>
     private Inventory FindPlayerInventory()
     {
-        // 플레이어 태그로 찾기
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            return player.GetComponent<Inventory>();
-        }
-        
-        // 직접 찾기
-        return FindFirstObjectByType<Inventory>();
+        // 싱글톤 인스턴스 사용
+        return Inventory.Instance;
     }
     
     /// <summary>

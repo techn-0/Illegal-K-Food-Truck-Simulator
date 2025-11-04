@@ -9,16 +9,36 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PlayerPickupInteractor : MonoBehaviour
 {
-    [SerializeField] private Inventory inventory; // 아이템을 저장할 인벤토리
+    private Inventory inventory; // 아이템을 저장할 인벤토리 (싱글톤에서 자동 참조)
     
     private InputAction interactAction; // 상호작용 입력 액션 (E키, 게임패드 버튼)
     private readonly List<PickupTarget> candidates = new(); // 픽업 가능 범위 내 아이템 목록
+
+    /// <summary>
+    /// 시작 시 싱글톤 인벤토리 참조
+    /// </summary>
+    private void Start()
+    {
+        // 싱글톤 인스턴스 참조
+        inventory = Inventory.Instance;
+        
+        if (inventory == null)
+        {
+            Debug.LogWarning("PlayerPickupInteractor: Inventory.Instance를 찾을 수 없습니다.");
+        }
+    }
 
     /// <summary>
     /// 활성화 시 상호작용 입력 설정 및 이벤트 바인딩
     /// </summary>
     private void OnEnable()
     {
+        // 싱글톤 인스턴스가 없으면 다시 찾기
+        if (inventory == null)
+        {
+            inventory = Inventory.Instance;
+        }
+
         // 상호작용 입력 설정: E키와 게임패드 남쪽 버튼
         interactAction = new InputAction("Interact", InputActionType.Button, "<Keyboard>/e");
         interactAction.AddBinding("<Gamepad>/buttonSouth");
@@ -68,8 +88,18 @@ public class PlayerPickupInteractor : MonoBehaviour
     /// </summary>
     private void OnInteractPerformed(InputAction.CallbackContext context)
     {
+        // 인벤토리 참조가 없으면 다시 찾기
+        if (inventory == null)
+        {
+            inventory = Inventory.Instance;
+        }
+
         // 상호작용 키가 눌렸을 때: 가장 가까운 아이템 픽업
-        if (inventory == null) return;
+        if (inventory == null)
+        {
+            Debug.LogWarning("PlayerPickupInteractor: 인벤토리를 찾을 수 없어서 아이템을 픽업할 수 없습니다.");
+            return;
+        }
 
         var nearest = GetNearestCandidate();
         if (nearest != null && nearest.TryPickup(inventory))

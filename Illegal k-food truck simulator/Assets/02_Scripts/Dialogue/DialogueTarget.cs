@@ -91,10 +91,9 @@ namespace Dialogue
         {
             if (itemRewards == null || itemRewards.Length == 0) return;
 
-            Inventory playerInventory = FindFirstObjectByType<Inventory>();
-            if (playerInventory == null)
+            if (Inventory.Instance == null)
             {
-                Debug.LogWarning("플레이어 인벤토리를 찾을 수 없습니다.");
+                Debug.LogWarning("Inventory 인스턴스를 찾을 수 없습니다.");
                 return;
             }
 
@@ -102,7 +101,7 @@ namespace Dialogue
             {
                 if (reward.item != null && reward.amount > 0)
                 {
-                    int added = playerInventory.AddItem(reward.item, reward.amount);
+                    int added = Inventory.Instance.AddItem(reward.item, reward.amount);
                     Debug.Log($"[DialogueTarget] 아이템 지급: {reward.item.DisplayName} x{added}");
                 }
             }

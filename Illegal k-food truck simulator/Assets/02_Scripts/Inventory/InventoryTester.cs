@@ -16,9 +16,6 @@ public class InventoryTester : MonoBehaviour
         public int Amount => amount;
     }
 
-    [Header("테스트할 인벤토리")]
-    [SerializeField] private Inventory targetInventory;
-
     [Header("추가할 아이템들")]
     [SerializeField] private TestItem[] testItems;
 
@@ -58,9 +55,11 @@ public class InventoryTester : MonoBehaviour
     [ContextMenu("모든 아이템 추가")]
     public void AddAllTestItems()
     {
+        Inventory targetInventory = Inventory.Instance;
+        
         if (targetInventory == null)
         {
-            Debug.LogWarning("타겟 인벤토리가 설정되지 않았습니다.");
+            Debug.LogWarning("Inventory 인스턴스를 찾을 수 없습니다.");
             return;
         }
 
@@ -85,9 +84,11 @@ public class InventoryTester : MonoBehaviour
     /// </summary>
     public void AddTestItem(int index)
     {
+        Inventory targetInventory = Inventory.Instance;
+        
         if (targetInventory == null)
         {
-            Debug.LogWarning("타겟 인벤토리가 설정되지 않았습니다.");
+            Debug.LogWarning("Inventory 인스턴스를 찾을 수 없습니다.");
             return;
         }
 
@@ -111,19 +112,15 @@ public class InventoryTester : MonoBehaviour
     [ContextMenu("인벤토리 초기화")]
     public void ClearInventory()
     {
+        Inventory targetInventory = Inventory.Instance;
+        
         if (targetInventory == null)
         {
-            Debug.LogWarning("타겟 인벤토리가 설정되지 않았습니다.");
+            Debug.LogWarning("Inventory 인스턴스를 찾을 수 없습니다.");
             return;
         }
 
-        // 기존 Inventory 클래스에 Clear 메서드가 없다면 각 슬롯을 개별적으로 비움
-        for (int i = 0; i < targetInventory.Slots.Count; i++)
-        {
-            var slot = targetInventory.Slots[i] as InventorySlot;
-            slot?.Clear();
-        }
-
+        targetInventory.Clear();
         Debug.Log("인벤토리가 초기화되었습니다.");
     }
 
@@ -133,9 +130,11 @@ public class InventoryTester : MonoBehaviour
     [ContextMenu("인벤토리 상태 출력")]
     public void LogInventoryStatus()
     {
+        Inventory targetInventory = Inventory.Instance;
+        
         if (targetInventory == null)
         {
-            Debug.LogWarning("타겟 인벤토리가 설정되지 않았습니다.");
+            Debug.LogWarning("Inventory 인스턴스를 찾을 수 없습니다.");
             return;
         }
 

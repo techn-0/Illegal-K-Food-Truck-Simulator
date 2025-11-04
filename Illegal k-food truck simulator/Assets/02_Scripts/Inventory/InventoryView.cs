@@ -6,20 +6,38 @@ using System.Collections.Generic;
 /// </summary>
 public class InventoryView : MonoBehaviour
 {
-    [Header("인벤토리 참조")]
-    [SerializeField] private Inventory inventory; // 표시할 인벤토리
-
     [Header("UI 참조")]
     [SerializeField] private Transform gridRoot; // 슬롯들이 배치될 부모 Transform (GridLayoutGroup)
     [SerializeField] private ItemSlotView slotPrefab; // 슬롯 UI 프리팹
 
+    private Inventory inventory; // 표시할 인벤토리 (싱글톤에서 자동 참조)
     private List<ItemSlotView> slotViews; // 생성된 슬롯 UI들
+
+    /// <summary>
+    /// 시작 시 싱글톤 인벤토리 참조
+    /// </summary>
+    private void Start()
+    {
+        // 싱글톤 인스턴스 참조
+        inventory = Inventory.Instance;
+        
+        if (inventory == null)
+        {
+            Debug.LogError("InventoryView: Inventory.Instance를 찾을 수 없습니다.");
+        }
+    }
 
     /// <summary>
     /// 오브젝트 활성화 시 초기화 및 이벤트 구독
     /// </summary>
     private void OnEnable()
     {
+        // 싱글톤 인스턴스가 없으면 다시 찾기
+        if (inventory == null)
+        {
+            inventory = Inventory.Instance;
+        }
+
         // 슬롯 UI 생성
         CreateSlotViews();
         
@@ -29,6 +47,10 @@ public class InventoryView : MonoBehaviour
             inventory.OnChanged += Refresh;
             // 초기 표시 갱신
             Refresh();
+        }
+        else
+        {
+            Debug.LogWarning("InventoryView: Inventory가 없어서 UI를 표시할 수 없습니다.");
         }
     }
 

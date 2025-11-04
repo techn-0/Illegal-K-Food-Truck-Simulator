@@ -14,8 +14,8 @@ public class IngredientSlotUI : MonoBehaviour
     
     void Start()
     {
-        // 플레이어 인벤토리 참조 찾기
-        playerInventory = FindFirstObjectByType<Inventory>();
+        // 플레이어 인벤토리 참조 (싱글톤 사용)
+        playerInventory = Inventory.Instance;
     }
     
     public void SetupIngredient(RecipeIngredient recipeIngredient)
