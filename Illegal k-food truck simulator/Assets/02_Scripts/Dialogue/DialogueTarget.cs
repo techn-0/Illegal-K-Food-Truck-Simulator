@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 namespace Dialogue
 {
@@ -15,6 +18,14 @@ namespace Dialogue
         [Header("대화 완료 보상")]
         [SerializeField] private ItemReward[] itemRewards;     // 지급할 아이템들
         [SerializeField] private RecipeDefinition[] recipeRewards; // 해금할 레시피들
+
+        [Header("대화 완료 후 씬 전환")]
+        [SerializeField] private bool loadSceneAfterDialogue = false;  // 씬 전환 활성화
+        [SerializeField] private string targetSceneName;                // 전환할 씬 이름
+        [SerializeField] private float sceneLoadDelay = 0.5f;           // 씬 전환 전 대기 시간
+
+        [Header("대화 완료 이벤트")]
+        [SerializeField] private UnityEvent onDialogueComplete;  // 대화 완료 시 실행될 이벤트
 
         /// <summary>
         /// 대화 CSV 데이터 (읽기 전용)
@@ -50,6 +61,27 @@ namespace Dialogue
         {
             GiveItemRewards();
             UnlockRecipeRewards();
+            
+            // 커스텀 이벤트 실행 (씬 전환, 추가 로직 등)
+            onDialogueComplete?.Invoke();
+            
+            // 씬 전환 처리
+            if (loadSceneAfterDialogue && !string.IsNullOrEmpty(targetSceneName))
+            {
+                StartCoroutine(LoadSceneAfterDelay());
+            }
+            
+            Debug.Log($"[DialogueTarget] 대화 완료 - {gameObject.name}");
+        }
+
+        /// <summary>
+        /// 지연 후 씬 로드
+        /// </summary>
+        private IEnumerator LoadSceneAfterDelay()
+        {
+            Debug.Log($"[DialogueTarget] {sceneLoadDelay}초 후 씬 전환: {targetSceneName}");
+            yield return new WaitForSeconds(sceneLoadDelay);
+            SceneManager.LoadScene(targetSceneName);
         }
 
         /// <summary>
