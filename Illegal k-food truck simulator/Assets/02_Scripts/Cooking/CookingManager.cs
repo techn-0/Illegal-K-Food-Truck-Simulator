@@ -5,7 +5,6 @@ using System;
 public class CookingManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Inventory playerInventory;
     [SerializeField] private RecipeDefinition[] availableRecipes;
     
     public static CookingManager Instance { get; private set; }
@@ -16,6 +15,9 @@ public class CookingManager : MonoBehaviour
     
     private bool isCooking = false;
     private CookingTimer cookingTimer;
+    
+    // Inventory 싱글톤을 직접 참조
+    private Inventory PlayerInventory => Inventory.Instance;
     
     void Awake()
     {
@@ -32,6 +34,12 @@ public class CookingManager : MonoBehaviour
     
     void Start()
     {
+        // Inventory 인스턴스 확인
+        if (Inventory.Instance == null)
+        {
+            Debug.LogError("Inventory instance not found! Make sure Inventory exists in the scene.");
+        }
+        
         // 타이머 이벤트 구독
         cookingTimer.OnTimerCompleted += OnTimerCompleted;
     }
@@ -69,6 +77,13 @@ public class CookingManager : MonoBehaviour
     {
         if (isCooking) return false;
         
+        // Inventory 인스턴스 확인
+        if (PlayerInventory == null)
+        {
+            Debug.LogError("PlayerInventory is null!");
+            return false;
+        }
+        
         // 요리 가능 범위 확인
         if (CookingInteractor.Instance == null || !CookingInteractor.Instance.IsPlayerInCookingRange())
         {
@@ -83,7 +98,7 @@ public class CookingManager : MonoBehaviour
         
         foreach (var ingredient in recipe.RequiredIngredients)
         {
-            if (!playerInventory.HasItem(ingredient.Ingredient, ingredient.RequiredAmount))
+            if (!PlayerInventory.HasItem(ingredient.Ingredient, ingredient.RequiredAmount))
             {
                 return false;
             }
@@ -94,6 +109,14 @@ public class CookingManager : MonoBehaviour
     
     public void StartCooking(RecipeDefinition recipe)
     {
+        // Inventory 인스턴스 확인
+        if (PlayerInventory == null)
+        {
+            OnCookingFailed?.Invoke("인벤토리를 찾을 수 없습니다!");
+            Debug.LogError("PlayerInventory is null!");
+            return;
+        }
+        
         // 요리 가능 범위 확인
         if (CookingInteractor.Instance == null || !CookingInteractor.Instance.IsPlayerInCookingRange())
         {
@@ -111,7 +134,7 @@ public class CookingManager : MonoBehaviour
         // 재료 소모
         foreach (var ingredient in recipe.RequiredIngredients)
         {
-            playerInventory.RemoveItem(ingredient.Ingredient, ingredient.RequiredAmount);
+            PlayerInventory.RemoveItem(ingredient.Ingredient, ingredient.RequiredAmount);
         }
         
         isCooking = true;
@@ -121,8 +144,16 @@ public class CookingManager : MonoBehaviour
     
     private void OnTimerCompleted(RecipeDefinition recipe)
     {
+        // Inventory 인스턴스 확인
+        if (PlayerInventory == null)
+        {
+            Debug.LogError("PlayerInventory is null when cooking completed!");
+            isCooking = false;
+            return;
+        }
+        
         // 요리 완성 - 결과물을 인벤토리에 추가
-        playerInventory.AddItem(recipe.ResultDish, recipe.ResultAmount);
+        PlayerInventory.AddItem(recipe.ResultDish, recipe.ResultAmount);
         
         isCooking = false;
         OnCookingCompleted?.Invoke(recipe);

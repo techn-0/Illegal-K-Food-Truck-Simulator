@@ -11,14 +11,12 @@ public class CookingInteractor : MonoBehaviour
     
     void Awake()
     {
-        if (Instance == null)
+        // 씬마다 새로운 CookingInteractor가 필요하므로 기존 인스턴스를 교체
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
+            Destroy(Instance.gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
     }
     
     private void OnTriggerEnter(Collider other)
@@ -42,4 +40,3 @@ public class CookingInteractor : MonoBehaviour
         return playerInRange;
     }
 }
-
