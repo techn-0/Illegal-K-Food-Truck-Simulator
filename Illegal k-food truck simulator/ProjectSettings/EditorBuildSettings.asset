@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/01_Scenes/00_Main Menu.unity
+    guid: ed0df59fd88c4e5489fb0b0f5cd7789f
+  - enabled: 1
     path: Assets/01_Scenes/01_in a dream.unity
     guid: 1d65fcc6e18fd7a4cb1d40a0153456b5
   - enabled: 1
