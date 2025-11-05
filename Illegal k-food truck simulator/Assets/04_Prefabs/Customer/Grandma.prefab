@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6065801961841179389}
   - component: {fileID: 8509300256105874871}
   - component: {fileID: 963521274245879308}
+  - component: {fileID: 3128522556600918312}
   m_Layer: 0
   m_Name: Grandma
   m_TagString: Untagged
@@ -100,13 +101,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue.DialogueTarget
   dialogueCSV: {fileID: 4900000, guid: 154e680ae61e92d488d3bab8199a8bc9, type: 3}
   startDialogueId: 100
+  moneyReward: 30000
   itemRewards:
   - item: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
-    amount: 1
+    amount: 2
   - item: {fileID: 11400000, guid: 9e9b3f10f89d3774e9193b57aa250f55, type: 2}
-    amount: 1
+    amount: 2
   recipeRewards:
   - {fileID: 11400000, guid: 6dbfdd3bad37ea344aa7077be07cef66, type: 2}
+  - {fileID: 11400000, guid: 3ac876b9e9b3a034d977f94dccaf5068, type: 2}
+  loadSceneAfterDialogue: 1
+  targetSceneName: 02_game
+  sceneLoadDelay: 0.5
+  onDialogueComplete:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3128522556600918312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407034567644833812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5d701baa474011b451b43efcd952f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue.SceneLoader
+  delayBeforeLoad: 0.5
 --- !u!1001 &3539980771305623776
 PrefabInstance:
   m_ObjectHideFlags: 0
