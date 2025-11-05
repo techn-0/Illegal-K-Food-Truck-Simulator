@@ -2259,7 +2259,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f8302308ff4950ad430004490bf422, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetInventory: {fileID: 1847597758}
   testItems:
   - item: {fileID: 11400000, guid: ae4bb24738b827f4aa6700b65bd886e8, type: 2}
     amount: 100
@@ -18293,6 +18292,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1137648763916422781, guid: 0ed8cb81c98b5554dab18c69864c449f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -9.949219
+      objectReference: {fileID: 0}
     - target: {fileID: 4491871835353186420, guid: 0ed8cb81c98b5554dab18c69864c449f, type: 3}
       propertyPath: m_Name
       value: DialoguePanel
@@ -18527,7 +18530,7 @@ PrefabInstance:
     - target: {fileID: 963521274245879308, guid: 7fe30d75862d7024ba095659932246a7, type: 3}
       propertyPath: onDialogueComplete.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2800000, guid: b8ac90ee6a49b461ba23d81791fca0cc, type: 3}
+      objectReference: {fileID: 882733825}
     - target: {fileID: 963521274245879308, guid: 7fe30d75862d7024ba095659932246a7, type: 3}
       propertyPath: onDialogueComplete.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
