@@ -18516,12 +18516,32 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 963521274245879308, guid: 7fe30d75862d7024ba095659932246a7, type: 3}
+      propertyPath: moneyReward
+      value: 30000
+      objectReference: {fileID: 0}
+    - target: {fileID: 963521274245879308, guid: 7fe30d75862d7024ba095659932246a7, type: 3}
       propertyPath: targetSceneName
       value: 02_game
       objectReference: {fileID: 0}
     - target: {fileID: 963521274245879308, guid: 7fe30d75862d7024ba095659932246a7, type: 3}
       propertyPath: loadSceneAfterDialogue
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 963521274245879308, guid: 7fe30d75862d7024ba095659932246a7, type: 3}
+      propertyPath: recipeRewards.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 963521274245879308, guid: 7fe30d75862d7024ba095659932246a7, type: 3}
+      propertyPath: 'recipeRewards.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 3ac876b9e9b3a034d977f94dccaf5068, type: 2}
+    - target: {fileID: 963521274245879308, guid: 7fe30d75862d7024ba095659932246a7, type: 3}
+      propertyPath: itemRewards.Array.data[0].amount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 963521274245879308, guid: 7fe30d75862d7024ba095659932246a7, type: 3}
+      propertyPath: itemRewards.Array.data[1].amount
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 963521274245879308, guid: 7fe30d75862d7024ba095659932246a7, type: 3}
       propertyPath: onDialogueComplete.m_PersistentCalls.m_Calls.Array.size

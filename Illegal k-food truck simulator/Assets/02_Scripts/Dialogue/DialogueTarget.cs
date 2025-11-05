@@ -16,6 +16,7 @@ namespace Dialogue
         [SerializeField] private int startDialogueId;     // 시작 대화 ID
 
         [Header("대화 완료 보상")]
+        [SerializeField] private int moneyReward = 0;          // 지급할 돈
         [SerializeField] private ItemReward[] itemRewards;     // 지급할 아이템들
         [SerializeField] private RecipeDefinition[] recipeRewards; // 해금할 레시피들
 
@@ -59,6 +60,7 @@ namespace Dialogue
         /// </summary>
         public void OnDialogueComplete()
         {
+            GiveMoneyReward();
             GiveItemRewards();
             UnlockRecipeRewards();
             
@@ -82,6 +84,26 @@ namespace Dialogue
             Debug.Log($"[DialogueTarget] {sceneLoadDelay}초 후 씬 전환: {targetSceneName}");
             yield return new WaitForSeconds(sceneLoadDelay);
             SceneManager.LoadScene(targetSceneName);
+        }
+
+        /// <summary>
+        /// 돈 보상 지급
+        /// </summary>
+        private void GiveMoneyReward()
+        {
+            if (moneyReward <= 0) return;
+
+            if (PlayerMoneyManager.Instance == null)
+            {
+                Debug.LogWarning("PlayerMoneyManager 인스턴스를 찾을 수 없습니다.");
+                return;
+            }
+
+            bool success = PlayerMoneyManager.Instance.AddMoney(moneyReward);
+            if (success)
+            {
+                Debug.Log($"[DialogueTarget] 돈 지급: {moneyReward}원");
+            }
         }
 
         /// <summary>
