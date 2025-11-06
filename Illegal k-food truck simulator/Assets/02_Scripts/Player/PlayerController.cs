@@ -20,6 +20,9 @@ namespace _02_Scripts
         Vector2 _moveInput; // Input System에서 받은 이동 입력값
         PlayerAnimationPresenter _animationPresenter;
 
+        // 침대 상호작용을 위한 변수
+        private BedInteractor _nearbyBed;
+
         /// <summary>
         /// 초기화: 필수 컴포넌트 연결 및 카메라 자동 할당
         /// </summary>
@@ -91,6 +94,15 @@ namespace _02_Scripts
                 }
             }
 
+            // E키로 침대 상호작용
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (_nearbyBed != null)
+                {
+                    _nearbyBed.Interact();
+                }
+            }
+
             // 이동 처리를 위한 기본 검증
             if (_cc == null || !_cc.enabled || !_cc.gameObject.activeInHierarchy) return;
             if (cameraTransform == null) return;
@@ -128,6 +140,28 @@ namespace _02_Scripts
             // 이동 상태에 따라 애니메이션 업데이트
             bool isWalking = _moveInput.sqrMagnitude > 0;
             _animationPresenter.UpdateWalkingState(isWalking);
+        }
+
+        // 침대 트리거 진입
+        private void OnTriggerEnter(Collider other)
+        {
+            BedInteractor bed = other.GetComponent<BedInteractor>();
+            if (bed != null)
+            {
+                _nearbyBed = bed;
+                Debug.Log("침대 근처입니다. E키를 눌러 상호작용하세요.");
+            }
+        }
+
+        // 침대 트리거 벗어남
+        private void OnTriggerExit(Collider other)
+        {
+            BedInteractor bed = other.GetComponent<BedInteractor>();
+            if (bed != null && _nearbyBed == bed)
+            {
+                _nearbyBed = null;
+                Debug.Log("침대에서 멀어졌습니다.");
+            }
         }
     }
 }

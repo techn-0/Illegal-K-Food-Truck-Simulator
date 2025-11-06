@@ -41,6 +41,12 @@ public class PlayerMoneyManager : MonoBehaviour
     
     private void Start()
     {
+        // 저장된 게임 상태가 있으면 동기화
+        if (GameManager.Instance != null && GameManager.Instance.Save != null)
+        {
+            currentMoney = GameManager.Instance.Save.money;
+        }
+
         // 초기 돈 이벤트 호출
         OnMoneyChanged?.Invoke(currentMoney);
     }
@@ -57,6 +63,13 @@ public class PlayerMoneyManager : MonoBehaviour
         currentMoney += amount;
         OnMoneyChanged?.Invoke(currentMoney);
         
+        // 저장 상태도 동기화
+        if (GameManager.Instance != null && GameManager.Instance.Save != null)
+        {
+            GameManager.Instance.Save.money = currentMoney;
+            GameManager.Instance.Save.todayEarnings += amount;
+        }
+        
         Debug.Log($"돈 추가: +{amount}원 (현재: {currentMoney}원)");
         return true;
     }
@@ -72,6 +85,12 @@ public class PlayerMoneyManager : MonoBehaviour
         
         currentMoney -= amount;
         OnMoneyChanged?.Invoke(currentMoney);
+        
+        // 저장 상태도 동기화
+        if (GameManager.Instance != null && GameManager.Instance.Save != null)
+        {
+            GameManager.Instance.Save.money = currentMoney;
+        }
         
         Debug.Log($"돈 차감: -{amount}원 (현재: {currentMoney}원)");
         return true;
