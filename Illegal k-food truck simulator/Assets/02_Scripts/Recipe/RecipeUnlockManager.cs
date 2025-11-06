@@ -134,14 +134,34 @@ public class RecipeUnlockManager : MonoBehaviour
     /// </summary>
     public void LoadUnlockedRecipes(List<string> recipeIds)
     {
-        unlockedRecipes.Clear();
         isDataLoaded = true; // 데이터 로드 플래그 설정
-        
+
+        // allRecipes가 비어있으면 가능한 범위에서 동적으로 보완 (씬/프리팹 세팅 누락 방지)
+        if (allRecipes == null || allRecipes.Length == 0)
+        {
+            var fallback = Resources.FindObjectsOfTypeAll<RecipeDefinition>();
+            if (fallback != null && fallback.Length > 0)
+            {
+                allRecipes = fallback;
+                Debug.LogWarning($"RecipeUnlockManager: allRecipes가 비어있어 동적 로드({allRecipes.Length})를 사용합니다.");
+            }
+        }
+
+        // 저장 데이터가 비거나 null이면 현재 상태 유지, 없으면 기본 해금 적용
         if (recipeIds == null || recipeIds.Count == 0)
         {
-            UnlockDefaultRecipes();
+            if (unlockedRecipes.Count == 0)
+            {
+                UnlockDefaultRecipes();
+            }
+            else
+            {
+                OnUnlockedRecipesChanged?.Invoke();
+            }
             return;
         }
+        
+        unlockedRecipes.Clear();
         
         foreach (string id in recipeIds)
         {
@@ -149,6 +169,10 @@ public class RecipeUnlockManager : MonoBehaviour
             if (recipe != null)
             {
                 unlockedRecipes.Add(recipe);
+            }
+            else
+            {
+                Debug.LogWarning($"레시피를 찾을 수 없습니다: {id}");
             }
         }
         
@@ -161,16 +185,30 @@ public class RecipeUnlockManager : MonoBehaviour
     /// </summary>
     private RecipeDefinition FindRecipeById(string id)
     {
-        if (allRecipes == null) return null;
+        if (string.IsNullOrEmpty(id)) return null;
         
-        foreach (var recipe in allRecipes)
+        if (allRecipes != null)
         {
-            if (recipe != null && recipe.RecipeId == id)
+            foreach (var recipe in allRecipes)
             {
-                return recipe;
+                if (recipe != null && recipe.RecipeId == id)
+                {
+                    return recipe;
+                }
+            }
+        }
+        
+        // 폴백: 로드된 객체들에서 검색
+        var loaded = Resources.FindObjectsOfTypeAll<RecipeDefinition>();
+        foreach (var r in loaded)
+        {
+            if (r != null && r.RecipeId == id)
+            {
+                return r;
             }
         }
         
         return null;
     }
 }
+

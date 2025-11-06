@@ -316,9 +316,15 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void LoadFromSaveData(List<InventorySlotData> saveData)
     {
-        Clear();
+        // 저장 데이터가 없으면 현재 상태를 유지하고 UI만 동기화
+        if (saveData == null || saveData.Count == 0)
+        {
+            OnChanged?.Invoke();
+            return;
+        }
 
-        if (saveData == null || saveData.Count == 0) return;
+        // 현재 슬롯을 비운 후 저장 데이터로 채움
+        Clear();
         
         for (int i = 0; i < saveData.Count && i < slots.Count; i++)
         {
@@ -335,6 +341,12 @@ public class Inventory : MonoBehaviour
                 {
                     slots[i].SetItem(item, slotData.count);
                 }
+                else
+                {
+                    // 매핑에 실패하더라도 데이터를 잃지 않도록 로그만 남기고 비워둠
+                    Debug.LogWarning($"Inventory: 아이템 ID 매핑 실패로 슬롯 비움 - {slotData.itemId}");
+                    slots[i].Clear();
+                }
             }
         }
 
@@ -346,13 +358,27 @@ public class Inventory : MonoBehaviour
     /// </summary>
     private ItemDefinition FindItemById(string itemId)
     {
-        if (allItems == null || string.IsNullOrEmpty(itemId)) return null;
+        if (string.IsNullOrEmpty(itemId)) return null;
         
-        foreach (var item in allItems)
+        // 1차: 인스펙터에 지정된 allItems에서 검색
+        if (allItems != null && allItems.Length > 0)
         {
-            if (item != null && item.Id == itemId)
+            foreach (var item in allItems)
             {
-                return item;
+                if (item != null && item.Id == itemId)
+                {
+                    return item;
+                }
+            }
+        }
+        
+        // 2차 폴백: 로드된 모든 ItemDefinition에서 검색 (씬/프리팹 참조 누락 대비)
+        var loaded = Resources.FindObjectsOfTypeAll<ItemDefinition>();
+        foreach (var it in loaded)
+        {
+            if (it != null && it.Id == itemId)
+            {
+                return it;
             }
         }
         

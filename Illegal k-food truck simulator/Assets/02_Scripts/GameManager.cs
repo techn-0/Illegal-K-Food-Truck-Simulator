@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // 게임 씬이 로드되고 저장 데이터가 있으면 복원
-        // 게임 씬이 로드되고 저장 데이터가 있으면 복원
         if (scene.name == gameSceneName && Save != null)
         {
             StartCoroutine(RestoreGameData());
@@ -59,18 +58,18 @@ public class GameManager : MonoBehaviour
         // 프레임 대기 (인스턴스 초기화 완료 대기)
         yield return null;
         
-        // 레시피 해금 상태 복원
-        if (RecipeUnlockManager.Instance != null && Save.unlockedRecipeIds != null && Save.unlockedRecipeIds.Count > 0)
+        // 레시피 해금 상태 복원: 저장 데이터가 비어있어도 명시적으로 호출하여 기본/현재 상태를 일관 적용
+        if (RecipeUnlockManager.Instance != null)
         {
             RecipeUnlockManager.Instance.LoadUnlockedRecipes(Save.unlockedRecipeIds);
-            Debug.Log($"레시피 복원 완료: {Save.unlockedRecipeIds.Count}개");
+            Debug.Log($"레시피 복원 요청: {(Save.unlockedRecipeIds == null ? 0 : Save.unlockedRecipeIds.Count)}개");
         }
         
-        // 인벤토리 상태 복원
-        if (Inventory.Instance != null && Save.inventorySlots != null && Save.inventorySlots.Count > 0)
+        // 인벤토리 상태 복원: 저장 데이터가 비어있으면 초기화 유지, 있으면 슬롯 세팅
+        if (Inventory.Instance != null)
         {
             Inventory.Instance.LoadFromSaveData(Save.inventorySlots);
-            Debug.Log($"인벤토리 복원 완료: {Save.inventorySlots.Count}개 슬롯");
+            Debug.Log($"인벤토리 복원 요청: {(Save.inventorySlots == null ? 0 : Save.inventorySlots.Count)}개 슬롯");
         }
     }
 
@@ -99,6 +98,7 @@ public class GameManager : MonoBehaviour
         if (loaded == null)
         {
             Debug.LogWarning("불러올 저장 데이터가 없습니다.");
+            NewGame(); // 저장 파일 없으면 새 게임 시작
             return;
         }
 
@@ -133,7 +133,10 @@ public class GameManager : MonoBehaviour
 
         Debug.Log($"Day {Save.currentDay - 1} 종료, 오늘 매출: {Save.todayEarnings}원, 총 누적 매출: {Save.totalEarnings}원");
 
+        // 다음 날을 위해 인메모리 데이터 초기화
         Save.todayEarnings = 0;
+        Save.inventorySlots = null; // 인벤토리 초기화
+        Save.unlockedRecipeIds = null; // 레시피 목록 초기화
 
         SceneManager.LoadScene(gameSceneName);
     }
