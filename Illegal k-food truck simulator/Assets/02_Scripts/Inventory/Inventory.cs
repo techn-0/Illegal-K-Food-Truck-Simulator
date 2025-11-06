@@ -16,6 +16,9 @@ public class Inventory : MonoBehaviour
     private const int CAPACITY = 12; // 인벤토리 용량 고정값
 
     [SerializeField] private List<InventorySlot> slots; // 인벤토리 슬롯들
+    
+    [Header("All Items")]
+    [SerializeField] private ItemDefinition[] allItems; // 모든 아이템 목록 (ID로 찾기 위해)
 
     /// <summary>
     /// 인벤토리 내용이 변경될 때 호출되는 이벤트
@@ -334,11 +337,11 @@ public class Inventory : MonoBehaviour
     }
     
     /// <summary>
-    /// ID로 아이템 찾기 (Resources 폴더에서 로드)
+    /// ID로 아이템 찾기
     /// </summary>
     private ItemDefinition FindItemById(string itemId)
     {
-        ItemDefinition[] allItems = Resources.LoadAll<ItemDefinition>("Items");
+        if (allItems == null || string.IsNullOrEmpty(itemId)) return null;
         
         foreach (var item in allItems)
         {
@@ -348,6 +351,7 @@ public class Inventory : MonoBehaviour
             }
         }
         
+        Debug.LogWarning($"아이템을 찾을 수 없습니다: {itemId}");
         return null;
     }
 }

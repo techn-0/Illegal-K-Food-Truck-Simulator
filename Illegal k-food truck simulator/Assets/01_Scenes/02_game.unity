@@ -263314,6 +263314,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecipeUnlockManager
   defaultUnlockedRecipes: []
+  allRecipes:
+  - {fileID: 11400000, guid: 6dbfdd3bad37ea344aa7077be07cef66, type: 2}
+  - {fileID: 11400000, guid: 3ac876b9e9b3a034d977f94dccaf5068, type: 2}
 --- !u!1001 &1202350493
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -394602,6 +394605,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slots: []
+  allItems:
+  - {fileID: 11400000, guid: ae4bb24738b827f4aa6700b65bd886e8, type: 2}
+  - {fileID: 11400000, guid: bb7810672d0d8e743a44569199f2bc76, type: 2}
+  - {fileID: 11400000, guid: 9e9b3f10f89d3774e9193b57aa250f55, type: 2}
+  - {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
+  - {fileID: 11400000, guid: 2142d50de3e6e0145851e1d11ae7c481, type: 2}
+  - {fileID: 11400000, guid: 1a2ad1bfec29a724c8554000b1636e94, type: 2}
 --- !u!4 &1847597759
 Transform:
   m_ObjectHideFlags: 0

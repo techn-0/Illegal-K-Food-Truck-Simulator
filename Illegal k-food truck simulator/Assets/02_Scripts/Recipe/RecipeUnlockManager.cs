@@ -21,6 +21,7 @@ public class RecipeUnlockManager : MonoBehaviour
     [SerializeField] private RecipeDefinition[] allRecipes; // 모든 레시피 목록 (ID로 찾기 위해)
     
     private HashSet<RecipeDefinition> unlockedRecipes = new HashSet<RecipeDefinition>();
+    private bool isDataLoaded = false; // 데이터 로드 여부 플래그
     
     /// <summary>
     /// 레시피가 해금될 때 호출되는 이벤트
@@ -48,8 +49,11 @@ public class RecipeUnlockManager : MonoBehaviour
     
     private void Start()
     {
-        // 기본 레시피들 해금
-        UnlockDefaultRecipes();
+        // 데이터가 로드되지 않은 경우에만 기본 레시피 해금
+        if (!isDataLoaded)
+        {
+            UnlockDefaultRecipes();
+        }
     }
     
     /// <summary>
@@ -131,6 +135,7 @@ public class RecipeUnlockManager : MonoBehaviour
     public void LoadUnlockedRecipes(List<string> recipeIds)
     {
         unlockedRecipes.Clear();
+        isDataLoaded = true; // 데이터 로드 플래그 설정
         
         if (recipeIds == null || recipeIds.Count == 0)
         {
@@ -148,6 +153,7 @@ public class RecipeUnlockManager : MonoBehaviour
         }
         
         OnUnlockedRecipesChanged?.Invoke();
+        Debug.Log($"레시피 로드 완료: {unlockedRecipes.Count}개");
     }
     
     /// <summary>
