@@ -5,6 +5,7 @@ using System;
 public class RecipeDefinition : ScriptableObject
 {
     [Header("Recipe Info")]
+    [SerializeField] private string recipeId; // 레시피 고유 ID
     [SerializeField] private string recipeName;
     [SerializeField] private Sprite dishImage;
     [SerializeField] private float cookingTime = 10f;
@@ -17,6 +18,7 @@ public class RecipeDefinition : ScriptableObject
     [SerializeField] private ItemDefinition resultDish;
     [SerializeField] private int resultAmount = 1;
     
+    public string RecipeId => recipeId;
     public string RecipeName => recipeName;
     public Sprite DishImage => dishImage;
     public float CookingTime => cookingTime;

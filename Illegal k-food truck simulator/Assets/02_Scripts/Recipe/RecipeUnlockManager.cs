@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 /// <summary>
 /// 플레이어가 해금한 레시피들을 관리하는 매니저
@@ -15,6 +16,9 @@ public class RecipeUnlockManager : MonoBehaviour
     
     [Header("Default Unlocked Recipes")]
     [SerializeField] private RecipeDefinition[] defaultUnlockedRecipes; // 기본으로 해금된 레시피들
+    
+    [Header("All Recipes")]
+    [SerializeField] private RecipeDefinition[] allRecipes; // 모든 레시피 목록 (ID로 찾기 위해)
     
     private HashSet<RecipeDefinition> unlockedRecipes = new HashSet<RecipeDefinition>();
     
@@ -109,4 +113,58 @@ public class RecipeUnlockManager : MonoBehaviour
     /// 해금된 레시피 개수
     /// </summary>
     public int UnlockedRecipeCount => unlockedRecipes.Count;
+    
+    /// <summary>
+    /// 현재 해금된 레시피 ID 목록 저장용으로 반환
+    /// </summary>
+    public List<string> GetUnlockedRecipeIds()
+    {
+        return unlockedRecipes
+            .Where(r => r != null && !string.IsNullOrEmpty(r.RecipeId))
+            .Select(r => r.RecipeId)
+            .ToList();
+    }
+    
+    /// <summary>
+    /// 저장된 레시피 ID 목록으로 해금 상태 복원
+    /// </summary>
+    public void LoadUnlockedRecipes(List<string> recipeIds)
+    {
+        unlockedRecipes.Clear();
+        
+        if (recipeIds == null || recipeIds.Count == 0)
+        {
+            UnlockDefaultRecipes();
+            return;
+        }
+        
+        foreach (string id in recipeIds)
+        {
+            RecipeDefinition recipe = FindRecipeById(id);
+            if (recipe != null)
+            {
+                unlockedRecipes.Add(recipe);
+            }
+        }
+        
+        OnUnlockedRecipesChanged?.Invoke();
+    }
+    
+    /// <summary>
+    /// ID로 레시피 찾기
+    /// </summary>
+    private RecipeDefinition FindRecipeById(string id)
+    {
+        if (allRecipes == null) return null;
+        
+        foreach (var recipe in allRecipes)
+        {
+            if (recipe != null && recipe.RecipeId == id)
+            {
+                return recipe;
+            }
+        }
+        
+        return null;
+    }
 }

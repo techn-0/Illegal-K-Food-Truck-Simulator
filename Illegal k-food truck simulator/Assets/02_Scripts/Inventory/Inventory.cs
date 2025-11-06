@@ -280,4 +280,74 @@ public class Inventory : MonoBehaviour
         
         return actualRemoved;
     }
+    
+    /// <summary>
+    /// 인벤토리 데이터를 저장용으로 변환
+    /// </summary>
+    public List<InventorySlotData> GetSaveData()
+    {
+        List<InventorySlotData> saveData = new List<InventorySlotData>();
+        
+        foreach (var slot in slots)
+        {
+            if (!slot.IsEmpty && slot.Item != null)
+            {
+                saveData.Add(new InventorySlotData(slot.Item.Id, slot.Count));
+            }
+            else
+            {
+                saveData.Add(new InventorySlotData(null, 0));
+            }
+        }
+        
+        return saveData;
+    }
+    
+    /// <summary>
+    /// 저장된 데이터로 인벤토리 복원
+    /// </summary>
+    public void LoadFromSaveData(List<InventorySlotData> saveData)
+    {
+        Clear();
+        
+        if (saveData == null || saveData.Count == 0) return;
+        
+        for (int i = 0; i < saveData.Count && i < slots.Count; i++)
+        {
+            var slotData = saveData[i];
+            
+            if (string.IsNullOrEmpty(slotData.itemId) || slotData.count <= 0)
+            {
+                slots[i].Clear();
+            }
+            else
+            {
+                ItemDefinition item = FindItemById(slotData.itemId);
+                if (item != null)
+                {
+                    slots[i].SetItem(item, slotData.count);
+                }
+            }
+        }
+        
+        OnChanged?.Invoke();
+    }
+    
+    /// <summary>
+    /// ID로 아이템 찾기 (Resources 폴더에서 로드)
+    /// </summary>
+    private ItemDefinition FindItemById(string itemId)
+    {
+        ItemDefinition[] allItems = Resources.LoadAll<ItemDefinition>("Items");
+        
+        foreach (var item in allItems)
+        {
+            if (item != null && item.Id == itemId)
+            {
+                return item;
+            }
+        }
+        
+        return null;
+    }
 }
