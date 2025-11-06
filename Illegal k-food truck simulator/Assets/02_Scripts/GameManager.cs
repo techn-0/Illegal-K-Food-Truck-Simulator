@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // 게임 씬이 로드되고 저장 데이터가 있으면 복원
+        // 게임 씬이 로드되고 저장 데이터가 있으면 복원
         if (scene.name == gameSceneName && Save != null)
         {
             StartCoroutine(RestoreGameData());

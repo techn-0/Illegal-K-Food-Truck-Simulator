@@ -45,7 +45,12 @@ public class Inventory : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializeSlots();
+            
+            // 슬롯이 없거나 비어있을 때만 초기화
+            if (slots == null || slots.Count == 0)
+            {
+                InitializeSlots();
+            }
         }
         else
         {
@@ -312,7 +317,7 @@ public class Inventory : MonoBehaviour
     public void LoadFromSaveData(List<InventorySlotData> saveData)
     {
         Clear();
-        
+
         if (saveData == null || saveData.Count == 0) return;
         
         for (int i = 0; i < saveData.Count && i < slots.Count; i++)
@@ -332,7 +337,7 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
-        
+
         OnChanged?.Invoke();
     }
     

@@ -49,8 +49,8 @@ public class RecipeUnlockManager : MonoBehaviour
     
     private void Start()
     {
-        // 데이터가 로드되지 않은 경우에만 기본 레시피 해금
-        if (!isDataLoaded)
+        // 데이터가 로드되지 않았고 레시피가 하나도 없을 때만 기본 레시피 해금
+        if (!isDataLoaded && unlockedRecipes.Count == 0)
         {
             UnlockDefaultRecipes();
         }
