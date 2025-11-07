@@ -440,7 +440,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f8302308ff4950ad430004490bf422, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetInventory: {fileID: 1847597758}
   testItems:
   - item: {fileID: 11400000, guid: ae4bb24738b827f4aa6700b65bd886e8, type: 2}
     amount: 100
@@ -1155,9 +1154,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d072bb523cb24c5f8b9e817078cb486b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  truckOrderPoint: {fileID: 1883901911}
+  OrderPoint: {fileID: 0}
   customerSpacing: 2
   queueDirection: {x: 0, y: 0, z: 1}
+  sortByDistance: 1
 --- !u!1001 &446633461
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2383,6 +2383,56 @@ MonoBehaviour:
   defaultUnlockedRecipes:
   - {fileID: 11400000, guid: 6dbfdd3bad37ea344aa7077be07cef66, type: 2}
   - {fileID: 11400000, guid: 3ac876b9e9b3a034d977f94dccaf5068, type: 2}
+  allRecipes: []
+--- !u!1 &1245644880
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1245644882}
+  - component: {fileID: 1245644881}
+  m_Layer: 0
+  m_Name: MiniGameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1245644881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245644880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea729d899da84be0b7dd87ab9c25bc3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Minigame.MiniGameManager
+  minigamePrefabs:
+  - id: 1
+    prefab: {fileID: 2870155055741935281, guid: 85195b5f586eb9e40bcdde6fe5d5cf15, type: 3}
+  dimmerCanvas: {fileID: 0}
+  dimmerCanvasGroup: {fileID: 0}
+--- !u!4 &1245644882
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245644880}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1266664921 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5291571908598379004, guid: 1c278cc781f12e54e849093a499f564e, type: 3}
@@ -2674,7 +2724,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a5f0954fdfa4cf990cc6599cad45a58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInventory: {fileID: 1847597758}
   availableRecipes:
   - {fileID: 11400000, guid: 6dbfdd3bad37ea344aa7077be07cef66, type: 2}
   - {fileID: 11400000, guid: 3ac876b9e9b3a034d977f94dccaf5068, type: 2}
@@ -2873,6 +2922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slots: []
+  allItems: []
 --- !u!4 &1847597759
 Transform:
   m_ObjectHideFlags: 0
@@ -2888,11 +2938,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1412211425}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1883901911 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1809370143413589175, guid: f54ba2e7dbf3cf34f91ed7bb0430e338, type: 3}
-  m_PrefabInstance: {fileID: 663139464}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1893130398 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4960938616239913019, guid: e9cfe8d3e6864c74a85221ce4064f049, type: 3}
@@ -3093,6 +3138,53 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6947715552600866214, guid: 22a895bdfeff4644fac4cee4dba2e026, type: 3}
   m_PrefabInstance: {fileID: 6106630928326172874}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2091029902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2091029904}
+  - component: {fileID: 2091029903}
+  m_Layer: 0
+  m_Name: MinigameTestTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2091029903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091029902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1194aacfb99a4d4abd886cc4959c2938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Minigame.MinigameTestTrigger
+  testMinigameId: 1
+  triggerKey: 116
+  resultText: {fileID: 0}
+--- !u!4 &2091029904
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091029902}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2095100503
 GameObject:
   m_ObjectHideFlags: 0
@@ -4287,3 +4379,5 @@ SceneRoots:
   - {fileID: 1656654006}
   - {fileID: 2645208133685106491}
   - {fileID: 6118726486586967823}
+  - {fileID: 1245644882}
+  - {fileID: 2091029904}

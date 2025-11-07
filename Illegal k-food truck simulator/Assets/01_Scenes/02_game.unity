@@ -369337,6 +369337,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 813174682680193820, guid: 90c93c15bc2f78a418a56966f311855c, type: 3}
   m_PrefabInstance: {fileID: 1720085376}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1720142886
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1720142888}
+  - component: {fileID: 1720142887}
+  m_Layer: 0
+  m_Name: MinigameTestTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1720142887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720142886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1194aacfb99a4d4abd886cc4959c2938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Minigame.MinigameTestTrigger
+  testMinigameId: 1
+  triggerKey: 116
+  resultText: {fileID: 0}
+--- !u!4 &1720142888
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720142886}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1720191414
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -426208,6 +426255,55 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7117939782406349125, guid: a82442b3b3748d84b9db5c9ddadd6ef3, type: 3}
   m_PrefabInstance: {fileID: 1998884418}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1999591361
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1999591363}
+  - component: {fileID: 1999591362}
+  m_Layer: 0
+  m_Name: MiniGameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1999591362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999591361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea729d899da84be0b7dd87ab9c25bc3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Minigame.MiniGameManager
+  minigamePrefabs:
+  - id: 1
+    prefab: {fileID: 2870155055741935281, guid: 85195b5f586eb9e40bcdde6fe5d5cf15, type: 3}
+  dimmerCanvas: {fileID: 0}
+  dimmerCanvasGroup: {fileID: 0}
+--- !u!4 &1999591363
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999591361}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1999751712
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -459770,6 +459866,8 @@ SceneRoots:
   - {fileID: 1705593623}
   - {fileID: 1791523313}
   - {fileID: 1754761709}
+  - {fileID: 1720142888}
+  - {fileID: 1999591363}
   - {fileID: 2005041797}
   - {fileID: 274864103}
   - {fileID: 1063547420}
