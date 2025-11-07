@@ -30,13 +30,13 @@ public class CustomerOrderSystem : MonoBehaviour
     private Vector3 _originalPosition; // 원래 위치
     private Quaternion _originalRotation; // 원래 회전
     private Vector3 _targetPosition; // 현재 목표 위치
-    private bool _isInQueue = false;
-    private bool _hasPlacedOrder = false;
-    private Vector3 _lastPosition; // 이전 프레임 위치
+    private bool _isInQueue; // 대기열에 있는지 여부
+    private bool _hasPlacedOrder; // 주문을 했는지 여부
+    private Vector3 _lastPosition; // 이전 프레임 위치 (애니메이션용)
     
     // 대기열 타이머 관련
-    private float _queueWaitTimer = 0f;
-    private bool _isWaitingInQueue = false;
+    private float _queueWaitTimer; // 대기열에서 기다린 시간
+    private bool _isWaitingInQueue; // 대기열 대기 중인지 여부
 
     private void Start()
     {
@@ -91,13 +91,14 @@ public class CustomerOrderSystem : MonoBehaviour
 
         // 움직임 감지 및 애니메이션 제어
         UpdateWalkingAnimation();
-
+        
         // 목표 위치에 도달했는지 확인
         CheckArrival();
     }
 
     private void OnDestroy()
     {
+        // 이벤트 구독 해제
         BusinessManager.OnBusinessStateChanged -= HandleBusinessStateChanged;
         if (_currentOrder != null)
         {
@@ -105,6 +106,9 @@ public class CustomerOrderSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 비즈니스 상태 변경 처리
+    /// </summary>
     private void HandleBusinessStateChanged(bool isActive)
     {
         if (isActive)
@@ -129,6 +133,26 @@ public class CustomerOrderSystem : MonoBehaviour
             _isInQueue = true;
             _isWaitingInQueue = true;
             _queueWaitTimer = 0f; // 대기열 타이머 시작
+            
+            // 대기열에 들어갈 때 UI 생성 (주문 아이템 미리 표시)
+            CreateQueueUI();
+        }
+    }
+    
+    /// <summary>
+    /// 대기열 UI 생성
+    /// </summary>
+    private void CreateQueueUI()
+    {
+        if (orderUI != null && _instantiatedUI == null && _currentOrder != null)
+        {
+            _instantiatedUI = Instantiate(orderUI, transform);
+            
+            var orderUIComponent = _instantiatedUI.GetComponent<OrderUI>();
+            if (orderUIComponent != null)
+            {
+                orderUIComponent.Setup(_currentOrder.orderItem, _currentOrder.quantity);
+            }
         }
     }
 
@@ -214,21 +238,14 @@ public class CustomerOrderSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// 주문 생성
+    /// 주문 생성 (대기열 타이머 중지, 음식 대기 타이머 시작)
     /// </summary>
     private void PlaceOrder()
     {
-        if (orderUI != null && _instantiatedUI == null && _currentOrder != null)
+        // UI가 이미 생성되어 있으므로 중복 생성하지 않음
+        // 주문 타이머 시작 (음식 대기 타이머)
+        if (_currentOrder != null)
         {
-            _instantiatedUI = Instantiate(orderUI, transform);
-            
-            var orderUIComponent = _instantiatedUI.GetComponent<OrderUI>();
-            if (orderUIComponent != null)
-            {
-                orderUIComponent.Setup(_currentOrder.orderItem, _currentOrder.quantity);
-            }
-            
-            // 주문 타이머 시작 (음식 대기 타이머)
             _currentOrder.ActivateOrder();
             _hasPlacedOrder = true;
             _isWaitingInQueue = false; // 대기열 타이머 중지

@@ -83,29 +83,64 @@ public class OrderUI : MonoBehaviour
     {
         if (customerOrderSystem == null) return;
 
-        var currentOrder = customerOrderSystem.GetCurrentOrder();
-        if (currentOrder == null || !currentOrder.IsActive) return;
-
-        // 타이머 바 업데이트
-        if (timerFillImage != null)
+        // 대기열에서 기다리는 중인지 확인
+        bool isWaitingInQueue = customerOrderSystem.IsWaitingInQueue();
+        
+        if (isWaitingInQueue)
         {
-            float timeRatio = currentOrder.GetTimeRatio();
-            timerFillImage.fillAmount = timeRatio;
+            // 대기열 타이머 표시
+            float remainingQueueTime = customerOrderSystem.GetRemainingQueueTime();
+            float queueTimeLimit = customerOrderSystem.queueWaitTimeLimit;
+            float queueTimeRatio = Mathf.Clamp01(remainingQueueTime / queueTimeLimit);
             
-            // 시간에 따른 색상 변경
-            if (timeRatio > 0.5f)
-                timerFillImage.color = Color.green;
-            else if (timeRatio > 0.25f)
-                timerFillImage.color = Color.yellow;
-            else
-                timerFillImage.color = Color.red;
+            // 타이머 바 업데이트
+            if (timerFillImage != null)
+            {
+                timerFillImage.fillAmount = queueTimeRatio;
+                
+                // 시간에 따른 색상 변경
+                if (queueTimeRatio > 0.5f)
+                    timerFillImage.color = Color.cyan; // 대기열은 청록색
+                else if (queueTimeRatio > 0.25f)
+                    timerFillImage.color = Color.yellow;
+                else
+                    timerFillImage.color = Color.red;
+            }
+            
+            // 타이머 텍스트 업데이트
+            if (timerText != null)
+            {
+                int remainingSeconds = Mathf.CeilToInt(remainingQueueTime);
+                timerText.text = remainingSeconds.ToString();
+            }
         }
-
-        // 타이머 텍스트 업데이트
-        if (timerText != null)
+        else
         {
-            int remainingSeconds = Mathf.CeilToInt(currentOrder.RemainingTime);
-            timerText.text = remainingSeconds.ToString();
+            // 주문 후 음식 대기 타이머 표시
+            var currentOrder = customerOrderSystem.GetCurrentOrder();
+            if (currentOrder == null || !currentOrder.IsActive) return;
+
+            // 타이머 바 업데이트
+            if (timerFillImage != null)
+            {
+                float timeRatio = currentOrder.GetTimeRatio();
+                timerFillImage.fillAmount = timeRatio;
+                
+                // 시간에 따른 색상 변경
+                if (timeRatio > 0.5f)
+                    timerFillImage.color = Color.green; // 음식 대기는 녹색
+                else if (timeRatio > 0.25f)
+                    timerFillImage.color = Color.yellow;
+                else
+                    timerFillImage.color = Color.red;
+            }
+
+            // 타이머 텍스트 업데이트
+            if (timerText != null)
+            {
+                int remainingSeconds = Mathf.CeilToInt(currentOrder.RemainingTime);
+                timerText.text = remainingSeconds.ToString();
+            }
         }
     }
 
