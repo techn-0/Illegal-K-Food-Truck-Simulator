@@ -99,12 +99,12 @@ namespace Minigame
                 // 한 바퀴 완료 체크
                 if (Mathf.Abs(currentRotationAngle) >= parameters.minRotationAngle)
                 {
-                    if (currentRotationAngle > 0)
+                    if (currentRotationAngle < 0)  // 음수(시계 반대 방향)가 정방향
                     {
                         completedRotations++;
                         currentRotationAngle = 0f;
                     }
-                    else // 역회전
+                    else // 역회전 (양수, 시계 방향)
                     {
                         completedRotations = Mathf.Max(0, 
                             completedRotations - Mathf.RoundToInt(parameters.reverseRotationPenalty));
@@ -115,7 +115,7 @@ namespace Minigame
                 // 반죽 볼 회전 시각화
                 if (doughBowlTransform != null)
                 {
-                    doughBowlTransform.Rotate(Vector3.up, angle * parameters.mouseSensitivity * 2f, Space.Self);
+                    doughBowlTransform.Rotate(Vector3.up, -angle * parameters.mouseSensitivity * 2f, Space.Self);
                 }
 
                 lastMousePos = currentMousePos;
@@ -217,4 +217,3 @@ namespace Minigame
         }
     }
 }
-
