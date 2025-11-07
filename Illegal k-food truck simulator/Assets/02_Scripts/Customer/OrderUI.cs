@@ -13,6 +13,9 @@ public class OrderUI : MonoBehaviour
     [Header("Timer UI")]
     public Image timerFillImage; // 타이머 바 (인스펙터에서 설정)
     public TMP_Text timerText; // 타이머 텍스트 (인스펙터에서 설정)
+    
+    [Header("Order UI Container (Optional)")]
+    public GameObject orderUIContainer; // 주문 UI를 담은 컨테이너 (인스펙터에서 설정 - 선택사항)
 
     private Camera mainCamera;
     private ItemDefinition orderItem;
@@ -27,6 +30,9 @@ public class OrderUI : MonoBehaviour
 
     private void Update()
     {
+        // 대기열 상태에 따라 주문 UI 표시/숨김
+        UpdateOrderUIVisibility();
+        
         // 판매 가능 여부에 따라 버튼 상태 업데이트
         UpdateSellButton();
         
@@ -55,6 +61,33 @@ public class OrderUI : MonoBehaviour
             itemIcon.sprite = item.Icon;
             itemName.text = item.DisplayName;
             itemQuantity.text = quantity.ToString();
+        }
+    }
+
+    /// <summary>
+    /// 대기열 상태에 따라 주문 UI 표시/숨김 처리
+    /// </summary>
+    private void UpdateOrderUIVisibility()
+    {
+        if (customerOrderSystem == null) return;
+
+        bool isWaitingInQueue = customerOrderSystem.IsWaitingInQueue();
+        
+        // 대기열에서 기다리는 중이면 주문 UI 숨김, 아니면 표시
+        bool showOrderUI = !isWaitingInQueue;
+        
+        // 컨테이너가 설정되어 있으면 컨테이너만 제어
+        if (orderUIContainer != null)
+        {
+            orderUIContainer.SetActive(showOrderUI);
+        }
+        else
+        {
+            // 컨테이너가 없으면 개별 UI 요소 제어
+            if (itemIcon != null) itemIcon.gameObject.SetActive(showOrderUI);
+            if (itemName != null) itemName.gameObject.SetActive(showOrderUI);
+            if (itemQuantity != null) itemQuantity.gameObject.SetActive(showOrderUI);
+            if (sellButton != null) sellButton.gameObject.SetActive(showOrderUI);
         }
     }
 
