@@ -263317,6 +263317,7 @@ MonoBehaviour:
   allRecipes:
   - {fileID: 11400000, guid: 6dbfdd3bad37ea344aa7077be07cef66, type: 2}
   - {fileID: 11400000, guid: 3ac876b9e9b3a034d977f94dccaf5068, type: 2}
+  - {fileID: 11400000, guid: 1ffcaf14856ce4c40a13b36b2891a0e2, type: 2}
 --- !u!1001 &1202350493
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -394612,6 +394613,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
   - {fileID: 11400000, guid: 2142d50de3e6e0145851e1d11ae7c481, type: 2}
   - {fileID: 11400000, guid: 1a2ad1bfec29a724c8554000b1636e94, type: 2}
+  - {fileID: 11400000, guid: 7f1810c7faab435489533d952a66e542, type: 2}
+  - {fileID: 11400000, guid: a5a10b2128c688a4797bf17cd8c126c7, type: 2}
 --- !u!4 &1847597759
 Transform:
   m_ObjectHideFlags: 0
