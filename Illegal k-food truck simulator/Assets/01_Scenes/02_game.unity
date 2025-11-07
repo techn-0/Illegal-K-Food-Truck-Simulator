@@ -96104,9 +96104,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d072bb523cb24c5f8b9e817078cb486b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  truckOrderPoint: {fileID: 287384220}
+  OrderPoint: {fileID: 287384220}
   customerSpacing: 2
   queueDirection: {x: 0, y: 0, z: 1}
+  sortByDistance: 1
 --- !u!1001 &419020570
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -254210,15 +254211,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2952019285318917830, guid: db5809748fe10ea42bfaf45d3e0c9a92, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.639999
+      value: 35.342
       objectReference: {fileID: 0}
     - target: {fileID: 2952019285318917830, guid: db5809748fe10ea42bfaf45d3e0c9a92, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.81
+      value: 0.162
       objectReference: {fileID: 0}
     - target: {fileID: 2952019285318917830, guid: db5809748fe10ea42bfaf45d3e0c9a92, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.699997
+      value: 1.173
       objectReference: {fileID: 0}
     - target: {fileID: 2952019285318917830, guid: db5809748fe10ea42bfaf45d3e0c9a92, type: 3}
       propertyPath: m_LocalRotation.w
@@ -254247,6 +254248,10 @@ PrefabInstance:
     - target: {fileID: 2952019285318917830, guid: db5809748fe10ea42bfaf45d3e0c9a92, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5100157918492657286, guid: db5809748fe10ea42bfaf45d3e0c9a92, type: 3}
+      propertyPath: queueWaitTimeLimit
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 7619372852061089396, guid: db5809748fe10ea42bfaf45d3e0c9a92, type: 3}
       propertyPath: m_Name

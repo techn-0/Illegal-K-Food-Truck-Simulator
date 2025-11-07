@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// 전체 주문을 관리하는 매니저
@@ -10,9 +11,10 @@ public class OrderManager : MonoBehaviour
     public static OrderManager Instance { get; private set; }
 
     [Header("Queue Settings")]
-    [SerializeField] private Transform truckOrderPoint; // 트럭의 주문 접수 지점
+    [SerializeField] private Transform OrderPoint; // 트럭의 주문 접수 지점
     [SerializeField] private float customerSpacing = 2f; // 손님 간 간격
     [SerializeField] private Vector3 queueDirection = Vector3.forward; // 줄 서는 방향 (트럭 기준)
+    [SerializeField] private bool sortByDistance = true; // 거리순으로 정렬할지 여부 (인스펙터에서 설정)
 
     private Queue<CustomerOrderSystem> _orderQueue = new Queue<CustomerOrderSystem>();
     private List<CustomerOrderSystem> _queuedCustomers = new List<CustomerOrderSystem>();
@@ -36,9 +38,41 @@ public class OrderManager : MonoBehaviour
     {
         if (customer == null || _queuedCustomers.Contains(customer)) return;
 
-        _orderQueue.Enqueue(customer);
         _queuedCustomers.Add(customer);
+        
+        // 거리순으로 정렬할지 여부 확인
+        if (sortByDistance && OrderPoint != null)
+        {
+            SortQueueByDistance();
+        }
+        
+        // Queue 재구성
+        RebuildQueue();
         UpdateQueuePositions();
+    }
+
+    /// <summary>
+    /// 트럭과의 거리를 기준으로 대기열 정렬
+    /// </summary>
+    private void SortQueueByDistance()
+    {
+        if (OrderPoint == null) return;
+        
+        _queuedCustomers = _queuedCustomers
+            .OrderBy(customer => Vector3.Distance(customer.transform.position, OrderPoint.position))
+            .ToList();
+    }
+    
+    /// <summary>
+    /// List 기반으로 Queue 재구성
+    /// </summary>
+    private void RebuildQueue()
+    {
+        _orderQueue.Clear();
+        foreach (var customer in _queuedCustomers)
+        {
+            _orderQueue.Enqueue(customer);
+        }
     }
 
     /// <summary>
@@ -48,20 +82,10 @@ public class OrderManager : MonoBehaviour
     {
         if (customer == null) return;
 
-        // Queue에서는 직접 제거할 수 없으므로 리스트로 재구성
-        var tempList = new List<CustomerOrderSystem>();
-        while (_orderQueue.Count > 0)
-        {
-            var c = _orderQueue.Dequeue();
-            if (c != customer)
-                tempList.Add(c);
-        }
-
-        // Queue 재구성
-        foreach (var c in tempList)
-            _orderQueue.Enqueue(c);
-
         _queuedCustomers.Remove(customer);
+        
+        // Queue 재구성
+        RebuildQueue();
         UpdateQueuePositions();
     }
 
@@ -86,7 +110,7 @@ public class OrderManager : MonoBehaviour
     /// </summary>
     private void UpdateQueuePositions()
     {
-        if (truckOrderPoint == null) return;
+        if (OrderPoint == null) return;
 
         for (int i = 0; i < _queuedCustomers.Count; i++)
         {
@@ -100,16 +124,16 @@ public class OrderManager : MonoBehaviour
     /// </summary>
     private Vector3 CalculateQueuePosition(int queueIndex)
     {
-        if (truckOrderPoint == null) return Vector3.zero;
+        if (OrderPoint == null) return Vector3.zero;
 
         // 트럭의 방향을 기준으로 줄 서는 방향 계산
-        Vector3 truckForward = truckOrderPoint.forward;
+        Vector3 truckForward = OrderPoint.forward;
         Vector3 actualQueueDirection = truckForward * queueDirection.z + 
-                                     truckOrderPoint.right * queueDirection.x + 
-                                     truckOrderPoint.up * queueDirection.y;
+                                     OrderPoint.right * queueDirection.x + 
+                                     OrderPoint.up * queueDirection.y;
 
         // 첫 번째는 주문 지점, 나머지는 간격을 두고 배치
-        Vector3 position = truckOrderPoint.position;
+        Vector3 position = OrderPoint.position;
         if (queueIndex > 0)
         {
             position -= actualQueueDirection.normalized * (queueIndex * customerSpacing);
