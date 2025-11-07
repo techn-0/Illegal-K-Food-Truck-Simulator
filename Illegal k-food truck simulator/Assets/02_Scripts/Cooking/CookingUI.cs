@@ -9,6 +9,10 @@ public class CookingUI : MonoBehaviour
     [SerializeField] private Transform recipeContainer;
     [SerializeField] private GameObject recipeItemPrefab;
     
+    [Header("Business Button")]
+    [SerializeField] private Button businessToggleButton;
+    [SerializeField] private TextMeshProUGUI businessButtonText;
+    
     [Header("Cooking Timer UI")]
     [SerializeField] private GameObject cookingTimerPanel;
     [SerializeField] private TextMeshProUGUI timerText;
@@ -17,6 +21,7 @@ public class CookingUI : MonoBehaviour
     
     private CookingManager cookingManager;
     private CookingTimer cookingTimer;
+    private bool playerInRange = false;
     
     void Awake()
     {
@@ -37,12 +42,32 @@ public class CookingUI : MonoBehaviour
         // 레시피 해금 이벤트 구독
         RecipeUnlockManager.OnUnlockedRecipesChanged += OnUnlockedRecipesChanged;
         
+        // CookingInteractor 이벤트 구독
+        if (CookingInteractor.Instance != null)
+        {
+            CookingInteractor.Instance.OnPlayerRangeChanged += OnPlayerRangeChanged;
+        }
+        
+        // BusinessManager 이벤트 구독
+        BusinessManager.OnBusinessStateChanged += OnBusinessStateChanged;
+        
+        // 장사 버튼 클릭 이벤트 연결 (코드로만 관리)
+        if (businessToggleButton != null)
+        {
+            // 기존 리스너를 모두 제거하고 새로 추가 (Inspector 설정과 중복 방지)
+            businessToggleButton.onClick.RemoveAllListeners();
+            businessToggleButton.onClick.AddListener(OnBusinessButtonClicked);
+        }
+        
         // 초기 상태 설정
         // cookingPanel.SetActive(false);
         // cookingTimerPanel.SetActive(false);
 
         // 레시피 목록 생성
         CreateRecipeList();
+        
+        // 버튼 초기 상태 업데이트
+        UpdateBusinessButton();
     }
     
     void OnDestroy()
@@ -61,6 +86,15 @@ public class CookingUI : MonoBehaviour
         
         // 레시피 해금 이벤트 구독 해제
         RecipeUnlockManager.OnUnlockedRecipesChanged -= OnUnlockedRecipesChanged;
+        
+        // CookingInteractor 이벤트 구독 해제
+        if (CookingInteractor.Instance != null)
+        {
+            CookingInteractor.Instance.OnPlayerRangeChanged -= OnPlayerRangeChanged;
+        }
+        
+        // BusinessManager 이벤트 구독 해제
+        BusinessManager.OnBusinessStateChanged -= OnBusinessStateChanged;
     }
     
     private void CreateRecipeList()
@@ -115,5 +149,45 @@ public class CookingUI : MonoBehaviour
     private void OnUnlockedRecipesChanged()
     {
         CreateRecipeList();
+    }
+    
+    private void OnPlayerRangeChanged(bool inRange)
+    {
+        playerInRange = inRange;
+        UpdateBusinessButton();
+    }
+    
+    private void OnBusinessStateChanged(bool isActive)
+    {
+        UpdateBusinessButton();
+    }
+    
+    private void UpdateBusinessButton()
+    {
+        if (businessToggleButton == null || businessButtonText == null)
+            return;
+        
+        // 플레이어가 범위 내에 있을 때만 버튼 활성화
+        businessToggleButton.interactable = playerInRange;
+        
+        // 장사 상태에 따라 텍스트 변경
+        if (BusinessManager.IsBusinessActive)
+        {
+            businessButtonText.text = "장사 종료";
+        }
+        else
+        {
+            businessButtonText.text = "장사 시작";
+        }
+        
+        // 버튼 색상 변경 (선택사항)
+        var colors = businessToggleButton.colors;
+        colors.normalColor = playerInRange ? Color.white : Color.gray;
+        businessToggleButton.colors = colors;
+    }
+    
+    private void OnBusinessButtonClicked()
+    {
+        BusinessManager.ToggleBusinessState();
     }
 }

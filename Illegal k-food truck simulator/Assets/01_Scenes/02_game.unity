@@ -377059,7 +377059,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1760109412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458860,6 +458860,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6106630928326172876}
     m_Modifications:
+    - target: {fileID: 2627120978924662787, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2627120978924662787, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1030487670}
     - target: {fileID: 3758290750092698108, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
