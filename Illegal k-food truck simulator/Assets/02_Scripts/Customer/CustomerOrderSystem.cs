@@ -53,20 +53,10 @@ public class CustomerOrderSystem : MonoBehaviour
         _originalRotation = transform.rotation;
         _lastPosition = transform.position;
         
-        // 해금된 레시피 중 랜덤으로 하나 선택
-        SelectRandomRecipe();
-        
-        // 주문 데이터 초기화
-        if (_orderedRecipe != null)
-        {
-            _currentOrder = new CustomerOrder(_orderedRecipe.ResultDish, orderQuantity, foodWaitTimeLimit);
-            _currentOrder.OnOrderExpired += HandleOrderExpired;
-        }
-        
         // 비즈니스 상태 이벤트 구독
         BusinessManager.OnBusinessStateChanged += HandleBusinessStateChanged;
         
-        // 영업 중이면 대기열에 참가
+        // 영업 중이면 대기열에 참가 (레시피 선택은 JoinQueue에서)
         if (BusinessManager.IsBusinessActive)
         {
             JoinQueue();
@@ -76,12 +66,21 @@ public class CustomerOrderSystem : MonoBehaviour
     /// <summary>해금된 레시피 중 랜덤으로 선택</summary>
     private void SelectRandomRecipe()
     {
-        if (CookingManager.Instance == null) return;
+        if (CookingManager.Instance == null)
+        {
+            Debug.LogWarning("CookingManager.Instance가 null입니다! 나중에 다시 시도합니다.");
+            return;
+        }
 
         var unlockedRecipes = CookingManager.Instance.GetAvailableRecipes();
         if (unlockedRecipes != null && unlockedRecipes.Length > 0)
         {
             _orderedRecipe = unlockedRecipes[Random.Range(0, unlockedRecipes.Length)];
+            Debug.Log($"손님이 {_orderedRecipe.RecipeName}을(를) 주문할 예정입니다.");
+        }
+        else
+        {
+            Debug.LogWarning("해금된 레시피가 없습니다!");
         }
     }
 
@@ -147,6 +146,24 @@ public class CustomerOrderSystem : MonoBehaviour
     {
         if (OrderManager.Instance != null && !_isInQueue)
         {
+            // 대기열 참가 시 레시피 선택 (Start보다 안전한 타이밍)
+            if (_orderedRecipe == null)
+            {
+                SelectRandomRecipe();
+                
+                // 레시피 선택 후 주문 데이터 초기화
+                if (_orderedRecipe != null)
+                {
+                    _currentOrder = new CustomerOrder(_orderedRecipe.ResultDish, orderQuantity, foodWaitTimeLimit);
+                    _currentOrder.OnOrderExpired += HandleOrderExpired;
+                }
+                else
+                {
+                    Debug.LogError("레시피 선택에 실패했습니다. UI를 생성할 수 없습니다.");
+                    return;
+                }
+            }
+            
             OrderManager.Instance.EnqueueCustomer(this);
             _isInQueue = true;
             _isWaitingInQueue = true;

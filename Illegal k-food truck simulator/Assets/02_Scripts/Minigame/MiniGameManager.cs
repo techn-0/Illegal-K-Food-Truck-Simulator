@@ -108,19 +108,20 @@ namespace Minigame
 
         private void OnMinigameFinished(MiniGameResult result)
         {
+            // 참조를 먼저 정리 (콜백에서 다음 미니게임을 시작할 수 있도록)
+            var callback = currentCallback;
+            currentMinigame = null;
+            currentMinigameObject = null;
+            currentCallback = null;
+
             // Dimmer 비활성화
             ShowDimmer(false);
 
             // 플레이어 입력 복구
             EnablePlayerInput();
 
-            // 콜백 실행
-            currentCallback?.Invoke(result);
-
-            // 참조 정리
-            currentMinigame = null;
-            currentMinigameObject = null;
-            currentCallback = null;
+            // 콜백 실행 (참조 정리 후)
+            callback?.Invoke(result);
         }
 
         private void CreateDimmerCanvas()

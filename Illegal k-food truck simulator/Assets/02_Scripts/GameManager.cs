@@ -55,21 +55,42 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private IEnumerator RestoreGameData()
     {
-        // 프레임 대기 (인스턴스 초기화 완료 대기)
+        // 여러 프레임 대기하여 모든 매니저 초기화 완료 보장
         yield return null;
+        yield return null;
+        yield return new WaitForSeconds(0.1f);
         
-        // 레시피 해금 상태 복원: 저장 데이터가 비어있어도 명시적으로 호출하여 기본/현재 상태를 일관 적용
+        // 레시피 해금 상태 복원
         if (RecipeUnlockManager.Instance != null)
         {
             RecipeUnlockManager.Instance.LoadUnlockedRecipes(Save.unlockedRecipeIds);
-            Debug.Log($"레시피 복원 요청: {(Save.unlockedRecipeIds == null ? 0 : Save.unlockedRecipeIds.Count)}개");
+            Debug.Log($"레시피 복원 완료: {(Save.unlockedRecipeIds == null ? 0 : Save.unlockedRecipeIds.Count)}개");
+        }
+        else
+        {
+            Debug.LogWarning("RecipeUnlockManager.Instance가 null입니다!");
         }
         
-        // 인벤토리 상태 복원: 저장 데이터가 비어있으면 초기화 유지, 있으면 슬롯 세팅
+        // 인벤토리 상태 복원
         if (Inventory.Instance != null)
         {
             Inventory.Instance.LoadFromSaveData(Save.inventorySlots);
-            Debug.Log($"인벤토리 복원 요청: {(Save.inventorySlots == null ? 0 : Save.inventorySlots.Count)}개 슬롯");
+            Debug.Log($"인벤토리 복원 완료: {(Save.inventorySlots == null ? 0 : Save.inventorySlots.Count)}개 슬롯");
+        }
+        else
+        {
+            Debug.LogWarning("Inventory.Instance가 null입니다!");
+        }
+        
+        // CookingManager 확인
+        if (CookingManager.Instance != null)
+        {
+            var recipes = CookingManager.Instance.GetAvailableRecipes();
+            Debug.Log($"CookingManager 사용 가능한 레시피: {(recipes == null ? 0 : recipes.Length)}개");
+        }
+        else
+        {
+            Debug.LogWarning("CookingManager.Instance가 null입니다!");
         }
     }
 
