@@ -10,7 +10,10 @@ public class CustomerOrderSystem : MonoBehaviour
     [Header("Order Settings")]
     public ItemDefinition orderItem; // 주문 아이템 (인스펙터에서 설정)
     [Range(1, 5)] public int orderQuantity = 1; // 주문 수량 (인스펙터에서 설정)
-    [Range(10f, 60f)] public float orderTimeLimit = 30f; // 주문 제한 시간 (인스펙터에서 설정)
+    
+    [Header("Timer Settings")]
+    [Range(10f, 120f)] public float queueWaitTimeLimit = 30f; // 대기열에서 기다리는 시간 (인스펙터에서 설정)
+    [Range(10f, 120f)] public float foodWaitTimeLimit = 30f; // 음식을 기다리는 시간 (인스펙터에서 설정)
 
     [Header("UI Settings")]
     public GameObject orderUI; // 주문 UI 프리팹 (인스펙터에서 설정)
@@ -30,6 +33,10 @@ public class CustomerOrderSystem : MonoBehaviour
     private bool _isInQueue = false;
     private bool _hasPlacedOrder = false;
     private Vector3 _lastPosition; // 이전 프레임 위치
+    
+    // 대기열 타이머 관련
+    private float _queueWaitTimer = 0f;
+    private bool _isWaitingInQueue = false;
 
     private void Start()
     {
@@ -46,8 +53,8 @@ public class CustomerOrderSystem : MonoBehaviour
         _originalRotation = transform.rotation;
         _lastPosition = transform.position;
         
-        // 주문 데이터 초기화
-        _currentOrder = new CustomerOrder(orderItem, orderQuantity, orderTimeLimit);
+        // 주문 데이터 초기화 (음식 대기 시간으로 초기화)
+        _currentOrder = new CustomerOrder(orderItem, orderQuantity, foodWaitTimeLimit);
         _currentOrder.OnOrderExpired += HandleOrderExpired;
         
         // 비즈니스 상태 이벤트 구독
@@ -62,8 +69,22 @@ public class CustomerOrderSystem : MonoBehaviour
 
     private void Update()
     {
-        // 주문 타이머 업데이트
-        if (_currentOrder != null)
+        // 대기열 타이머 업데이트
+        if (_isWaitingInQueue && !_hasPlacedOrder)
+        {
+            _queueWaitTimer += Time.deltaTime;
+            
+            // 대기열 타임아웃 체크
+            if (_queueWaitTimer >= queueWaitTimeLimit)
+            {
+                Debug.Log($"대기열 타임아웃: 주문 차례가 오지 않아 떠남");
+                HandleQueueTimeout();
+                return;
+            }
+        }
+        
+        // 주문 타이머 업데이트 (주문을 한 후에만)
+        if (_currentOrder != null && _hasPlacedOrder)
         {
             _currentOrder.UpdateTimer(Time.deltaTime);
         }
@@ -106,6 +127,8 @@ public class CustomerOrderSystem : MonoBehaviour
         {
             OrderManager.Instance.EnqueueCustomer(this);
             _isInQueue = true;
+            _isWaitingInQueue = true;
+            _queueWaitTimer = 0f; // 대기열 타이머 시작
         }
     }
 
@@ -120,6 +143,9 @@ public class CustomerOrderSystem : MonoBehaviour
             _isInQueue = false;
         }
         
+        _isWaitingInQueue = false;
+        _queueWaitTimer = 0f;
+        
         // 주문 UI 제거
         RemoveOrderUI();
         
@@ -130,6 +156,15 @@ public class CustomerOrderSystem : MonoBehaviour
         }
         
         _hasPlacedOrder = false;
+    }
+
+    /// <summary>
+    /// 대기열 타임아웃 처리
+    /// </summary>
+    private void HandleQueueTimeout()
+    {
+        LeaveQueue();
+        ReturnToOriginalPosition();
     }
 
     /// <summary>
@@ -150,6 +185,8 @@ public class CustomerOrderSystem : MonoBehaviour
     public void OnRemovedFromQueue()
     {
         _isInQueue = false;
+        _isWaitingInQueue = false;
+        _queueWaitTimer = 0f;
         RemoveOrderUI();
         if (_currentOrder != null)
         {
@@ -191,9 +228,12 @@ public class CustomerOrderSystem : MonoBehaviour
                 orderUIComponent.Setup(_currentOrder.orderItem, _currentOrder.quantity);
             }
             
-            // 주문 타이머 시작
+            // 주문 타이머 시작 (음식 대기 타이머)
             _currentOrder.ActivateOrder();
             _hasPlacedOrder = true;
+            _isWaitingInQueue = false; // 대기열 타이머 중지
+            
+            Debug.Log($"주문 완료: {_currentOrder.orderItem.DisplayName}, 대기 시간: {_queueWaitTimer:F1}초");
         }
     }
 
@@ -210,11 +250,11 @@ public class CustomerOrderSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// 주문 시간 초과 처리
+    /// 주문 시간 초과 처리 (음식 대기 시간 초과)
     /// </summary>
     private void HandleOrderExpired(CustomerOrder expiredOrder)
     {
-        Debug.Log($"주문 시간 초과: {expiredOrder.orderItem.DisplayName}");
+        Debug.Log($"음식 대기 시간 초과: {expiredOrder.orderItem.DisplayName}");
         LeaveQueue();
         ReturnToOriginalPosition();
     }
@@ -250,6 +290,31 @@ public class CustomerOrderSystem : MonoBehaviour
     public CustomerOrder GetCurrentOrder()
     {
         return _currentOrder;
+    }
+    
+    /// <summary>
+    /// 대기열 타이머 정보 반환 (UI 표시용)
+    /// </summary>
+    public float GetQueueWaitTime()
+    {
+        return _queueWaitTimer;
+    }
+    
+    /// <summary>
+    /// 대기열 대기 중인지 반환
+    /// </summary>
+    public bool IsWaitingInQueue()
+    {
+        return _isWaitingInQueue;
+    }
+    
+    /// <summary>
+    /// 남은 대기열 시간 반환
+    /// </summary>
+    public float GetRemainingQueueTime()
+    {
+        if (!_isWaitingInQueue) return 0f;
+        return Mathf.Max(0f, queueWaitTimeLimit - _queueWaitTimer);
     }
 
     /// <summary>

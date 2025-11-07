@@ -167,8 +167,11 @@ public class CookingUI : MonoBehaviour
         if (businessToggleButton == null || businessButtonText == null)
             return;
         
+        // CookingInteractor에서 직접 범위 상태 확인
+        bool inRange = CookingInteractor.Instance != null && CookingInteractor.Instance.IsPlayerInCookingRange();
+        
         // 플레이어가 범위 내에 있을 때만 버튼 활성화
-        businessToggleButton.interactable = playerInRange;
+        businessToggleButton.interactable = inRange;
         
         // 장사 상태에 따라 텍스트 변경
         if (BusinessManager.IsBusinessActive)
@@ -182,7 +185,7 @@ public class CookingUI : MonoBehaviour
         
         // 버튼 색상 변경 (선택사항)
         var colors = businessToggleButton.colors;
-        colors.normalColor = playerInRange ? Color.white : Color.gray;
+        colors.normalColor = inRange ? Color.white : Color.gray;
         businessToggleButton.colors = colors;
     }
     

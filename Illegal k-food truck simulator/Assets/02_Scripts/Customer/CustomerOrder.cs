@@ -11,34 +11,39 @@ public class CustomerOrder
     [Header("Order Data")]
     public ItemDefinition orderItem;
     public int quantity;
-    public float orderTimeLimit; // 주문 제한 시간 (초)
+    public float foodWaitTimeLimit; // 음식 대기 제한 시간 (초)
 
     [Header("Runtime Data")]
     [SerializeField] private float remainingTime;
     [SerializeField] private bool isActive;
+    [SerializeField] private bool isFoodWaiting; // 음식 대기 중인지 (주문 완료 후)
 
     public float RemainingTime => remainingTime;
     public bool IsActive => isActive;
+    public bool IsFoodWaiting => isFoodWaiting;
     public bool IsExpired => isActive && remainingTime <= 0f;
 
     public event Action<CustomerOrder> OnOrderExpired;
+    public event Action<CustomerOrder> OnQueueWaitExpired; // 대기열 타임아웃
 
-    public CustomerOrder(ItemDefinition item, int qty, float timeLimit = 30f)
+    public CustomerOrder(ItemDefinition item, int qty, float foodTimeLimit = 30f)
     {
         orderItem = item;
         quantity = qty;
-        orderTimeLimit = timeLimit;
-        remainingTime = timeLimit;
+        foodWaitTimeLimit = foodTimeLimit;
+        remainingTime = foodTimeLimit;
         isActive = false;
+        isFoodWaiting = false;
     }
 
     /// <summary>
-    /// 주문 활성화 (타이머 시작)
+    /// 주문 활성화 (음식 대기 타이머 시작)
     /// </summary>
     public void ActivateOrder()
     {
         isActive = true;
-        remainingTime = orderTimeLimit;
+        isFoodWaiting = true;
+        remainingTime = foodWaitTimeLimit;
     }
 
     /// <summary>
@@ -47,6 +52,7 @@ public class CustomerOrder
     public void DeactivateOrder()
     {
         isActive = false;
+        isFoodWaiting = false;
     }
 
     /// <summary>
@@ -78,7 +84,8 @@ public class CustomerOrder
     /// </summary>
     public float GetTimeRatio()
     {
-        if (orderTimeLimit <= 0f) return 1f;
-        return Mathf.Clamp01(remainingTime / orderTimeLimit);
+        float timeLimit = isFoodWaiting ? foodWaitTimeLimit : foodWaitTimeLimit;
+        if (timeLimit <= 0f) return 1f;
+        return Mathf.Clamp01(remainingTime / timeLimit);
     }
 }
