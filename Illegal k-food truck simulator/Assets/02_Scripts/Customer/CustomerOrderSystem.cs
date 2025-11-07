@@ -169,8 +169,8 @@ public class CustomerOrderSystem : MonoBehaviour
             var orderUIComponent = _instantiatedUI.GetComponent<OrderUI>();
             if (orderUIComponent != null)
             {
-                // 레시피로 UI 설정
-                orderUIComponent.SetupWithRecipe(_orderedRecipe, orderQuantity);
+                // 기존 Setup 메서드 사용 (ItemDefinition)
+                orderUIComponent.Setup(_orderedRecipe.ResultDish, orderQuantity);
             }
         }
     }
@@ -369,5 +369,13 @@ public class CustomerOrderSystem : MonoBehaviour
             // 이전 위치 업데이트
             _lastPosition = transform.position;
         }
+    }
+
+    /// <summary>
+    /// 주문한 레시피 정보 반환 (OrderUI에서 사용)
+    /// </summary>
+    public RecipeDefinition GetOrderedRecipe()
+    {
+        return _orderedRecipe;
     }
 }

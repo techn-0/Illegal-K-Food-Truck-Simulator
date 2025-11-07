@@ -62,10 +62,24 @@ public class OrderUI : MonoBehaviour
     /// <summary>기존 ItemDefinition 호환성 유지</summary>
     public void Setup(ItemDefinition item, int quantity)
     {
-        // RecipeDefinition으로 변환 시도
-        orderedRecipe = FindRecipeForItem(item);
         orderQuantity = quantity;
         
+        // CustomerOrderSystem에서 직접 레시피 가져오기
+        if (customerOrderSystem == null)
+            customerOrderSystem = GetComponentInParent<CustomerOrderSystem>();
+        
+        if (customerOrderSystem != null)
+        {
+            orderedRecipe = customerOrderSystem.GetOrderedRecipe();
+        }
+        
+        // orderedRecipe가 없으면 아이템으로 찾기 시도
+        if (orderedRecipe == null && item != null)
+        {
+            orderedRecipe = FindRecipeForItem(item);
+        }
+        
+        // UI 업데이트
         if (item != null)
         {
             itemIcon.sprite = item.Icon;
