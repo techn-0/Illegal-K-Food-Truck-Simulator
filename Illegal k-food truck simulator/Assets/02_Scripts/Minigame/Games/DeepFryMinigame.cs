@@ -35,7 +35,7 @@ namespace Minigame
             if (basketTransform != null)
             {
                 basketOriginalPos = basketTransform.localPosition;
-                basketFryingPos = basketOriginalPos + Vector3.down * 2f; // 기름에 담긴 위치
+                basketFryingPos = basketOriginalPos + Vector3.down * 1f; // 기름에 담긴 위치
             }
             
             if (bubbleParticles != null)

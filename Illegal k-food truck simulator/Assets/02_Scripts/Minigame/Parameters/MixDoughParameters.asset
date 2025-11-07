@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b102535d60e442686069b2fd9497949, type: 3}
   m_Name: MixDoughParameters
   m_EditorClassIdentifier: Assembly-CSharp::Minigame.MixDoughParameters
-  minigameId: 0
+  minigameId: 3
   prepareTime: 3
   resultDisplayTime: 2
   scoringCurve:

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cd75149c64142009eff604b9e3cda17, type: 3}
   m_Name: DeepFryParameters
   m_EditorClassIdentifier: Assembly-CSharp::Minigame.DeepFryParameters
-  minigameId: 0
+  minigameId: 4
   prepareTime: 3
   resultDisplayTime: 2
   scoringCurve:
@@ -39,7 +39,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  targetTime: 10
+  targetTime: 5
   sigma: 0.5
   perfectRange: 0.1
   maxWaitTime: 15
