@@ -6,6 +6,8 @@ using UnityEngine;
 public class CookingInteractor : MonoBehaviour
 {
     public static CookingInteractor Instance { get; private set; }
+
+    public event System.Action<bool> OnPlayerRangeChanged;
     
     private bool playerInRange = false;
     
@@ -24,6 +26,7 @@ public class CookingInteractor : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
+            OnPlayerRangeChanged?.Invoke(true);
         }
     }
     
@@ -32,6 +35,7 @@ public class CookingInteractor : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            OnPlayerRangeChanged?.Invoke(false);
         }
     }
     
