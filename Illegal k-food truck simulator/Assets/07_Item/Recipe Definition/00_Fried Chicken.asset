@@ -16,7 +16,7 @@ MonoBehaviour:
   recipeName: "\uCE58\uD0A8"
   dishImage: {fileID: 21300000, guid: ac1b9b581b455b6489b9fed3e38863f7, type: 3}
   cookingTime: 10
-  basePrice: 100
+  basePrice: 20000
   requiredIngredients:
   - ingredient: {fileID: 11400000, guid: ae4bb24738b827f4aa6700b65bd886e8, type: 2}
     requiredAmount: 1
