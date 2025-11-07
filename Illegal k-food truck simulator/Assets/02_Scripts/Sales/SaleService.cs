@@ -110,7 +110,7 @@ public class SaleService : MonoBehaviour
     {
         if (recipe == null || recipe.ResultDish == null) return false;
         
-        return ProcessSale(recipe.ResultDish, quantity, recipe.Price);
+        return ProcessSale(recipe.ResultDish, quantity, recipe.BasePrice);
     }
 
     /// <summary>

@@ -181,8 +181,9 @@ namespace Minigame
 
             if (playerInput != null)
             {
-                // 미니게임 액션 맵으로 전환 (또는 비활성화)
-                playerInput.DeactivateInput();
+                // 이동만 비활성화 (UI 액션은 유지)
+                playerInput.currentActionMap.FindAction("Move")?.Disable();
+                // 전체 입력을 비활성화하지 않음 - Input.GetKeyDown은 계속 작동
             }
         }
 
@@ -190,7 +191,8 @@ namespace Minigame
         {
             if (playerInput != null)
             {
-                playerInput.ActivateInput();
+                // 이동 다시 활성화
+                playerInput.currentActionMap.FindAction("Move")?.Enable();
             }
         }
 
@@ -212,4 +214,3 @@ namespace Minigame
         public GameObject prefab;
     }
 }
-

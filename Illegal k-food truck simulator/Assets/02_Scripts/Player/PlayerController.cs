@@ -46,7 +46,7 @@ namespace _02_Scripts
 
         void Update()
         {
-            // 인벤토리 UI 토글 처리 (I키) 나중에 인풋시스템으로 변경하는게 좋을듯
+            // 인벤토리 UI 토글 처리 (I키)
             if (Input.GetKeyDown(KeyCode.I))
             {
                 if (inventoryView != null)
@@ -67,6 +67,12 @@ namespace _02_Scripts
                             cursorManager.OnUIWindowClosed();
                         }
                     }
+                    
+                    Debug.Log($"인벤토리 UI: {(isActive ? "열림" : "닫힘")}");
+                }
+                else
+                {
+                    Debug.LogWarning("InventoryView가 할당되지 않았습니다!");
                 }
             }
 
@@ -91,6 +97,12 @@ namespace _02_Scripts
                             cursorManager.OnUIWindowClosed();
                         }
                     }
+                    
+                    Debug.Log($"쿠킹 UI: {(isActive ? "열림" : "닫힘")}");
+                }
+                else
+                {
+                    Debug.LogWarning("CookingUI가 할당되지 않았습니다!");
                 }
             }
 

@@ -8,17 +8,17 @@ public class OrderUI : MonoBehaviour
     public Image itemIcon;
     public TMP_Text itemName;
     public TMP_Text itemQuantity;
-    public Button sellButton;
+    public Button acceptOrderButton; // 이름 변경: sellButton -> acceptOrderButton
     
     [Header("Timer UI")]
-    public Image timerFillImage; // 타이머 바 (인스펙터에서 설정)
-    public TMP_Text timerText; // 타이머 텍스트 (인스펙터에서 설정)
+    public Image timerFillImage;
+    public TMP_Text timerText;
     
     [Header("Order UI Container (Optional)")]
-    public GameObject orderUIContainer; // 주문 UI를 담은 컨테이너 (인스펙터에서 설정 - 선택사항)
+    public GameObject orderUIContainer;
 
     private Camera mainCamera;
-    private ItemDefinition orderItem;
+    private RecipeDefinition orderedRecipe; // ItemDefinition 대신 RecipeDefinition 사용
     private int orderQuantity;
     private CustomerOrderSystem customerOrderSystem;
 
@@ -30,30 +30,40 @@ public class OrderUI : MonoBehaviour
 
     private void Update()
     {
-        // 대기열 상태에 따라 주문 UI 표시/숨김
         UpdateOrderUIVisibility();
-        
-        // 판매 가능 여부에 따라 버튼 상태 업데이트
-        UpdateSellButton();
-        
-        // 타이머 UI 업데이트
+        UpdateAcceptButton();
         UpdateTimerUI();
     }
 
     private void LateUpdate()
     {
-        // UI가 항상 카메라를 바라보도록 설정
         if (mainCamera != null)
         {
             Vector3 direction = mainCamera.transform.position - transform.position;
-            direction.y = 0; // 수직 축 회전을 방지
+            direction.y = 0;
             transform.rotation = Quaternion.LookRotation(-direction);
         }
     }
 
+    /// <summary>레시피로 UI 설정</summary>
+    public void SetupWithRecipe(RecipeDefinition recipe, int quantity)
+    {
+        orderedRecipe = recipe;
+        orderQuantity = quantity;
+        
+        if (recipe != null)
+        {
+            itemIcon.sprite = recipe.DishImage;
+            itemName.text = recipe.RecipeName;
+            itemQuantity.text = quantity.ToString();
+        }
+    }
+
+    /// <summary>기존 ItemDefinition 호환성 유지</summary>
     public void Setup(ItemDefinition item, int quantity)
     {
-        orderItem = item;
+        // RecipeDefinition으로 변환 시도
+        orderedRecipe = FindRecipeForItem(item);
         orderQuantity = quantity;
         
         if (item != null)
@@ -64,83 +74,98 @@ public class OrderUI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 대기열 상태에 따라 주문 UI 표시/숨김 처리
-    /// </summary>
+    private RecipeDefinition FindRecipeForItem(ItemDefinition item)
+    {
+        if (CookingManager.Instance == null) return null;
+        
+        var recipes = CookingManager.Instance.GetAvailableRecipes();
+        foreach (var recipe in recipes)
+        {
+            if (recipe.ResultDish == item)
+                return recipe;
+        }
+        return null;
+    }
+
     private void UpdateOrderUIVisibility()
     {
         if (customerOrderSystem == null) return;
 
         bool isWaitingInQueue = customerOrderSystem.IsWaitingInQueue();
-        
-        // 대기열에서 기다리는 중이면 주문 UI 숨김, 아니면 표시
         bool showOrderUI = !isWaitingInQueue;
         
-        // 컨테이너가 설정되어 있으면 컨테이너만 제어
         if (orderUIContainer != null)
         {
             orderUIContainer.SetActive(showOrderUI);
         }
         else
         {
-            // 컨테이너가 없으면 개별 UI 요소 제어
             if (itemIcon != null) itemIcon.gameObject.SetActive(showOrderUI);
             if (itemName != null) itemName.gameObject.SetActive(showOrderUI);
             if (itemQuantity != null) itemQuantity.gameObject.SetActive(showOrderUI);
-            if (sellButton != null) sellButton.gameObject.SetActive(showOrderUI);
+            if (acceptOrderButton != null) acceptOrderButton.gameObject.SetActive(showOrderUI);
         }
     }
 
-    private void UpdateSellButton()
+    private void UpdateAcceptButton()
     {
-        if (orderItem == null || SaleService.Instance == null)
+        if (orderedRecipe == null || Inventory.Instance == null)
         {
-            sellButton.interactable = false;
+            if (acceptOrderButton != null)
+                acceptOrderButton.interactable = false;
             return;
         }
 
-        // 판매 가능 여부에 따라 버튼 활성화
-        bool canSell = SaleService.Instance.CanSell(orderItem, orderQuantity);
-        sellButton.interactable = canSell;
+        // 재료가 충분한지 확인
+        bool hasIngredients = HasRequiredIngredients();
+        if (acceptOrderButton != null)
+        {
+            acceptOrderButton.interactable = hasIngredients;
 
-        // 버튼 색상 변경 (시각적 피드백)
-        var colors = sellButton.colors;
-        colors.normalColor = canSell ? Color.white : Color.gray;
-        sellButton.colors = colors;
+            var colors = acceptOrderButton.colors;
+            colors.normalColor = hasIngredients ? Color.white : Color.gray;
+            acceptOrderButton.colors = colors;
+        }
     }
 
-    /// <summary>
-    /// 타이머 UI 업데이트
-    /// </summary>
+    private bool HasRequiredIngredients()
+    {
+        if (orderedRecipe == null || Inventory.Instance == null) return false;
+
+        foreach (var ingredient in orderedRecipe.RequiredIngredients)
+        {
+            if (!Inventory.Instance.HasItem(ingredient.Ingredient, ingredient.RequiredAmount))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void UpdateTimerUI()
     {
         if (customerOrderSystem == null) return;
 
-        // 대기열에서 기다리는 중인지 확인
         bool isWaitingInQueue = customerOrderSystem.IsWaitingInQueue();
         
         if (isWaitingInQueue)
         {
-            // 대기열 타이머 표시
             float remainingQueueTime = customerOrderSystem.GetRemainingQueueTime();
             float queueTimeLimit = customerOrderSystem.queueWaitTimeLimit;
             float queueTimeRatio = Mathf.Clamp01(remainingQueueTime / queueTimeLimit);
             
-            // 타이머 바 업데이트
             if (timerFillImage != null)
             {
                 timerFillImage.fillAmount = queueTimeRatio;
                 
-                // 시간에 따른 색상 변경
                 if (queueTimeRatio > 0.5f)
-                    timerFillImage.color = Color.cyan; // 대기열은 청록색
+                    timerFillImage.color = Color.cyan;
                 else if (queueTimeRatio > 0.25f)
                     timerFillImage.color = Color.yellow;
                 else
                     timerFillImage.color = Color.red;
             }
             
-            // 타이머 텍스트 업데이트
             if (timerText != null)
             {
                 int remainingSeconds = Mathf.CeilToInt(remainingQueueTime);
@@ -149,26 +174,22 @@ public class OrderUI : MonoBehaviour
         }
         else
         {
-            // 주문 후 음식 대기 타이머 표시
             var currentOrder = customerOrderSystem.GetCurrentOrder();
             if (currentOrder == null || !currentOrder.IsActive) return;
 
-            // 타이머 바 업데이트
             if (timerFillImage != null)
             {
                 float timeRatio = currentOrder.GetTimeRatio();
                 timerFillImage.fillAmount = timeRatio;
                 
-                // 시간에 따른 색상 변경
                 if (timeRatio > 0.5f)
-                    timerFillImage.color = Color.green; // 음식 대기는 녹색
+                    timerFillImage.color = Color.green;
                 else if (timeRatio > 0.25f)
                     timerFillImage.color = Color.yellow;
                 else
                     timerFillImage.color = Color.red;
             }
 
-            // 타이머 텍스트 업데이트
             if (timerText != null)
             {
                 int remainingSeconds = Mathf.CeilToInt(currentOrder.RemainingTime);
@@ -177,30 +198,41 @@ public class OrderUI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 판매 버튼 클릭 시 호출되는 메서드 (에디터에서 설정)
-    /// </summary>
-    public void OnSellButtonClicked()
+    /// <summary>주문 수락 버튼 클릭 시 호출 (미니게임 시작)</summary>
+    public void OnAcceptOrderButtonClicked()
     {
-        if (orderItem == null || SaleService.Instance == null) return;
+        if (orderedRecipe == null || CookingMinigameController.Instance == null) return;
 
-        // SaleService를 통해 판매 처리
-        bool saleSuccess = SaleService.Instance.ProcessSale(orderItem, orderQuantity, GetItemPrice());
+        if (!HasRequiredIngredients())
+        {
+            Debug.Log("재료가 부족합니다!");
+            return;
+        }
 
-        // 판매 성공시 손님에게 알림
-        if (saleSuccess && customerOrderSystem != null)
+        // 미니게임 시퀀스 시작
+        CookingMinigameController.Instance.StartCookingSequence(orderedRecipe, OnCookingCompleted);
+    }
+
+    private void OnCookingCompleted(char rank, int finalPrice)
+    {
+        Debug.Log($"조리 완료! 랭크: {rank}, 판매가: {finalPrice}");
+
+        // 판매 처리
+        if (SaleService.Instance != null)
+        {
+            SaleService.Instance.ProcessSale(orderedRecipe.ResultDish, orderQuantity, finalPrice);
+        }
+
+        // 손님에게 음식 전달 완료
+        if (customerOrderSystem != null)
         {
             customerOrderSystem.OnOrderCompleted();
         }
     }
 
-    /// <summary>
-    /// 아이템 가격 계산 (기본값 또는 아이템에서 가져오기)
-    /// </summary>
-    private int GetItemPrice()
+    // 기존 메서드 호환성 유지
+    public void OnSellButtonClicked()
     {
-        // ItemDefinition에 가격 정보가 있다면 사용, 없으면 기본값
-        // 이 부분은 ItemDefinition 구조에 따라 수정 필요
-        return 100; // 임시 기본값
+        OnAcceptOrderButtonClicked();
     }
 }

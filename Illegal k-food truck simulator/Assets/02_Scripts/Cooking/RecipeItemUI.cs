@@ -41,7 +41,7 @@ public class RecipeItemUI : MonoBehaviour
         // 기본 정보 설정
         dishImage.sprite = recipe.DishImage;
         dishNameText.text = recipe.RecipeName;
-        priceText.text = $"가격: {recipe.Price}원";
+        priceText.text = $"가격: {recipe.BasePrice}원";
         cookingTimeText.text = $"조리시간: {recipe.CookingTime}초";
         
         // 재료 목록 생성

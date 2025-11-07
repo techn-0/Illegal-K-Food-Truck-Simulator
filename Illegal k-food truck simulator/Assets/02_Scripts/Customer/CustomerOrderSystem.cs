@@ -8,7 +8,6 @@ using UnityEngine.AI;
 public class CustomerOrderSystem : MonoBehaviour
 {
     [Header("Order Settings")]
-    public ItemDefinition orderItem; // 주문 아이템 (인스펙터에서 설정)
     [Range(1, 5)] public int orderQuantity = 1; // 주문 수량 (인스펙터에서 설정)
     
     [Header("Timer Settings")]
@@ -27,12 +26,13 @@ public class CustomerOrderSystem : MonoBehaviour
     private NavMeshAgent _agent;
     private GameObject _instantiatedUI;
     private CustomerOrder _currentOrder;
-    private Vector3 _originalPosition; // 원래 위치
-    private Quaternion _originalRotation; // 원래 회전
-    private Vector3 _targetPosition; // 현재 목표 위치
-    private bool _isInQueue; // 대기열에 있는지 여부
-    private bool _hasPlacedOrder; // 주문을 했는지 여부
-    private Vector3 _lastPosition; // 이전 프레임 위치 (애니메이션용)
+    private RecipeDefinition _orderedRecipe; // 주문한 레시피
+    private Vector3 _originalPosition;
+    private Quaternion _originalRotation;
+    private Vector3 _targetPosition;
+    private bool _isInQueue;
+    private bool _hasPlacedOrder;
+    private Vector3 _lastPosition;
     
     // 대기열 타이머 관련
     private float _queueWaitTimer; // 대기열에서 기다린 시간
@@ -53,9 +53,15 @@ public class CustomerOrderSystem : MonoBehaviour
         _originalRotation = transform.rotation;
         _lastPosition = transform.position;
         
-        // 주문 데이터 초기화 (음식 대기 시간으로 초기화)
-        _currentOrder = new CustomerOrder(orderItem, orderQuantity, foodWaitTimeLimit);
-        _currentOrder.OnOrderExpired += HandleOrderExpired;
+        // 해금된 레시피 중 랜덤으로 하나 선택
+        SelectRandomRecipe();
+        
+        // 주문 데이터 초기화
+        if (_orderedRecipe != null)
+        {
+            _currentOrder = new CustomerOrder(_orderedRecipe.ResultDish, orderQuantity, foodWaitTimeLimit);
+            _currentOrder.OnOrderExpired += HandleOrderExpired;
+        }
         
         // 비즈니스 상태 이벤트 구독
         BusinessManager.OnBusinessStateChanged += HandleBusinessStateChanged;
@@ -64,6 +70,18 @@ public class CustomerOrderSystem : MonoBehaviour
         if (BusinessManager.IsBusinessActive)
         {
             JoinQueue();
+        }
+    }
+
+    /// <summary>해금된 레시피 중 랜덤으로 선택</summary>
+    private void SelectRandomRecipe()
+    {
+        if (CookingManager.Instance == null) return;
+
+        var unlockedRecipes = CookingManager.Instance.GetAvailableRecipes();
+        if (unlockedRecipes != null && unlockedRecipes.Length > 0)
+        {
+            _orderedRecipe = unlockedRecipes[Random.Range(0, unlockedRecipes.Length)];
         }
     }
 
@@ -144,14 +162,15 @@ public class CustomerOrderSystem : MonoBehaviour
     /// </summary>
     private void CreateQueueUI()
     {
-        if (orderUI != null && _instantiatedUI == null && _currentOrder != null)
+        if (orderUI != null && _instantiatedUI == null && _orderedRecipe != null)
         {
             _instantiatedUI = Instantiate(orderUI, transform);
             
             var orderUIComponent = _instantiatedUI.GetComponent<OrderUI>();
             if (orderUIComponent != null)
             {
-                orderUIComponent.Setup(_currentOrder.orderItem, _currentOrder.quantity);
+                // 레시피로 UI 설정
+                orderUIComponent.SetupWithRecipe(_orderedRecipe, orderQuantity);
             }
         }
     }
@@ -250,7 +269,7 @@ public class CustomerOrderSystem : MonoBehaviour
             _hasPlacedOrder = true;
             _isWaitingInQueue = false; // 대기열 타이머 중지
             
-            Debug.Log($"주문 완료: {_currentOrder.orderItem.DisplayName}, 대기 시간: {_queueWaitTimer:F1}초");
+            Debug.Log($"주문 완료: {_orderedRecipe.RecipeName}, 대기 시간: {_queueWaitTimer:F1}초");
         }
     }
 
