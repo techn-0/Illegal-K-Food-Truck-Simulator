@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afbb38b8e8874c0abcb313ce88008677, type: 3}
   m_Name: PourFlourParameters
   m_EditorClassIdentifier: Assembly-CSharp::Minigame.PourFlourParameters
-  minigameId: 0
+  minigameId: 2
   prepareTime: 3
   resultDisplayTime: 2
   scoringCurve:
@@ -39,8 +39,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  targetAmount: 100
-  toleranceRange: 10
+  targetAmount: 80
+  toleranceRange: 15
   flowRate: 20
   flowCurve:
     serializedVersion: 2

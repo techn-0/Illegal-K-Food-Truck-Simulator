@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d521f5e784c840b18ec9a43a90a25043, type: 3}
   m_Name: CatchPigeonParameters
   m_EditorClassIdentifier: Assembly-CSharp::Minigame.CatchPigeonParameters
-  minigameId: 0
+  minigameId: 1
   prepareTime: 3
   resultDisplayTime: 2
   scoringCurve:
@@ -39,7 +39,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  barSpeed: 1.5
+  barSpeed: 2
   barRange: 5
   barMovementCurve:
     serializedVersion: 2

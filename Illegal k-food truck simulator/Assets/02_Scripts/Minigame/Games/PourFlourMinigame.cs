@@ -102,7 +102,7 @@ namespace Minigame
                 {
                     flourBagTransform.localRotation = Quaternion.Lerp(
                         originalBagRotation,
-                        originalBagRotation * Quaternion.Euler(60, 0, 0),
+                        originalBagRotation * Quaternion.Euler(-90, 0, 0),
                         0.3f
                     );
                 }

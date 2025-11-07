@@ -2416,6 +2416,8 @@ MonoBehaviour:
   minigamePrefabs:
   - id: 1
     prefab: {fileID: 2870155055741935281, guid: 85195b5f586eb9e40bcdde6fe5d5cf15, type: 3}
+  - id: 2
+    prefab: {fileID: 6804634883884622582, guid: b3b0d3314c30ac042b7741414a6595c2, type: 3}
   dimmerCanvas: {fileID: 0}
   dimmerCanvasGroup: {fileID: 0}
 --- !u!4 &1245644882
@@ -3167,7 +3169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1194aacfb99a4d4abd886cc4959c2938, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Minigame.MinigameTestTrigger
-  testMinigameId: 1
+  testMinigameId: 2
   triggerKey: 116
   resultText: {fileID: 0}
 --- !u!4 &2091029904
