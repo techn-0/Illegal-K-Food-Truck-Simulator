@@ -140,12 +140,12 @@ namespace Minigame
             dimmerCanvasGroup.alpha = 0f;
             dimmerCanvasGroup.blocksRaycasts = false;
 
-            // 반투명 검정 배경
+            // 완전히 투명한 배경 (입력 차단용)
             GameObject bgObj = new GameObject("Background");
             bgObj.transform.SetParent(dimmerObj.transform);
 
             UnityEngine.UI.Image bgImage = bgObj.AddComponent<UnityEngine.UI.Image>();
-            bgImage.color = new Color(0, 0, 0, 0.5f);
+            bgImage.color = new Color(0, 0, 0, 0f); // 완전히 투명
 
             RectTransform bgRect = bgObj.GetComponent<RectTransform>();
             bgRect.anchorMin = Vector2.zero;
@@ -162,7 +162,7 @@ namespace Minigame
                 dimmerCanvas.gameObject.SetActive(show);
                 if (dimmerCanvasGroup != null)
                 {
-                    dimmerCanvasGroup.alpha = show ? 0.5f : 0f;
+                    dimmerCanvasGroup.alpha = 1f; // alpha는 1로 설정 (백그라운드 자체가 투명하므로)
                     dimmerCanvasGroup.blocksRaycasts = show;
                 }
             }
