@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 namespace Dialogue
 {
@@ -27,6 +28,16 @@ namespace Dialogue
 
         // 현재 생성된 선택지 버튼들 / Currently generated choice buttons
         private List<Button> currentChoiceButtons = new List<Button>();
+        private CanvasGroup canvasGroup;
+
+        private void Awake()
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+        }
 
         /// <summary>
         /// 다이얼로그 라인을 화면에 렌더링 / Render dialogue line to screen
@@ -191,7 +202,8 @@ namespace Dialogue
         /// </summary>
         public void Hide()
         {
-            gameObject.SetActive(false);
+            transform.DOScale(0.9f, 0.2f);
+            canvasGroup.DOFade(0f, 0.2f).OnComplete(() => gameObject.SetActive(false));
         }
 
         /// <summary>
@@ -200,6 +212,10 @@ namespace Dialogue
         public void Show()
         {
             gameObject.SetActive(true);
+            transform.localScale = Vector3.one * 0.9f;
+            canvasGroup.alpha = 0f;
+            transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
+            canvasGroup.DOFade(1f, 0.3f);
         }
     }
 }

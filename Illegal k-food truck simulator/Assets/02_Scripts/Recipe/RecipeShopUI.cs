@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 /// <summary>
 /// 레시피 상점 UI를 관리하는 클래스
@@ -17,6 +18,16 @@ public class RecipeShopUI : MonoBehaviour
     [SerializeField] private RecipeShop assignedRecipeShop; // 이 UI가 표시할 특정 상점
     
     private RecipeShop recipeShop;
+    private CanvasGroup canvasGroup;
+    
+    private void Awake()
+    {
+        canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+    }
     
     private void Start()
     {
@@ -44,6 +55,12 @@ public class RecipeShopUI : MonoBehaviour
     
     private void OnEnable()
     {
+        // 애니메이션
+        transform.localScale = Vector3.one * 0.9f;
+        canvasGroup.alpha = 0f;
+        transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
+        canvasGroup.DOFade(1f, 0.3f);
+        
         // 할당된 상점이 있다면 사용, 없다면 기존 방식으로 찾기
         if (recipeShop == null)
         {

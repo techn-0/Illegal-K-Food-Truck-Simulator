@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 /// <summary>
 /// 아이템 상점 UI를 관리하는 클래스
@@ -15,6 +16,16 @@ public class ItemShopUI : MonoBehaviour
     [SerializeField] private Button closeButton; // 상점 닫기 버튼 (선택사항)
     
     private ItemShop itemShop;
+    private CanvasGroup canvasGroup;
+    
+    private void Awake()
+    {
+        canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+    }
     
     private void Start()
     {
@@ -37,6 +48,12 @@ public class ItemShopUI : MonoBehaviour
     
     private void OnEnable()
     {
+        // 애니메이션
+        transform.localScale = Vector3.one * 0.9f;
+        canvasGroup.alpha = 0f;
+        transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
+        canvasGroup.DOFade(1f, 0.3f);
+        
         // 상점 참조가 없다면 다시 찾기
         if (itemShop == null)
         {
@@ -121,17 +138,19 @@ public class ItemShopUI : MonoBehaviour
     /// </summary>
     private void CloseShop()
     {
-        gameObject.SetActive(false);
-        
-        // CursorManager 호출
-        CursorManager cursorManager = FindObjectOfType<CursorManager>();
-        if (cursorManager != null)
+        transform.DOScale(0.9f, 0.2f);
+        canvasGroup.DOFade(0f, 0.2f).OnComplete(() => 
         {
-            cursorManager.OnUIWindowClosed();
-        }
-        
-        // 커서 숨기기
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+            gameObject.SetActive(false);
+            
+            CursorManager cursorManager = FindObjectOfType<CursorManager>();
+            if (cursorManager != null)
+            {
+                cursorManager.OnUIWindowClosed();
+            }
+            
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        });
     }
 }

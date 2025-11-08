@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using DG.Tweening;
 
 namespace Minigame
 {
@@ -20,12 +21,19 @@ namespace Minigame
         [SerializeField] private Button confirmButton;
 
         private System.Action onConfirm;
+        private CanvasGroup canvasGroup;
 
         private void Awake()
         {
             if (confirmButton != null)
             {
                 confirmButton.onClick.AddListener(OnConfirmClicked);
+            }
+
+            canvasGroup = resultPanel?.GetComponent<CanvasGroup>();
+            if (canvasGroup == null && resultPanel != null)
+            {
+                canvasGroup = resultPanel.AddComponent<CanvasGroup>();
             }
 
             Hide();
@@ -74,10 +82,14 @@ namespace Minigame
                 totalPriceText.text = $"판매 가격: {totalPrice}원";
             }
 
-            // 패널 활성화
+            // 패널 활성화 및 애니메이션
             if (resultPanel != null)
             {
                 resultPanel.SetActive(true);
+                resultPanel.transform.localScale = Vector3.one * 0.8f;
+                canvasGroup.alpha = 0f;
+                resultPanel.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
+                canvasGroup.DOFade(1f, 0.3f);
             }
         }
 
@@ -142,9 +154,9 @@ namespace Minigame
         {
             if (resultPanel != null)
             {
-                resultPanel.SetActive(false);
+                resultPanel.transform.DOScale(0.8f, 0.2f);
+                canvasGroup.DOFade(0f, 0.2f).OnComplete(() => resultPanel.SetActive(false));
             }
         }
     }
 }
-

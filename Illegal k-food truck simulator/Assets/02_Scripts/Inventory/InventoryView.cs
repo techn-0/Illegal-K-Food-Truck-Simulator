@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using DG.Tweening;
 
 /// <summary>
 /// 인벤토리 UI 전체를 관리하는 클래스
@@ -12,6 +13,7 @@ public class InventoryView : MonoBehaviour
 
     private Inventory inventory; // 표시할 인벤토리 (싱글톤에서 자동 참조)
     private List<ItemSlotView> slotViews; // 생성된 슬롯 UI들
+    private CanvasGroup canvasGroup;
 
     /// <summary>
     /// 시작 시 싱글톤 인벤토리 참조
@@ -27,11 +29,26 @@ public class InventoryView : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+    }
+
     /// <summary>
     /// 오브젝트 활성화 시 초기화 및 이벤트 구독
     /// </summary>
     private void OnEnable()
     {
+        // 애니메이션
+        transform.localScale = Vector3.one * 0.9f;
+        canvasGroup.alpha = 0f;
+        transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
+        canvasGroup.DOFade(1f, 0.3f);
+        
         // 싱글톤 인스턴스가 없으면 다시 찾기
         if (inventory == null)
         {

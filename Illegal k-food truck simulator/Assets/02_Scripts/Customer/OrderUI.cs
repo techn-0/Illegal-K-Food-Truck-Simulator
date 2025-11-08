@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class OrderUI : MonoBehaviour
 {
@@ -22,10 +23,18 @@ public class OrderUI : MonoBehaviour
     private int orderQuantity;
     private CustomerOrderSystem customerOrderSystem;
 
+    private CanvasGroup canvasGroup;
+
     private void Start()
     {
         mainCamera = Camera.main;
         customerOrderSystem = GetComponentInParent<CustomerOrderSystem>();
+        
+        canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
     }
 
     private void Update()
@@ -110,7 +119,19 @@ public class OrderUI : MonoBehaviour
         
         if (orderUIContainer != null)
         {
-            orderUIContainer.SetActive(showOrderUI);
+            if (showOrderUI && !orderUIContainer.activeSelf)
+            {
+                orderUIContainer.SetActive(true);
+                orderUIContainer.transform.localScale = Vector3.one * 0.8f;
+                canvasGroup.alpha = 0f;
+                orderUIContainer.transform.DOScale(1f, 0.25f);
+                canvasGroup.DOFade(1f, 0.25f);
+            }
+            else if (!showOrderUI && orderUIContainer.activeSelf)
+            {
+                orderUIContainer.transform.DOScale(0.8f, 0.15f);
+                canvasGroup.DOFade(0f, 0.15f).OnComplete(() => orderUIContainer.SetActive(false));
+            }
         }
         else
         {

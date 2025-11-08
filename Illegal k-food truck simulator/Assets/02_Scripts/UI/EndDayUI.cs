@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 /// <summary>
 /// 하루 종료 확인 및 요약 UI를 관리
@@ -19,8 +20,26 @@ public class EndDayUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI summaryText;
     [SerializeField] private Button summaryConfirmButton;
 
+    private CanvasGroup confirmCanvasGroup;
+    private CanvasGroup summaryCanvasGroup;
+
     private void Start()
     {
+        // CanvasGroup 설정
+        if (confirmPanel != null)
+        {
+            confirmCanvasGroup = confirmPanel.GetComponent<CanvasGroup>();
+            if (confirmCanvasGroup == null)
+                confirmCanvasGroup = confirmPanel.AddComponent<CanvasGroup>();
+        }
+        
+        if (summaryPanel != null)
+        {
+            summaryCanvasGroup = summaryPanel.GetComponent<CanvasGroup>();
+            if (summaryCanvasGroup == null)
+                summaryCanvasGroup = summaryPanel.AddComponent<CanvasGroup>();
+        }
+        
         // 버튼 이벤트 연결
         if (confirmYesButton != null)
             confirmYesButton.onClick.AddListener(OnConfirmYes);
@@ -44,6 +63,10 @@ public class EndDayUI : MonoBehaviour
         if (confirmPanel != null)
         {
             confirmPanel.SetActive(true);
+            confirmPanel.transform.localScale = Vector3.one * 0.9f;
+            confirmCanvasGroup.alpha = 0f;
+            confirmPanel.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
+            confirmCanvasGroup.DOFade(1f, 0.3f);
         }
     }
 
@@ -60,7 +83,8 @@ public class EndDayUI : MonoBehaviour
     /// </summary>
     private void OnConfirmNo()
     {
-        HideAll();
+        confirmPanel.transform.DOScale(0.9f, 0.2f);
+        confirmCanvasGroup.DOFade(0f, 0.2f).OnComplete(() => HideAll());
     }
 
     /// <summary>
@@ -73,6 +97,10 @@ public class EndDayUI : MonoBehaviour
         if (summaryPanel != null)
         {
             summaryPanel.SetActive(true);
+            summaryPanel.transform.localScale = Vector3.one * 0.9f;
+            summaryCanvasGroup.alpha = 0f;
+            summaryPanel.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
+            summaryCanvasGroup.DOFade(1f, 0.3f);
 
             // 오늘 매출과 총 매출 표시
             if (summaryText != null && GameManager.Instance != null)
