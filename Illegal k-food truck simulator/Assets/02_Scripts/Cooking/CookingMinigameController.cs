@@ -10,6 +10,9 @@ public class CookingMinigameController : MonoBehaviour
 {
     public static CookingMinigameController Instance { get; private set; }
 
+    [Header("UI References")]
+    [SerializeField] private MinigameResultUI resultUI;
+
     private RecipeDefinition currentRecipe;
     private int currentMinigameIndex;
     private List<MiniGameResult> minigameResults = new List<MiniGameResult>();
@@ -96,12 +99,27 @@ public class CookingMinigameController : MonoBehaviour
             Inventory.Instance.AddItem(currentRecipe.ResultDish, currentRecipe.ResultAmount);
         }
 
-        // 콜백 호출
-        onAllMinigamesCompleted?.Invoke(finalRank, finalPrice);
-
-        // 초기화
-        currentRecipe = null;
-        minigameResults.Clear();
+        // 결과 UI 표시
+        if (resultUI != null)
+        {
+            resultUI.Show(minigameResults, finalRank, finalPrice, () => {
+                // UI 확인 후 콜백 호출
+                onAllMinigamesCompleted?.Invoke(finalRank, finalPrice);
+                
+                // 초기화
+                currentRecipe = null;
+                minigameResults.Clear();
+            });
+        }
+        else
+        {
+            // UI가 없으면 바로 콜백 호출
+            onAllMinigamesCompleted?.Invoke(finalRank, finalPrice);
+            
+            // 초기화
+            currentRecipe = null;
+            minigameResults.Clear();
+        }
     }
 
     private void ConsumeIngredients()
@@ -123,4 +141,3 @@ public class CookingMinigameController : MonoBehaviour
         return 'F';
     }
 }
-
