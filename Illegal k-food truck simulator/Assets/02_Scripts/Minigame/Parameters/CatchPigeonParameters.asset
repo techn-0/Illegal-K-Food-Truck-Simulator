@@ -67,4 +67,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   perfectZone: 0.2
   playTimeLimit: 10
-  scoreGamma: 2
+  scoreGamma: 5

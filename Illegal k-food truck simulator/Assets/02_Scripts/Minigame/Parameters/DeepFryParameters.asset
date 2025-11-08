@@ -43,4 +43,4 @@ MonoBehaviour:
   sigma: 0.5
   perfectRange: 0.1
   maxWaitTime: 15
-  earlyReleasePenalty: 1.5
+  earlyReleasePenalty: 2

@@ -39,8 +39,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  targetAmount: 80
-  toleranceRange: 15
+  targetAmount: 50
+  toleranceRange: 10
   flowRate: 20
   flowCurve:
     serializedVersion: 2
