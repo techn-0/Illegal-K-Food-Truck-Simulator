@@ -841,6 +841,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1569637535344340301, guid: cb5681f14c4800541951df2c61bb3a6f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.40185237
+      objectReference: {fileID: 0}
+    - target: {fileID: 1569637535344340301, guid: cb5681f14c4800541951df2c61bb3a6f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.4439163
+      objectReference: {fileID: 0}
+    - target: {fileID: 1569637535344340301, guid: cb5681f14c4800541951df2c61bb3a6f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.536085
+      objectReference: {fileID: 0}
+    - target: {fileID: 1569637535344340301, guid: cb5681f14c4800541951df2c61bb3a6f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1569637535344340301, guid: cb5681f14c4800541951df2c61bb3a6f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: 3037071323838805905, guid: cb5681f14c4800541951df2c61bb3a6f, type: 3}
       propertyPath: m_Name
       value: MixDoughMinigame
