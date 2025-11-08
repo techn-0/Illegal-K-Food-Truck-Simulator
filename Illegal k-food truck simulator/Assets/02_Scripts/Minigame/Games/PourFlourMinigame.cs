@@ -10,8 +10,8 @@ namespace Minigame
         [Header("References")]
         public PourFlourParameters parameters;
         public Transform flourBagTransform;     // 밀가루 포대
-        public Image fillBar;                   // 채우기 바
-        public Image targetZone;                // 목표 구역 표시
+        public Image fillBar;                   // 채우기 바 (빨간색)
+        public Image targetZone;                // 목표 구역 표시 (초록색)
         public ParticleSystem flourParticles;   // 밀가루 파티클
         public TextMeshProUGUI countdownText;
         public TextMeshProUGUI instructionText;
@@ -19,6 +19,14 @@ namespace Minigame
         public GameObject resultPanel;
         public TextMeshProUGUI resultScoreText;
         public TextMeshProUGUI resultRankText;
+
+        [Header("UI 설정")]
+        [Tooltip("바의 최대값")]
+        public float maxBarValue = 100f;
+        [Tooltip("목표값 (초록색 구간)")]
+        public float targetValue = 60f;
+        [Tooltip("목표 구간 너비")]
+        public float targetZoneWidth = 5f;
 
         private float currentAmount;
         private bool isPouring;
@@ -39,6 +47,12 @@ namespace Minigame
             if (flourParticles != null)
                 flourParticles.Stop();
             
+            // 바 초기화
+            if (fillBar != null)
+            {
+                fillBar.fillAmount = 0f;
+            }
+            
             ChangeState(MinigameState.Prepare);
         }
 
@@ -47,11 +61,27 @@ namespace Minigame
             countdownText.gameObject.SetActive(true);
             instructionText.gameObject.SetActive(false);
             
-            // 목표 구역 설정
+            // 목표 구역 위치 설정
             if (targetZone != null && fillBar != null)
             {
-                float targetNormalized = parameters.targetAmount / (parameters.targetAmount + parameters.toleranceRange * 2);
-                targetZone.fillAmount = parameters.toleranceRange * 2 / (parameters.targetAmount + parameters.toleranceRange * 2);
+                // 목표값의 위치 계산 (0-100 중 60)
+                float targetPosition = targetValue / maxBarValue;
+                
+                // 목표 구간의 너비 계산
+                float zoneWidth = targetZoneWidth / maxBarValue;
+                
+                // RectTransform을 이용해 목표 구간 위치 설정
+                RectTransform targetRect = targetZone.GetComponent<RectTransform>();
+                RectTransform fillBarRect = fillBar.GetComponent<RectTransform>();
+                
+                if (targetRect != null && fillBarRect != null)
+                {
+                    // 목표 구간을 60 위치에 배치
+                    targetRect.anchorMin = new Vector2(targetPosition - zoneWidth / 2f, 0);
+                    targetRect.anchorMax = new Vector2(targetPosition + zoneWidth / 2f, 1);
+                    targetRect.offsetMin = Vector2.zero;
+                    targetRect.offsetMax = Vector2.zero;
+                }
             }
         }
 
@@ -96,6 +126,9 @@ namespace Minigame
                 float flowMultiplier = parameters.flowCurve.Evaluate(Mathf.Clamp01(pouringTime / 2f));
                 float flow = parameters.flowRate * flowMultiplier * Time.unscaledDeltaTime;
                 currentAmount += flow;
+                
+                // 최대값 제한
+                currentAmount = Mathf.Min(currentAmount, maxBarValue);
 
                 // 포대 기울이기
                 if (flourBagTransform != null)
@@ -127,16 +160,15 @@ namespace Minigame
                 }
             }
 
-            // UI 업데이트
+            // UI 업데이트 (0-100 범위)
             if (fillBar != null)
             {
-                float maxAmount = parameters.targetAmount + parameters.toleranceRange * 2;
-                fillBar.fillAmount = Mathf.Clamp01(currentAmount / maxAmount);
+                fillBar.fillAmount = Mathf.Clamp01(currentAmount / maxBarValue);
             }
 
             if (amountText != null)
             {
-                amountText.text = $"{currentAmount:F1} / {parameters.targetAmount:F0}";
+                amountText.text = $"{currentAmount:F1} / {targetValue:F0}";
             }
 
             // 완료 조건: 스페이스를 뗐을 때 판정
@@ -154,16 +186,16 @@ namespace Minigame
 
         protected override void OnJudge()
         {
-            // 목표량과의 오차 계산
-            float error = Mathf.Abs(currentAmount - parameters.targetAmount);
+            // 목표량과의 오차 계산 (목표: 60)
+            float error = Mathf.Abs(currentAmount - targetValue);
             
             // 허용 범위 내 점수 계산
             float normalizedError = Mathf.Clamp01(error / parameters.toleranceRange);
 
             // 오버슈트 추가 감점
-            if (currentAmount > parameters.targetAmount + parameters.toleranceRange)
+            if (currentAmount > targetValue + parameters.toleranceRange)
             {
-                float overshoot = currentAmount - (parameters.targetAmount + parameters.toleranceRange);
+                float overshoot = currentAmount - (targetValue + parameters.toleranceRange);
                 normalizedError += overshoot / parameters.toleranceRange * parameters.overshootPenalty;
                 normalizedError = Mathf.Clamp01(normalizedError);
             }
@@ -215,4 +247,3 @@ namespace Minigame
         }
     }
 }
-

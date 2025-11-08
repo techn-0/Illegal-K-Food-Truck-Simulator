@@ -549,14 +549,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.6392157, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3726425920621327834, guid: 4ba6a03f318064c4883f2269d7409ef8, type: 3}
+  m_Sprite: {fileID: 5104042318393516069, guid: 712fbc5cfbf23d14ab940ddb535d85bd, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6156,6 +6156,9 @@ MonoBehaviour:
   resultPanel: {fileID: 3176792873730302401}
   resultScoreText: {fileID: 1854672572881545335}
   resultRankText: {fileID: 225400847059957991}
+  maxBarValue: 100
+  targetValue: 60
+  targetZoneWidth: 5
 --- !u!1 &8486190160490317133
 GameObject:
   m_ObjectHideFlags: 0
@@ -6305,7 +6308,7 @@ GameObject:
   - component: {fileID: 8340355675480716594}
   - component: {fileID: 1592709965120226979}
   m_Layer: 6
-  m_Name: backBar
+  m_Name: targetZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6351,14 +6354,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.28527856, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 5104042318393516069, guid: 712fbc5cfbf23d14ab940ddb535d85bd, type: 3}
+  m_Sprite: {fileID: 3726425920621327834, guid: 4ba6a03f318064c4883f2269d7409ef8, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
