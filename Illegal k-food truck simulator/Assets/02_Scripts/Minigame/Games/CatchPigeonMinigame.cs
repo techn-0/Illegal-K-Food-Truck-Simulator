@@ -16,6 +16,9 @@ namespace Minigame
         public GameObject resultPanel;
         public TextMeshProUGUI resultScoreText;
         public TextMeshProUGUI resultRankText;
+        // 결과 카운트다운/스킵 안내 텍스트 (결과 패널에 새로 추가하여 인스펙터에서 할당)
+        public TextMeshProUGUI resultCountdownText;
+        public TextMeshProUGUI resultSkipText;
 
         private float barPosition;              // -1 ~ 1
         private float barTime;
@@ -126,16 +129,33 @@ namespace Minigame
             resultPanel.SetActive(true);
             resultScoreText.text = $"점수: {gameResult.score:F1}";
             resultRankText.text = $"등급: {gameResult.rank}";
+            if (resultCountdownText != null)
+            {
+                resultCountdownText.gameObject.SetActive(true);
+                resultCountdownText.text = $"다음 게임까지: {parameters.resultDisplayTime:F1}초";
+            }
+            if (resultSkipText != null)
+            {
+                resultSkipText.gameObject.SetActive(true);
+                resultSkipText.text = "스페이스바로 스킵";
+            }
         }
 
         protected override void UpdateResult()
         {
+            float remaining = parameters.resultDisplayTime - stateTimer;
+            if (resultCountdownText != null)
+            {
+                resultCountdownText.text = $"다음 게임까지: {Mathf.Max(0f, remaining):F1}초";
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                ChangeState(MinigameState.Cleanup);
+                return;
+            }
             if (stateTimer >= parameters.resultDisplayTime)
             {
-                if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
-                {
-                    ChangeState(MinigameState.Cleanup);
-                }
+                ChangeState(MinigameState.Cleanup);
             }
         }
 
@@ -154,4 +174,3 @@ namespace Minigame
         }
     }
 }
-

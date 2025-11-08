@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Minigame.DeepFryParameters
   minigameId: 4
   prepareTime: 3
-  resultDisplayTime: 2
+  resultDisplayTime: 4
   scoringCurve:
     serializedVersion: 2
     m_Curve:

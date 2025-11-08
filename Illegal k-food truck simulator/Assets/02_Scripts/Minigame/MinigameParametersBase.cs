@@ -13,11 +13,10 @@ namespace Minigame
         public float prepareTime = 3f;
 
         [Tooltip("결과 표시 시간")]
-        public float resultDisplayTime = 2f;
+        public float resultDisplayTime = 4f;
 
         [Header("점수 계산")]
         [Tooltip("점수 계산 커브 (0=완벽 실수, 1=완벽 성공)")]
         public AnimationCurve scoringCurve = AnimationCurve.EaseInOut(0, 0, 1, 100);
     }
 }
-

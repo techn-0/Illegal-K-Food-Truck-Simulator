@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Minigame.PourFlourParameters
   minigameId: 2
   prepareTime: 3
-  resultDisplayTime: 2
+  resultDisplayTime: 4
   scoringCurve:
     serializedVersion: 2
     m_Curve:

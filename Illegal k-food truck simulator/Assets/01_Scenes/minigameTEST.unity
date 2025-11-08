@@ -413,7 +413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Minigame.MinigameTestTrigger
   testMinigameId: 1
-  triggerKey: 257
+  triggerKey: 282
   resultText: {fileID: 0}
 --- !u!4 &1341762125
 Transform:
@@ -443,7 +443,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Minigame.MinigameTestTrigger
   testMinigameId: 4
-  triggerKey: 259
+  triggerKey: 285
   resultText: {fileID: 0}
 --- !u!114 &1341762127
 MonoBehaviour:
@@ -458,7 +458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Minigame.MinigameTestTrigger
   testMinigameId: 3
-  triggerKey: 259
+  triggerKey: 284
   resultText: {fileID: 0}
 --- !u!114 &1341762128
 MonoBehaviour:
@@ -473,7 +473,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Minigame.MinigameTestTrigger
   testMinigameId: 2
-  triggerKey: 258
+  triggerKey: 283
   resultText: {fileID: 0}
 --- !u!1 &1722209554
 GameObject:
@@ -704,6 +704,8 @@ MonoBehaviour:
   resultPanel: {fileID: 0}
   resultScoreText: {fileID: 0}
   resultRankText: {fileID: 0}
+  resultCountdownText: {fileID: 0}
+  resultSkipText: {fileID: 0}
 --- !u!1001 &2742669482968046533
 PrefabInstance:
   m_ObjectHideFlags: 0

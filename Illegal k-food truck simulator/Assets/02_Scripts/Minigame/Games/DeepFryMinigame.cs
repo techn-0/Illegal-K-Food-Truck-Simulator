@@ -18,6 +18,9 @@ namespace Minigame
         public GameObject resultPanel;
         public TextMeshProUGUI resultScoreText;
         public TextMeshProUGUI resultRankText;
+        // 결과 카운트다운/스킵 안내 텍스트 (결과 패널에 새로 추가하여 인스펙터에서 할당)
+        public TextMeshProUGUI resultCountdownText;
+        public TextMeshProUGUI resultSkipText;
 
         private bool isFrying;
         private float fryingStartTime;
@@ -78,7 +81,6 @@ namespace Minigame
                 isFrying = true;
                 fryingStartTime = Time.unscaledTime;
                 
-                // 바구니를 기름에 담그기
                 if (basketTransform != null)
                 {
                     basketTransform.localPosition = basketFryingPos;
@@ -90,17 +92,13 @@ namespace Minigame
                 instructionText.text = $"튀기는 중... {parameters.targetTime}초에 떼세요!";
             }
 
-            // 튀기는 중
             if (isFrying)
             {
                 float currentFryTime = Time.unscaledTime - fryingStartTime;
 
-                // 타이머 UI 업데이트
                 if (timerText != null)
                 {
                     timerText.text = $"{currentFryTime:F2}초";
-                    
-                    // 목표 시간에 가까워지면 색상 변경
                     if (Mathf.Abs(currentFryTime - parameters.targetTime) < 0.5f)
                     {
                         timerText.color = Color.yellow;
@@ -115,14 +113,12 @@ namespace Minigame
                     }
                 }
 
-                // 스페이스를 떼면 판정
                 if (Input.GetKeyUp(KeyCode.Space))
                 {
                     releaseTime = currentFryTime;
                     ChangeState(MinigameState.Judge);
                 }
 
-                // 최대 대기 시간 초과
                 if (currentFryTime >= parameters.maxWaitTime)
                 {
                     releaseTime = currentFryTime;
@@ -133,60 +129,62 @@ namespace Minigame
 
         protected override void OnJudge()
         {
-            // 목표 시간과의 오차 계산
             float error = Mathf.Abs(releaseTime - parameters.targetTime);
-            
             float score;
-
-            // 가우시안 분포 기반 점수 계산
-            // f(x) = 100 * exp(-(x^2) / (2*sigma^2))
             float gaussianValue = Mathf.Exp(-(error * error) / (2f * parameters.sigma * parameters.sigma));
             score = 100f * gaussianValue;
-
-            // 너무 빨리 뗀 경우 추가 감점
             if (releaseTime < parameters.targetTime - parameters.perfectRange)
             {
-                float earlyError = parameters.targetTime - releaseTime;
+                float earlyError = parameters.targetTime - releaseTime; // (사용안함) 남겨둠
                 score *= 1f / parameters.earlyReleasePenalty;
             }
-
-            // 완벽 판정 범위
             if (error <= parameters.perfectRange)
             {
                 score = 100f;
             }
-
             gameResult = new MiniGameResult(score, releaseTime, isAborted);
-            
             ChangeState(MinigameState.Result);
         }
 
         protected override void OnResult()
         {
             instructionText.gameObject.SetActive(false);
-            
             if (bubbleParticles != null)
                 bubbleParticles.Stop();
-            
-            // 바구니 올리기
             if (basketTransform != null)
             {
                 basketTransform.localPosition = basketOriginalPos;
             }
-            
             resultPanel.SetActive(true);
             resultScoreText.text = $"점수: {gameResult.score:F1}\n시간: {releaseTime:F2}초";
             resultRankText.text = $"등급: {gameResult.rank}";
+            if (resultCountdownText != null)
+            {
+                resultCountdownText.gameObject.SetActive(true);
+                resultCountdownText.text = $"다음 게임까지: {parameters.resultDisplayTime:F1}초";
+            }
+            if (resultSkipText != null)
+            {
+                resultSkipText.gameObject.SetActive(true);
+                resultSkipText.text = "스페이스바로 스킵";
+            }
         }
 
         protected override void UpdateResult()
         {
+            float remaining = parameters.resultDisplayTime - stateTimer;
+            if (resultCountdownText != null)
+            {
+                resultCountdownText.text = $"다음 게임까지: {Mathf.Max(0f, remaining):F1}초";
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                ChangeState(MinigameState.Cleanup);
+                return;
+            }
             if (stateTimer >= parameters.resultDisplayTime)
             {
-                if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
-                {
-                    ChangeState(MinigameState.Cleanup);
-                }
+                ChangeState(MinigameState.Cleanup);
             }
         }
 
@@ -207,4 +205,3 @@ namespace Minigame
         }
     }
 }
-
