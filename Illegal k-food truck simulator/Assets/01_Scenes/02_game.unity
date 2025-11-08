@@ -259101,10 +259101,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5350821032343277767, guid: f2b3d80dfa5c3cc44999b1fa2588bcc8, type: 3}
-      propertyPath: inventory
-      value: 
-      objectReference: {fileID: 1847597758}
     - target: {fileID: 6730462449760298940, guid: f2b3d80dfa5c3cc44999b1fa2588bcc8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -259136,10 +259132,6 @@ PrefabInstance:
     - target: {fileID: 7309139749804738738, guid: f2b3d80dfa5c3cc44999b1fa2588bcc8, type: 3}
       propertyPath: m_Name
       value: Panel_Inventory
-      objectReference: {fileID: 0}
-    - target: {fileID: 7309139749804738738, guid: f2b3d80dfa5c3cc44999b1fa2588bcc8, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
