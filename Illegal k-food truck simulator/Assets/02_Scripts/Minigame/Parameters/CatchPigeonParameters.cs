@@ -24,7 +24,6 @@ namespace Minigame
 
         [Header("감마 커브 설정")]
         [Tooltip("점수 계산 감마값 (높을수록 완벽에 가까워야 높은 점수)")]
-        public float scoreGamma = 2.0f;
+        public float scoreGamma = 3.0f;
     }
 }
-

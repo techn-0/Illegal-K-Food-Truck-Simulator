@@ -93,17 +93,27 @@ namespace Minigame
 
         protected override void OnJudge()
         {
-            // 중앙(0) 기준 거리 계산
-            float distance = Mathf.Abs(pressedPosition);
+            // 비둘기 위치 가져오기 (pigeonTransform이 없으면 중앙(0) 사용)
+            float pigeonPosition = 0f;
+            if (pigeonTransform != null)
+            {
+                pigeonPosition = pigeonTransform.localPosition.x / parameters.barRange;
+            }
             
-            // 정규화 (0=완벽, 1=최악)
-            float normalizedError = Mathf.Clamp01(distance);
+            // 비둘기 기준 거리 계산
+            float distance = Mathf.Abs(pressedPosition - pigeonPosition);
+            
+            // 정규화 (0=완벽, 1=최악) - 최대 거리는 2 (한쪽 끝에서 반대쪽 끝까지)
+            float normalizedError = Mathf.Clamp01(distance / 2f);
 
-            // 감마 커브 적용
-            float accuracy = 1f - Mathf.Pow(normalizedError, parameters.scoreGamma);
+            // 정확도 계산 (1=완벽, 0=최악)
+            float accuracy = 1f - normalizedError;
+            
+            // 감마 커브 적용하여 점수 계산을 더 엄격하게
+            float adjustedAccuracy = Mathf.Pow(accuracy, parameters.scoreGamma);
 
             // 점수 계산
-            float score = parameters.scoringCurve.Evaluate(accuracy);
+            float score = parameters.scoringCurve.Evaluate(adjustedAccuracy);
 
             gameResult = new MiniGameResult(score, GetPlayDuration(), isAborted);
             

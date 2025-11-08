@@ -39,7 +39,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  barSpeed: 2
+  barSpeed: 1.5
   barRange: 5
   barMovementCurve:
     serializedVersion: 2
@@ -67,4 +67,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   perfectZone: 0.2
   playTimeLimit: 10
-  scoreGamma: 5
+  scoreGamma: 3
