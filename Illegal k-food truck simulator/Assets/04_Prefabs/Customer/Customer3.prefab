@@ -3726,7 +3726,7 @@ PrefabInstance:
     - target: {fileID: 8869603686651460694, guid: dd3fb16426b2a714e916f990abf1474d, type: 3}
       propertyPath: animator
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6064293622892172472}
     - target: {fileID: 8869603686651460694, guid: dd3fb16426b2a714e916f990abf1474d, type: 3}
       propertyPath: foodWaitTimeLimit
       value: 60

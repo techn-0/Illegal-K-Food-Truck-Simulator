@@ -324,4 +324,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9377ca8bccc04271bfb9b9346dd6e827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_02_Scripts.Player.PlayerAnimationView
-  animator: {fileID: 0}
+  animator: {fileID: 4629471214948324233}
+--- !u!95 &4629471214948324233 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6488490128057515029, guid: 085d99a3257002c48bc7705b21f10845, type: 3}
+  m_PrefabInstance: {fileID: 1888293496114851740}
+  m_PrefabAsset: {fileID: 0}
