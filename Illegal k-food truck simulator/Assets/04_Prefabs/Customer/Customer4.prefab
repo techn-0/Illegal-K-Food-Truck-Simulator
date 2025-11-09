@@ -178,7 +178,7 @@ MonoBehaviour:
   foodWaitTimeLimit: 60
   orderUI: {fileID: 2184116015384947564, guid: 6f240f805bb7eb240bbedb4a70adc539, type: 3}
   arrivalDistance: 0.5
-  animator: {fileID: 0}
+  animator: {fileID: 4629471214948324233}
 --- !u!54 &6724985122040999714
 Rigidbody:
   m_ObjectHideFlags: 0
