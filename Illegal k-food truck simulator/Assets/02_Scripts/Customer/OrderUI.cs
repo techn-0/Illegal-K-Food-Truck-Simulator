@@ -189,9 +189,14 @@ public class OrderUI : MonoBehaviour
     {
         if (customerOrderSystem == null) return;
 
+        bool isFirstInQueue = OrderManager.Instance != null && OrderManager.Instance.IsFirstInQueue(customerOrderSystem);
         bool isWaitingInQueue = customerOrderSystem.IsWaitingInQueue();
-        
-        if (isWaitingInQueue)
+        var currentOrder = customerOrderSystem.GetCurrentOrder();
+
+        // 첫 번째 손님이라면 대기열 타이머 대신 음식 대기 타이머를 표시해야 한다.
+        bool useQueueTimer = isWaitingInQueue && !isFirstInQueue;
+
+        if (useQueueTimer)
         {
             float remainingQueueTime = customerOrderSystem.GetRemainingQueueTime();
             float queueTimeLimit = customerOrderSystem.queueWaitTimeLimit;
@@ -217,14 +222,26 @@ public class OrderUI : MonoBehaviour
         }
         else
         {
-            var currentOrder = customerOrderSystem.GetCurrentOrder();
-            if (currentOrder == null || !currentOrder.IsActive) return;
+            // 음식 대기 타이머 (주문 활성화 전이라도 첫 번째 손님이면 foodWaitTimeLimit 기준으로 표시)
+            float remainingFoodTime;
+            float foodTimeLimit = customerOrderSystem.foodWaitTimeLimit;
+            float timeRatio;
+
+            if (currentOrder != null && currentOrder.IsActive)
+            {
+                remainingFoodTime = currentOrder.RemainingTime;
+                timeRatio = currentOrder.GetTimeRatio();
+            }
+            else
+            {
+                // 활성화 전: 아직 주문 수락 안 했더라도 전체 제한 시간을 그대로 보여줌
+                remainingFoodTime = foodTimeLimit; // 시작 상태 (감소 로직 없음)
+                timeRatio = 1f;
+            }
 
             if (timerFillImage != null)
             {
-                float timeRatio = currentOrder.GetTimeRatio();
                 timerFillImage.fillAmount = timeRatio;
-                
                 if (timeRatio > 0.5f)
                     timerFillImage.color = Color.green;
                 else if (timeRatio > 0.25f)
@@ -235,7 +252,7 @@ public class OrderUI : MonoBehaviour
 
             if (timerText != null)
             {
-                int remainingSeconds = Mathf.CeilToInt(currentOrder.RemainingTime);
+                int remainingSeconds = Mathf.CeilToInt(remainingFoodTime);
                 timerText.text = remainingSeconds.ToString();
             }
         }

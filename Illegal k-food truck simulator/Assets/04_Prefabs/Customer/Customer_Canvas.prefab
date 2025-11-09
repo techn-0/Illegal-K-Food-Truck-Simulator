@@ -161,7 +161,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &4288695181217822940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,6 +197,7 @@ MonoBehaviour:
   acceptOrderButton: {fileID: 7203981580293726191}
   timerFillImage: {fileID: 6102992059065656056}
   timerText: {fileID: 1712999368269953915}
+  timerPanel: {fileID: 6950668164251132651}
   orderUIContainer: {fileID: 8951207283597551834}
 --- !u!1 &3330158811071228640
 GameObject:
