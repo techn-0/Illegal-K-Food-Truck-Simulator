@@ -37,6 +37,7 @@ public class CustomerOrderSystem : MonoBehaviour
     // 대기열 타이머 관련
     private float _queueWaitTimer; // 대기열에서 기다린 시간
     private bool _isWaitingInQueue; // 대기열 대기 중인지 여부
+    private float _firstInQueueTimer; // 첫 번째 위치에 머문 시간 추적
 
     private void Start()
     {
@@ -98,6 +99,39 @@ public class CustomerOrderSystem : MonoBehaviour
                 HandleQueueTimeout();
                 return;
             }
+        }
+        
+        // 첫 번째 손님인데 아직 주문 안 된 경우 머문 시간 누적 및 강제 활성화 Fallback
+        if (_isInQueue && !_hasPlacedOrder && OrderManager.Instance != null && OrderManager.Instance.IsFirstInQueue(this) && BusinessManager.IsBusinessActive)
+        {
+            _firstInQueueTimer += Time.deltaTime;
+            
+            // 도착 근처이거나 일정 시간 초과 시 강제 주문 처리
+            bool closeEnough = false;
+            if (_agent != null && _agent.isActiveAndEnabled && !_agent.pathPending)
+            {
+                float threshold = Mathf.Max(_agent.stoppingDistance, arrivalDistance) + 0.5f; // 여유 허용
+                if (_agent.remainingDistance <= threshold)
+                {
+                    closeEnough = true;
+                }
+            }
+            else
+            {
+                if (Vector3.Distance(transform.position, _targetPosition) <= arrivalDistance + 0.5f)
+                    closeEnough = true;
+            }
+
+            if (closeEnough || _firstInQueueTimer > 2f) // 2초 이상 대기 시 강제 주문 시작
+            {
+                Debug.Log($"첫 번째 손님 주문 활성화: closeEnough={closeEnough}, timer={_firstInQueueTimer:F1}s");
+                PlaceOrder();
+            }
+        }
+        else if (_hasPlacedOrder)
+        {
+            // 주문 후에는 타이머 초기화
+            _firstInQueueTimer = 0f;
         }
         
         // 주문 타이머 업데이트 (주문을 한 후에만)
@@ -205,6 +239,7 @@ public class CustomerOrderSystem : MonoBehaviour
         
         _isWaitingInQueue = false;
         _queueWaitTimer = 0f;
+        _firstInQueueTimer = 0f;
         
         // 주문 UI 제거
         RemoveOrderUI();
@@ -223,6 +258,7 @@ public class CustomerOrderSystem : MonoBehaviour
     /// </summary>
     private void HandleQueueTimeout()
     {
+        _firstInQueueTimer = 0f;
         LeaveQueue();
         ReturnToOriginalPosition();
     }
@@ -247,6 +283,7 @@ public class CustomerOrderSystem : MonoBehaviour
         _isInQueue = false;
         _isWaitingInQueue = false;
         _queueWaitTimer = 0f;
+        _firstInQueueTimer = 0f;
         RemoveOrderUI();
         if (_currentOrder != null)
         {
@@ -260,16 +297,38 @@ public class CustomerOrderSystem : MonoBehaviour
     /// </summary>
     private void CheckArrival()
     {
-        if (Vector3.Distance(transform.position, _targetPosition) <= arrivalDistance)
+        // 첫 번째 손님이고 아직 주문하지 않았으며 영업 중일 때만 도착 판정 수행
+        if (OrderManager.Instance == null || !_isInQueue) return;
+        if (!OrderManager.Instance.IsFirstInQueue(this) || _hasPlacedOrder || !BusinessManager.IsBusinessActive) return;
+
+        bool arrived = false;
+
+        if (_agent != null && _agent.isActiveAndEnabled)
         {
-            // 첫 번째 손님이고 아직 주문하지 않았다면 주문 생성
-            if (OrderManager.Instance != null && 
-                OrderManager.Instance.IsFirstInQueue(this) && 
-                !_hasPlacedOrder &&
-                BusinessManager.IsBusinessActive)
+            // NavMesh 경로 기준 도착 판정: 경로 계산 완료 + 남은 거리 <= threshold
+            if (!_agent.pathPending)
             {
-                PlaceOrder();
+                float threshold = Mathf.Max(_agent.stoppingDistance, arrivalDistance);
+                if (_agent.remainingDistance <= threshold)
+                {
+                    arrived = true;
+                }
+                else if (_agent.velocity.sqrMagnitude < 0.001f && Vector3.Distance(transform.position, _targetPosition) <= threshold + 0.3f)
+                {
+                    // 거의 정지 상태인데 아주 근접하면 도착으로 간주
+                    arrived = true;
+                }
             }
+        }
+        else
+        {
+            // 에이전트가 없으면 위치 거리로 판정
+            arrived = Vector3.Distance(transform.position, _targetPosition) <= arrivalDistance;
+        }
+
+        if (arrived)
+        {
+            PlaceOrder();
         }
     }
 
@@ -278,6 +337,8 @@ public class CustomerOrderSystem : MonoBehaviour
     /// </summary>
     private void PlaceOrder()
     {
+        if (_hasPlacedOrder) return; // 중복 방지
+        
         // UI가 이미 생성되어 있으므로 중복 생성하지 않음
         // 주문 타이머 시작 (음식 대기 타이머)
         if (_currentOrder != null)
@@ -285,6 +346,7 @@ public class CustomerOrderSystem : MonoBehaviour
             _currentOrder.ActivateOrder();
             _hasPlacedOrder = true;
             _isWaitingInQueue = false; // 대기열 타이머 중지
+            _firstInQueueTimer = 0f;
             
             Debug.Log($"주문 완료: {_orderedRecipe.RecipeName}, 대기 시간: {_queueWaitTimer:F1}초");
 
@@ -332,6 +394,7 @@ public class CustomerOrderSystem : MonoBehaviour
             _currentOrder.CompleteOrder();
         }
         
+        _firstInQueueTimer = 0f;
         LeaveQueue();
         ReturnToOriginalPosition();
     }
