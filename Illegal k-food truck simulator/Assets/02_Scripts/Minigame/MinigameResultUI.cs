@@ -36,7 +36,11 @@ namespace Minigame
                 canvasGroup = resultPanel.AddComponent<CanvasGroup>();
             }
 
-            Hide();
+            // 초기 상태 설정 - DOTween 없이 직접 비활성화
+            if (resultPanel != null)
+            {
+                resultPanel.SetActive(false);
+            }
         }
 
         /// <summary>
@@ -85,11 +89,23 @@ namespace Minigame
             // 패널 활성화 및 애니메이션
             if (resultPanel != null)
             {
+                // 진행 중인 애니메이션 정리
+                resultPanel.transform.DOKill();
+                if (canvasGroup != null)
+                {
+                    canvasGroup.DOKill();
+                }
+                
                 resultPanel.SetActive(true);
                 resultPanel.transform.localScale = Vector3.one * 0.8f;
-                canvasGroup.alpha = 0f;
+                
+                if (canvasGroup != null)
+                {
+                    canvasGroup.alpha = 0f;
+                    canvasGroup.DOFade(1f, 0.3f);
+                }
+                
                 resultPanel.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
-                canvasGroup.DOFade(1f, 0.3f);
             }
         }
 
@@ -143,8 +159,19 @@ namespace Minigame
         /// </summary>
         private void OnConfirmClicked()
         {
-            Hide();
-            onConfirm?.Invoke();
+            if (resultPanel != null && canvasGroup != null)
+            {
+                // 진행 중인 애니메이션 정리
+                resultPanel.transform.DOKill();
+                canvasGroup.DOKill();
+                
+                // 애니메이션 후 콜백 실행
+                resultPanel.transform.DOScale(0.8f, 0.2f);
+                canvasGroup.DOFade(0f, 0.2f).OnComplete(() => {
+                    resultPanel.SetActive(false);
+                    onConfirm?.Invoke();  // 애니메이션 완료 후 실행
+                });
+            }
         }
 
         /// <summary>
@@ -152,11 +179,15 @@ namespace Minigame
         /// </summary>
         public void Hide()
         {
-            if (resultPanel != null)
+            if (resultPanel != null && canvasGroup != null)
             {
-                resultPanel.transform.DOScale(0.8f, 0.2f);
-                canvasGroup.DOFade(0f, 0.2f).OnComplete(() => resultPanel.SetActive(false));
+                // 진행 중인 애니메이션 정리
+                resultPanel.transform.DOKill();
+                canvasGroup.DOKill();
+                
+                resultPanel.SetActive(false);
             }
         }
     }
 }
+
