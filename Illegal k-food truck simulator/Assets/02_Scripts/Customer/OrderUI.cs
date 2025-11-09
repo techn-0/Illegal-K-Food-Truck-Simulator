@@ -115,8 +115,12 @@ public class OrderUI : MonoBehaviour
         if (customerOrderSystem == null) return;
 
         bool isWaitingInQueue = customerOrderSystem.IsWaitingInQueue();
-        bool showOrderUI = !isWaitingInQueue;
-        
+        // UI 표시 조건: 대기열에 있는 동안에도 UI를 표시하거나,
+        // 대기열에 있지 않더라도 현재 주문이 활성화(음식 대기중)인 경우 표시
+        var currentOrder = customerOrderSystem.GetCurrentOrder();
+        bool isOrderActive = currentOrder != null && currentOrder.IsActive;
+        bool showOrderUI = isWaitingInQueue || isOrderActive;
+
         if (orderUIContainer != null)
         {
             if (showOrderUI && !orderUIContainer.activeSelf)
