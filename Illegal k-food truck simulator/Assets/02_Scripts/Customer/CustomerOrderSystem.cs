@@ -23,6 +23,9 @@ public class CustomerOrderSystem : MonoBehaviour
     [Header("Animation Settings")]
     [SerializeField] private Animator animator; // 애니메이터 컴포넌트
 
+    // OrderPoint 감지 관련
+    private bool _orderPointInRange = false; // OrderPoint가 범위 내에 있는지
+
     private NavMeshAgent _agent;
     private GameObject _instantiatedUI;
     private CustomerOrder _currentOrder;
@@ -57,8 +60,8 @@ public class CustomerOrderSystem : MonoBehaviour
         // 비즈니스 상태 이벤트 구독
         BusinessManager.OnBusinessStateChanged += HandleBusinessStateChanged;
         
-        // 영업 중이면 대기열에 참가 (레시피 선택은 JoinQueue에서)
-        if (BusinessManager.IsBusinessActive)
+        // 영업 중이고 범위 내에 있으면 대기열에 참가 (레시피 선택은 JoinQueue에서)
+        if (BusinessManager.IsBusinessActive && _orderPointInRange)
         {
             JoinQueue();
         }
@@ -162,7 +165,7 @@ public class CustomerOrderSystem : MonoBehaviour
     /// </summary>
     private void HandleBusinessStateChanged(bool isActive)
     {
-        if (isActive)
+        if (isActive && _orderPointInRange)
         {
             JoinQueue();
         }
@@ -458,6 +461,40 @@ public class CustomerOrderSystem : MonoBehaviour
             
             // 이전 위치 업데이트
             _lastPosition = transform.position;
+        }
+    }
+
+    /// <summary>
+    /// OrderPoint 트리거 진입 (범위 내 진입)
+    /// </summary>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("OrderPoint"))
+        {
+            _orderPointInRange = true;
+            
+            // 영업 중이면 즉시 대기열 참가
+            if (BusinessManager.IsBusinessActive && !_isInQueue)
+            {
+                JoinQueue();
+            }
+        }
+    }
+
+    /// <summary>
+    /// OrderPoint 트리거 탈출 (범위 밖으로)
+    /// </summary>
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("OrderPoint"))
+        {
+            _orderPointInRange = false;
+            
+            // 대기열에서 나가기
+            if (_isInQueue)
+            {
+                LeaveQueue();
+            }
         }
     }
 

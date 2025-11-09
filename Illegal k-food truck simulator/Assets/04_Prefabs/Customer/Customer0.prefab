@@ -40,6 +40,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6575107397021148106}
     m_Modifications:
+    - target: {fileID: 1345253362585285399, guid: dd3fb16426b2a714e916f990abf1474d, type: 3}
+      propertyPath: m_Radius
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 2238151015618549003, guid: dd3fb16426b2a714e916f990abf1474d, type: 3}
       propertyPath: m_Name
       value: Customer
@@ -86,11 +90,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8869603686651460694, guid: dd3fb16426b2a714e916f990abf1474d, type: 3}
       propertyPath: foodWaitTimeLimit
-      value: 60
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8869603686651460694, guid: dd3fb16426b2a714e916f990abf1474d, type: 3}
       propertyPath: queueWaitTimeLimit
-      value: 120
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

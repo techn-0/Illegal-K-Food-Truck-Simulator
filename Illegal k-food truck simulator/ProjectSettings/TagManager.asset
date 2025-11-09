@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - CustomerTrigger
+  - OrderPoint
   layers:
   - Default
   - TransparentFX
