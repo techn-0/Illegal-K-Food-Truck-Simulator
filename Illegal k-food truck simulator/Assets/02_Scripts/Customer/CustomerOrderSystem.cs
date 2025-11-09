@@ -287,6 +287,16 @@ public class CustomerOrderSystem : MonoBehaviour
             _isWaitingInQueue = false; // 대기열 타이머 중지
             
             Debug.Log($"주문 완료: {_orderedRecipe.RecipeName}, 대기 시간: {_queueWaitTimer:F1}초");
+
+            // UI 업데이트 강제 호출
+            if (_instantiatedUI != null)
+            {
+                var orderUIComponent = _instantiatedUI.GetComponent<OrderUI>();
+                if (orderUIComponent != null)
+                {
+                    orderUIComponent.HandleOrderPlacement();
+                }
+            }
         }
     }
 

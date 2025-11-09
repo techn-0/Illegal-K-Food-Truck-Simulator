@@ -14,9 +14,10 @@ public class OrderUI : MonoBehaviour
     [Header("Timer UI")]
     public Image timerFillImage;
     public TMP_Text timerText;
+    public GameObject timerPanel; // Panel_Timer
     
     [Header("Order UI Container (Optional)")]
-    public GameObject orderUIContainer;
+    public GameObject orderUIContainer; // Panel_Order
 
     private Camera mainCamera;
     private RecipeDefinition orderedRecipe; // ItemDefinition 대신 RecipeDefinition 사용
@@ -114,36 +115,39 @@ public class OrderUI : MonoBehaviour
     {
         if (customerOrderSystem == null) return;
 
-        bool isWaitingInQueue = customerOrderSystem.IsWaitingInQueue();
-        // UI 표시 조건: 대기열에 있는 동안에도 UI를 표시하거나,
-        // 대기열에 있지 않더라도 현재 주문이 활성화(음식 대기중)인 경우 표시
+        bool isFirstInQueue = OrderManager.Instance != null && OrderManager.Instance.IsFirstInQueue(customerOrderSystem);
         var currentOrder = customerOrderSystem.GetCurrentOrder();
         bool isOrderActive = currentOrder != null && currentOrder.IsActive;
-        bool showOrderUI = isWaitingInQueue || isOrderActive;
 
-        if (orderUIContainer != null)
+        bool showFullOrder = isFirstInQueue || isOrderActive;
+        bool showTimerOnly = customerOrderSystem.IsWaitingInQueue() && !isFirstInQueue;
+
+        if (orderUIContainer != null) orderUIContainer.SetActive(showFullOrder);
+        if (timerPanel != null) timerPanel.SetActive(showFullOrder || showTimerOnly);
+
+        // 전체 UI 컨테이너의 활성화/비활성화 로직
+        GameObject mainContainer = orderUIContainer != null ? orderUIContainer.transform.parent.gameObject : gameObject;
+        bool shouldShowAnything = showFullOrder || showTimerOnly;
+
+        if (shouldShowAnything && !mainContainer.activeSelf)
         {
-            if (showOrderUI && !orderUIContainer.activeSelf)
-            {
-                orderUIContainer.SetActive(true);
-                orderUIContainer.transform.localScale = Vector3.one * 0.8f;
-                canvasGroup.alpha = 0f;
-                orderUIContainer.transform.DOScale(1f, 0.25f);
-                canvasGroup.DOFade(1f, 0.25f);
-            }
-            else if (!showOrderUI && orderUIContainer.activeSelf)
-            {
-                orderUIContainer.transform.DOScale(0.8f, 0.15f);
-                canvasGroup.DOFade(0f, 0.15f).OnComplete(() => orderUIContainer.SetActive(false));
-            }
+            mainContainer.SetActive(true);
+            mainContainer.transform.localScale = Vector3.one * 0.8f;
+            canvasGroup.alpha = 0f;
+            mainContainer.transform.DOScale(1f, 0.25f);
+            canvasGroup.DOFade(1f, 0.25f);
         }
-        else
+        else if (!shouldShowAnything && mainContainer.activeSelf)
         {
-            if (itemIcon != null) itemIcon.gameObject.SetActive(showOrderUI);
-            if (itemName != null) itemName.gameObject.SetActive(showOrderUI);
-            if (itemQuantity != null) itemQuantity.gameObject.SetActive(showOrderUI);
-            if (acceptOrderButton != null) acceptOrderButton.gameObject.SetActive(showOrderUI);
+            mainContainer.transform.DOScale(0.8f, 0.15f);
+            canvasGroup.DOFade(0f, 0.15f).OnComplete(() => mainContainer.SetActive(false));
         }
+    }
+
+    public void HandleOrderPlacement()
+    {
+        UpdateOrderUIVisibility();
+        UpdateTimerUI();
     }
 
     private void UpdateAcceptButton()
