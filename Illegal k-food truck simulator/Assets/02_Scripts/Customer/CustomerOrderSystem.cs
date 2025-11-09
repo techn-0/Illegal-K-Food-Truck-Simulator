@@ -24,7 +24,8 @@ public class CustomerOrderSystem : MonoBehaviour
     [SerializeField] private Animator animator; // 애니메이터 컴포넌트
 
     // OrderPoint 감지 관련
-    private bool _orderPointInRange = false; // OrderPoint가 범위 내에 있는지
+    private bool _orderPointInRange; // OrderPoint가 범위 내에 있는지
+    private bool _hasCompletedOrderToday; // 오늘 주문을 완료했는지 (재주문 방지)
 
     private NavMeshAgent _agent;
     private GameObject _instantiatedUI;
@@ -104,7 +105,7 @@ public class CustomerOrderSystem : MonoBehaviour
             }
         }
         
-        // 첫 번째 손님인데 아직 주문 안 된 경우 머문 시간 누적 및 강제 활성화 Fallback
+        // 첫 번째 손님인데 아직 주문 안 된 경우 머는 시간 누적 및 강제 활성화 Fallback
         if (_isInQueue && !_hasPlacedOrder && OrderManager.Instance != null && OrderManager.Instance.IsFirstInQueue(this) && BusinessManager.IsBusinessActive)
         {
             _firstInQueueTimer += Time.deltaTime;
@@ -167,12 +168,22 @@ public class CustomerOrderSystem : MonoBehaviour
     {
         if (isActive && _orderPointInRange)
         {
-            JoinQueue();
+            // 오늘 이미 주문 완료한 손님은 다시 주문하지 않음
+            if (!_hasCompletedOrderToday)
+            {
+                JoinQueue();
+            }
         }
         else
         {
             LeaveQueue();
             ReturnToOriginalPosition();
+            
+            // 영업 종료 시 오늘의 주문 완료 플래그 초기화
+            if (!isActive)
+            {
+                _hasCompletedOrderToday = false;
+            }
         }
     }
 
@@ -181,7 +192,7 @@ public class CustomerOrderSystem : MonoBehaviour
     /// </summary>
     private void JoinQueue()
     {
-        if (OrderManager.Instance != null && !_isInQueue)
+        if (OrderManager.Instance != null && !_isInQueue && !_hasCompletedOrderToday)
         {
             // 대기열 참가 시 레시피 선택 (Start보다 안전한 타이밍)
             if (_orderedRecipe == null)
@@ -254,6 +265,10 @@ public class CustomerOrderSystem : MonoBehaviour
         }
         
         _hasPlacedOrder = false;
+        
+        // 주문/레시피 초기화 (범위 벗어난 경우 다시 주문 가능하도록)
+        _orderedRecipe = null;
+        _currentOrder = null;
     }
 
     /// <summary>
@@ -262,6 +277,7 @@ public class CustomerOrderSystem : MonoBehaviour
     private void HandleQueueTimeout()
     {
         _firstInQueueTimer = 0f;
+        _hasCompletedOrderToday = true; // 타임아웃도 오늘 주문 완료로 처리
         LeaveQueue();
         ReturnToOriginalPosition();
     }
@@ -383,6 +399,7 @@ public class CustomerOrderSystem : MonoBehaviour
     private void HandleOrderExpired(CustomerOrder expiredOrder)
     {
         Debug.Log($"음식 대기 시간 초과: {expiredOrder.orderItem.DisplayName}");
+        _hasCompletedOrderToday = true; // 음식 타임아웃도 오늘 주문 완료로 처리
         LeaveQueue();
         ReturnToOriginalPosition();
     }
@@ -398,6 +415,7 @@ public class CustomerOrderSystem : MonoBehaviour
         }
         
         _firstInQueueTimer = 0f;
+        _hasCompletedOrderToday = true; // 주문 완료한 손님은 오늘 다시 주문 안함
         LeaveQueue();
         ReturnToOriginalPosition();
     }
@@ -473,8 +491,8 @@ public class CustomerOrderSystem : MonoBehaviour
         {
             _orderPointInRange = true;
             
-            // 영업 중이면 즉시 대기열 참가
-            if (BusinessManager.IsBusinessActive && !_isInQueue)
+            // 영업 중이고 오늘 주문 안한 손님만 대기열 참가
+            if (BusinessManager.IsBusinessActive && !_isInQueue && !_hasCompletedOrderToday)
             {
                 JoinQueue();
             }
@@ -490,7 +508,7 @@ public class CustomerOrderSystem : MonoBehaviour
         {
             _orderPointInRange = false;
             
-            // 대기열에서 나가기
+            // 대기열에서 나가고 원래 위치로 복귀 (재주문 가능)
             if (_isInQueue)
             {
                 LeaveQueue();
