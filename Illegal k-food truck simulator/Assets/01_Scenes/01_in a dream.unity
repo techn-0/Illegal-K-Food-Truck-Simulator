@@ -3664,9 +3664,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d072bb523cb24c5f8b9e817078cb486b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  truckOrderPoint: {fileID: 0}
+  OrderPoint: {fileID: 0}
   customerSpacing: 2
   queueDirection: {x: 0, y: 0, z: 1}
+  sortByDistance: 1
 --- !u!1001 &441323806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10799,6 +10800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecipeUnlockManager
   defaultUnlockedRecipes: []
+  allRecipes: []
 --- !u!1001 &1217277477
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15608,6 +15610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slots: []
+  allItems: []
 --- !u!4 &1847597759
 Transform:
   m_ObjectHideFlags: 0
@@ -17737,10 +17740,6 @@ PrefabInstance:
     - target: {fileID: 77079057867003369, guid: 0ed8cb81c98b5554dab18c69864c449f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1137648763916422781, guid: 0ed8cb81c98b5554dab18c69864c449f, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -9.949219
       objectReference: {fileID: 0}
     - target: {fileID: 4491871835353186420, guid: 0ed8cb81c98b5554dab18c69864c449f, type: 3}
       propertyPath: m_Name
