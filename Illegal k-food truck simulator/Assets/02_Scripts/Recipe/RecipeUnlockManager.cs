@@ -110,6 +110,21 @@ public class RecipeUnlockManager : MonoBehaviour
     {
         var recipeArray = new RecipeDefinition[unlockedRecipes.Count];
         unlockedRecipes.CopyTo(recipeArray);
+        
+        // 디버그: 해금된 레시피 확인
+        Debug.Log($"[RecipeUnlockManager] GetUnlockedRecipes 호출 - 총 {recipeArray.Length}개 레시피");
+        for (int i = 0; i < recipeArray.Length; i++)
+        {
+            if (recipeArray[i] != null)
+            {
+                Debug.Log($"  [{i}] {recipeArray[i].RecipeName} (ID: {recipeArray[i].RecipeId})");
+            }
+            else
+            {
+                Debug.LogWarning($"  [{i}] NULL 레시피 발견!");
+            }
+        }
+        
         return recipeArray;
     }
     
@@ -211,4 +226,3 @@ public class RecipeUnlockManager : MonoBehaviour
         return null;
     }
 }
-

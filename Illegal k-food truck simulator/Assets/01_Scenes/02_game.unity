@@ -58302,15 +58302,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   testItems:
   - item: {fileID: 11400000, guid: ae4bb24738b827f4aa6700b65bd886e8, type: 2}
-    amount: 100
+    amount: 99
   - item: {fileID: 11400000, guid: bb7810672d0d8e743a44569199f2bc76, type: 2}
-    amount: 5
+    amount: 99
   - item: {fileID: 11400000, guid: 9e9b3f10f89d3774e9193b57aa250f55, type: 2}
-    amount: 5
+    amount: 99
   - item: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
-    amount: 12
-  - item: {fileID: 11400000, guid: 10fd9c8c3ec6b8049a30e423b9f312fe, type: 2}
-    amount: 2
+    amount: 99
+  - item: {fileID: 11400000, guid: 7f1810c7faab435489533d952a66e542, type: 2}
+    amount: 99
   addAllItems: 0
   clearInventory: 0
   addMoney: 0
@@ -105090,6 +105090,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6106630928326172876}
     m_Modifications:
+    - target: {fileID: 4062879969411350204, guid: e9cfe8d3e6864c74a85221ce4064f049, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062879969411350204, guid: e9cfe8d3e6864c74a85221ce4064f049, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062879969411350204, guid: e9cfe8d3e6864c74a85221ce4064f049, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -17
+      objectReference: {fileID: 0}
     - target: {fileID: 4286245131119732114, guid: e9cfe8d3e6864c74a85221ce4064f049, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -105173,6 +105185,18 @@ PrefabInstance:
     - target: {fileID: 4960938616239913019, guid: e9cfe8d3e6864c74a85221ce4064f049, type: 3}
       propertyPath: m_Name
       value: ItemShopUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 4960938616239913019, guid: e9cfe8d3e6864c74a85221ce4064f049, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7712522914244379003, guid: e9cfe8d3e6864c74a85221ce4064f049, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7712522914244379003, guid: e9cfe8d3e6864c74a85221ce4064f049, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -473068,6 +473092,34 @@ PrefabInstance:
     - target: {fileID: 5177818475788289749, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6196756502645020306, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 42f904db7dde44a32a88d7b7dcf4dbfb, type: 3}
+    - target: {fileID: 7209479941283168095, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 7209479941283168095, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 7209479941283168095, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 7209479941283168095, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -25.099976
+      objectReference: {fileID: 0}
+    - target: {fileID: 7209479941283168095, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -24.100006
+      objectReference: {fileID: 0}
+    - target: {fileID: 7209479941283168095, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7621584042477703653, guid: 67bda8835a033914c9a38c6f568e4e9b, type: 3}
       propertyPath: timerText

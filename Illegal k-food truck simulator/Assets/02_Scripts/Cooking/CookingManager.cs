@@ -63,14 +63,15 @@ public class CookingManager : MonoBehaviour
     
     public RecipeDefinition[] GetAvailableRecipes()
     {
-        // 해금된 레시피만 반환
-        if (RecipeUnlockManager.Instance == null)
+        // RecipeUnlockManager가 있으면 해금된 레시피만 반환
+        if (RecipeUnlockManager.Instance != null)
         {
-            // RecipeUnlockManager가 없다면 기존 방식 사용
-            return availableRecipes;
+            return RecipeUnlockManager.Instance.GetUnlockedRecipes();
         }
         
-        return RecipeUnlockManager.Instance.GetUnlockedRecipes();
+        // RecipeUnlockManager가 없을 때는 경고 로그 출력 후 빈 배열 반환
+        Debug.LogWarning("RecipeUnlockManager.Instance가 null입니다! 해금된 레시피를 확인할 수 없습니다.");
+        return new RecipeDefinition[0]; // 빈 배열 반환 (null 방지)
     }
     
     public bool CanCookRecipe(RecipeDefinition recipe)

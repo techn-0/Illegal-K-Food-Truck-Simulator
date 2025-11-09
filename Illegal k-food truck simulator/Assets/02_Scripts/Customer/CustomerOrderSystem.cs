@@ -69,23 +69,42 @@ public class CustomerOrderSystem : MonoBehaviour
     }
 
     /// <summary>해금된 레시피 중 랜덤으로 선택</summary>
-    private void SelectRandomRecipe()
+    private bool SelectRandomRecipe()
     {
         if (CookingManager.Instance == null)
         {
             Debug.LogWarning("CookingManager.Instance가 null입니다! 나중에 다시 시도합니다.");
-            return;
+            return false;
         }
 
         var unlockedRecipes = CookingManager.Instance.GetAvailableRecipes();
+        
+        // 상세 디버그 로그 추가
+        Debug.Log($"[레시피 선택] 해금된 레시피 개수: {(unlockedRecipes != null ? unlockedRecipes.Length : 0)}개");
         if (unlockedRecipes != null && unlockedRecipes.Length > 0)
         {
-            _orderedRecipe = unlockedRecipes[Random.Range(0, unlockedRecipes.Length)];
-            Debug.Log($"손님이 {_orderedRecipe.RecipeName}을(를) 주문할 예정입니다.");
+            // 해금된 레시피 목록 출력
+            string recipeList = "해금된 레시피 목록: ";
+            for (int i = 0; i < unlockedRecipes.Length; i++)
+            {
+                if (unlockedRecipes[i] != null)
+                {
+                    recipeList += $"[{i}] {unlockedRecipes[i].RecipeName}";
+                    if (i < unlockedRecipes.Length - 1) recipeList += ", ";
+                }
+            }
+            Debug.Log(recipeList);
+            
+            // 랜덤 선택
+            int randomIndex = Random.Range(0, unlockedRecipes.Length);
+            _orderedRecipe = unlockedRecipes[randomIndex];
+            Debug.Log($"손님이 {_orderedRecipe.RecipeName}을(를) 주문할 예정입니다. (선택된 인덱스: {randomIndex})");
+            return true;
         }
         else
         {
-            Debug.LogWarning("해금된 레시피가 없습니다!");
+            Debug.LogWarning("해금된 레시피가 없습니다! 손님이 주문할 수 없습니다.");
+            return false;
         }
     }
 
@@ -197,7 +216,12 @@ public class CustomerOrderSystem : MonoBehaviour
             // 대기열 참가 시 레시피 선택 (Start보다 안전한 타이밍)
             if (_orderedRecipe == null)
             {
-                SelectRandomRecipe();
+                if (!SelectRandomRecipe())
+                {
+                    // 레시피 선택 실패 시 대기열 참가 취소
+                    Debug.LogWarning("레시피 선택 실패: 대기열 참가 취소");
+                    return;
+                }
                 
                 // 레시피 선택 후 주문 데이터 초기화
                 if (_orderedRecipe != null)

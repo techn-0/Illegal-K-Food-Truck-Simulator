@@ -89,12 +89,20 @@ public class OrderUI : MonoBehaviour
             orderedRecipe = FindRecipeForItem(item);
         }
         
-        // UI 업데이트
-        if (item != null)
+        // UI 업데이트: 레시피 정보가 있으면 레시피 정보 사용, 없으면 아이템 정보 사용
+        if (orderedRecipe != null)
+        {
+            itemIcon.sprite = orderedRecipe.DishImage;
+            itemName.text = orderedRecipe.RecipeName;
+            itemQuantity.text = quantity.ToString();
+            Debug.Log($"[OrderUI] Setup 완료: {orderedRecipe.RecipeName} (레시피 정보 사용)");
+        }
+        else if (item != null)
         {
             itemIcon.sprite = item.Icon;
             itemName.text = item.DisplayName;
             itemQuantity.text = quantity.ToString();
+            Debug.Log($"[OrderUI] Setup 완료: {item.DisplayName} (아이템 정보 사용)");
         }
     }
 
