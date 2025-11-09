@@ -84,6 +84,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8869603686651460694, guid: dd3fb16426b2a714e916f990abf1474d, type: 3}
+      propertyPath: foodWaitTimeLimit
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869603686651460694, guid: dd3fb16426b2a714e916f990abf1474d, type: 3}
+      propertyPath: queueWaitTimeLimit
+      value: 120
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
