@@ -211,30 +211,27 @@ namespace Dialogue
         }
 
         /// <summary>
-        /// 화자 이미지를 03_Resource 폴더에서 로드 / Load speaker image from 03_Resource folder
+        /// 화자 이미지를 Resources/Portraits 폴더에서 로드 / Load speaker image from Resources/Portraits folder
         /// </summary>
-        /// <param name="fileName">파일명</param>
+        /// <param name="fileName">파일명 (확장자 제외)</param>
         /// <returns>Sprite 또는 null</returns>
         private static Sprite LoadSpeakerImage(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
                 return null;
 
-#if UNITY_EDITOR
-            // 03_Resource/Sprite/Portraits 경로에서 로드 (에디터 전용)
-            string resourcePath = $"Assets/03_Resource/Sprite/Portraits/{fileName}.png";
-            Sprite sprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(resourcePath);
+            // 확장자 제거 (Resources.Load는 확장자 없이 사용)
+            fileName = System.IO.Path.GetFileNameWithoutExtension(fileName);
+
+            // Resources/Portraits 폴더에서 로드 (빌드에서도 작동)
+            Sprite sprite = Resources.Load<Sprite>($"Portraits/{fileName}");
             
             if (sprite == null)
             {
-                Debug.LogWarning($"Could not load speaker image: {resourcePath}");
+                Debug.LogWarning($"Could not load speaker image from Resources/Portraits/{fileName}");
             }
 
             return sprite;
-#else
-            // 런타임 빌드에서는 Addressables/Resources 사용을 권장 (현재는 null 반환)
-            return null;
-#endif
         }
     }
 }
