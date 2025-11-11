@@ -120,22 +120,91 @@ graph LR
 ## 📂 폴더 구조 (요약)
 
 ```
-Assets/
- ├─ 01_Scenes/
- │   ├─ Tutorial
- │   └─ FriedChickenScene1
- ├─ 02_Scripts/
- │   ├─ Player/
- │   ├─ Inventory/
- │   ├─ Items/
- │   ├─ Cooking/
- │   ├─ Customer/
- │   ├─ Sales/
- │   ├─ Dialogue/
- │   └─ Business/
- └─ 03_Resource/
-     └─ Sprites, Portraits, CSVs
+Assets/02_Scripts
+├── BirdMover.cs
+├── CarController.cs
+├── CursorManager.cs
+├── GameManager.cs
+├── GameSave.cs
+├── SaveManager.cs
+├── Business
+│   └── BusinessManager.cs
+├── Cooking
+│   ├── CookingInteractor.cs
+│   ├── CookingManager.cs
+│   ├── CookingMinigameController.cs
+│   ├── CookingTimer.cs
+│   ├── CookingUI.cs
+│   ├── IngredientSlotUI.cs
+│   ├── RecipeDefinition.cs
+│   └── RecipeItemUI.cs
+├── Customer
+│   ├── CustomerOrder.cs
+│   ├── CustomerOrderSystem.cs
+│   ├── OrderManager.cs
+│   └── OrderUI.cs
+├── Dialogue
+│   ├── ChoiceParser.cs
+│   ├── CSVLoader.cs
+│   ├── DialogueData.cs
+│   ├── DialogueManager.cs
+│   ├── DialogueTarget.cs
+│   ├── DialogueTester.cs
+│   ├── DialogueView.cs
+│   ├── example_dialogue.csv
+│   ├── GRANDMA.csv
+│   ├── PlayerDialogueInteractor.cs
+│   └── SceneLoader.cs
+├── Inventory
+│   ├── Inventory.cs
+│   ├── InventorySlot.cs
+│   ├── InventoryTester.cs
+│   ├── InventoryView.cs
+│   └── ItemSlotView.cs
+├── Items
+│   ├── ItemDefinition.cs
+│   ├── ItemShop.cs
+│   ├── ItemShopInteractor.cs
+│   ├── ItemShopItemUI.cs
+│   ├── ItemShopUI.cs
+│   ├── ItemType.cs
+│   └── PickupTarget.cs
+├── MainMenu
+│   └── BT_MoveScen.cs
+├── Minigame
+│   ├── Games
+│   ├── IMinigame.cs
+│   ├── MinigameBase.cs
+│   ├── MinigameId.cs
+│   ├── MiniGameManager.cs
+│   ├── MinigameParametersBase.cs
+│   ├── MiniGameResult.cs
+│   ├── MinigameResultItemUI.cs
+│   ├── MinigameResultUI.cs
+│   ├── MinigameTestTrigger.cs
+│   └── README.md
+├── Player
+│   ├── BedInteractor.cs
+│   ├── PlayerAnimationModel.cs
+│   ├── PlayerAnimationPresenter.cs
+│   ├── PlayerAnimationView.cs
+│   ├── PlayerController.cs
+│   ├── PlayerMoneyManager.cs
+│   └── PlayerPickupInteractor.cs
+├── Recipe
+│   ├── RecipeShop.cs
+│   ├── RecipeShopInteractor.cs
+│   ├── RecipeShopItemUI.cs
+│   ├── RecipeShopUI.cs
+│   └── RecipeUnlockManager.cs
+├── Sales
+│   └── SaleService.cs
+└── UI
+    ├── DayDisplayUI.cs
+    ├── EndDayUI.cs
+    └── MoneyDisplayUI.cs
 ```
+
 
 ---
 
