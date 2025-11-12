@@ -1,6 +1,6 @@
 # 🐔불법 K-푸드트럭 시뮬레이터
 
-## Lllegal K-Food Truck Simulator
+## Illegal K-Food Truck Simulator
 
 > “닭 대신 비둘기를 파는 불법 푸드트럭 게임”
 > 
