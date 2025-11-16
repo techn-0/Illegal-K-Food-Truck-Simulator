@@ -25,6 +25,8 @@
 | **담당 역할** | 기획 · 프로그래밍 · 디자인 전담 |
 | **영감** | 초등학교 시절 도시괴담 “학교 앞 치킨은 비둘기로 만든다” |
 
+노션에서 보기:[ @Illegal K-Food Truck Simulator ](https://www.notion.so/Illegal-K-Food-Truck-Simulator-2a9311655ecb8095adcae1579e6d0474)
+
 ---
 
 ## 스토리 개요
@@ -160,7 +162,7 @@
 
 **▶ 플레이어**
 
-- 이동: `WASD` / 게임패드 좌스틱
+- 이동: `WASD`
 - 상호작용: `E` (대화, 상점, 요리 등)
 - 인벤토리: `I`
 - 요리 UI: `C`
@@ -180,7 +182,7 @@
 **▶ 손님 / 판매**
 
 - `CustomerOrderSystem`, `OrderManager`, `SaleService`
-- 장사 시작시 주변의 손님들이 가까운 순으로 큐에 등록됨
+- 장사 시작 시 주변의 손님들이 가까운 순으로 큐에 등록됨
 - 손님이 줄 서서 주문, 제한 시간 내 요리 제공
 - 제한 시간 내 제공 실패 시 손님이 떠남
 
@@ -193,10 +195,9 @@
 **▶ 대화**
 
 - `DialogueManager`, `CSVLoader`, `ChoiceParser`
-- TextAsset CSV 기반 분기 대화
+- CSV 기반 분기 대화
 - 선택지별 대화 분기 가능
 - 대화 보상으로 아이템, 레시피, 돈 할당 가능
-
 ---
 
 ## **게임 시스템 플로우**
@@ -221,7 +222,7 @@
 
 ## 손님 대기열 위치 계산 및 이동 로직
 
-손님이 자신의 대기열 위치를 찾고 이동하는 과정은 `OrderManager`클래스와 `CustomerOrderSystem`클래스의 협업을 통해 이루어지도록 구현했습니다. 
+손님이 자신의 대기열 위치를 찾고 이동하는 과정은 `OrderManager`클래스와 `CustomerOrderSystem`클래스의 협업을 통해 이루어지도록 구현했습니다.
 
 <img width="1920" height="1080" alt="Illegal k-food truck simulator 2025-11-10 오후 11_57_46 (1)" src="https://github.com/user-attachments/assets/d48f9b8e-0e13-49f2-8212-32132241efc1" />
 
@@ -242,7 +243,7 @@
 - queueDirection (줄 서는 방향)
 - customerSpacing (손님 간 간격)
 
-첫 번째 손님은 OrderPoint 바로 앞에 위치하며, 이후 손님들은 queueDirection 방향으로 customerSpacing만큼 떨어진 위치에 배치됩니다.
+첫 번째 손님은 OrderPoint 바로 앞에 위치하며, 이후 손님들은 `queueDirection` 방향으로 `customerSpacing`만큼 떨어진 위치에 배치됩니다.
 
 ### 4. 손님 이동
 
@@ -254,7 +255,7 @@
 
 ## UI 설계 구조 및 MVP 패턴 연동 방식
 
-UI 설계는 MVP패턴을 기반으로 구현 했으며, 각 컴포넌트는 명확한 역할을 가지고 상호작용합니다. 이 구조는 UI와 비즈니스 로직을 분리하여 유지보수성과 확장성을 높이는 데 집중하였습니다.
+UI 설계는 MVP 패턴을 기반으로 구현했으며, 각 컴포넌트는 명확한 역할을 가지고 상호작용합니다. 이 구조는 UI와 비즈니스 로직을 분리하여 유지 보수성과 확장성을 높이는 데 집중하였습니다.
 <img width="1920" height="1080" alt="Illegal k-food truck simulator 2025-11-10 오후 11_56_48" src="https://github.com/user-attachments/assets/e090e20a-5404-44d1-94ec-cdf95f3fd6a7" />
 <img width="1920" height="1080" alt="Illegal k-food truck simulator 2025-11-10 오후 11_55_29 (1)" src="https://github.com/user-attachments/assets/b4af910e-d591-4ff8-bdbe-8c04e176f9c9" />
 <img width="1920" height="1080" alt="Illegal k-food truck simulator 2025-11-10 오후 11_54_42" src="https://github.com/user-attachments/assets/868c5bb3-046a-4235-88b5-b86aecc00f58" />
@@ -288,25 +289,38 @@ UI 설계는 MVP패턴을 기반으로 구현 했으며, 각 컴포넌트는 명
 - Presenter는 키 입력 등을 통해 View의 활성화 및 비활성화를 제어하며, UI 간의 전환을 관리합니다.
     - ex) `UIManager`가 `DialogueView`와 `InventoryView`등의 전환 제어
 
-## **트러블슈팅**
+# **💡트러블슈팅**
 
-| 문제 상황 | 원인 | 해결 방법 |
-| --- | --- | --- |
-| **씬 전환 후 데이터 누락 (NullReferenceException)** | Manager 초기화 순서 불일치 | `SceneManager.sceneLoaded` 이벤트 후 코루틴 지연 복원 (`yield return null * 2`) |
-| **요리 UI가 해금 직후 업데이트되지 않음** | 이벤트 미발행 | `RecipeUnlockManager.OnRecipeUnlocked` 이벤트 추가 → UI 갱신 구독 |
-| **판매 중 인벤토리 참조 충돌** | 동시 접근(미니게임 스레드) | `ProcessSale` 내 Lock-like 플래그 및 롤백 처리 도입 |
-| **대기열 손님이 동시 반응하는 버그** | Coroutine 중복 실행 | `CustomerQueueManager` 내 `isProcessing` 플래그로 단일 실행 보장 |
-| **DOTween 트랜지션 중 UI 클릭 가능 문제** | Input Action Map 미전환 | `PlayerInput.Disable("Move")`, `UI`는 유지하도록 제어 분리 |
+## **1. UI–로직 결합 문제를 MVP 패턴으로  분리**
+
+개발 초기에는 인벤토리와 대화 UI가 로직과 직접 연결되어 있어 기능을 추가하거나 수정할 때마다 UI까지 함께 수정해야 하는 구조적 문제가 있었습니다. 이를 해결하기 위해 두 시스템을 MVP 패턴으로 전면 리팩터링 했습니다. 모델은 순수 데이터만 관리하고, 프레젠터가 변화 이벤트를 받아 뷰를 갱신하는 구조로 분리했습니다. 그 결과 인벤토리는 모델에서 아이템 변경 이벤트를 발행하면 프레젠터가 이를 받아 UI를 자동으로 갱신하는 구조가 되었고, 대화 시스템은 CSV 파일만 교체해도 신규 대화 이벤트를 추가할 수 있을 만큼 확장성이 향상되었습니다. 또한 플레이어 애니메이션을 상태·렌더링·제어 구조로 나누면서 NPC도 같은 로직을 재사용할 수 있게 구조가 정돈되었습니다.
+
+---
+
+## **2. 반복 빌드 문제를 ScriptableObject 데이터 구조로 개선**
+
+레시피와 아이템 데이터가 코드에 하드코딩되어 있어 콘텐츠 데이터를 수정할 때마다 빌드를 반복해야 하는 비효율이 있었습니다. 이를 해결하기 위해 레시피와 아이템을 모두 ScriptableObject로 분리하고 ID 기반 참조 구조로 재설계했습니다. 이 방식으로 전환한 뒤에는 ScriptableObject 자산만 생성하거나 수정해도 코드 변경 없이 즉시 게임에 반영할 수 있게 되었으며, 결과적으로 콘텐츠 제작 속도가 크게 향상되고 유지 보수성이 높아졌습니다.
+
+---
+
+## **3.세이브 로딩 시 발생한 프레임 드롭을 로딩 분산 처리로 해결**
+
+세이브 파일을 불러올 때 맵 로딩, JSON 파싱, 인벤토리 복원, 레시피 해금 복원 과정이 한 프레임에 몰리면서 심한 프레임 드롭이 발생했습니다. 이를 병목 현상으로 판단하고 각 로딩 단계를 짧은 지연 코루틴으로 분산 처리하는 방식으로 개선했습니다. 기능을 여러 프레임에 나누어 실행하도록 조정한 결과 프레임 드롭이 사라졌고, 로딩 과정 역시 자연스러운 흐름으로 개선되었습니다.
+
+---
+
+## **4. FIFO 대기열을 거리 기반 정렬로 개선**
+
+초기 대기열 시스템은 손님을 단순 FIFO로 처리하고 있어 특정 손님이 반복적으로 줄의 맨 앞을 차지하는 부자연스러운 상황이 발생했습니다. 이를 개선하기 위해 손님이 대기열에 진입할 때 트럭과의 거리를 우선순위로 계산해 정렬한 후, 해당 순서대로 큐를 재구성하는 방식으로 수정했습니다. 이 변경으로 손님이 거리 기준으로 자연스럽게 배치되었고, 매번 다른 손님 흐름이 형성되어 현실감 있는 대기열 시스템을 구현할 수 있었습니다.
 
 ---
 
 # **✍️ 배운 점**
 
-- 이벤트 기반 구조(Event-Driven Architecture)로 **UI-로직 결합도 최소화**
+- 이벤트 기반 구조로 **UI-로직 결합도 최소화**
 - ScriptableObject 설계의 **데이터 내구성** 이해 (ID 매핑, 폴백 로딩)
 - 씬 초기화/복원 타이밍 문제 해결을 통해 **Unity 비동기 구조 감각 습득**
 - 대기열·판매 루프 등 **비결정적 이벤트의 동기화** 경험
-
 ---
 
 ## **🎯 개선 계획**
